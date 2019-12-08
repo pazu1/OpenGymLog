@@ -11,23 +11,6 @@
 
 using namespace std;
 
-struct SingleSet
-{
-    Q_GADGET
-    unsigned int reps;
-    float weight;
-};
-
-/**
- * @brief SetsAcross
- * Includes one exercise and associated sets.
- */
-struct SetsAcross
-{
-    Q_GADGET
-    Exercise exercise;
-    std::vector<SingleSet> sets;
-};
 
 class DataStore : public QObject
 {

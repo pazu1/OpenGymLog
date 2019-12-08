@@ -4,7 +4,7 @@
 #include <QQuickStyle>
 #include <QQuickView>
 
-#include "datastore.h"
+#include "datastore.hh"
 
 int main(int argc, char *argv[])
 {
@@ -21,6 +21,8 @@ int main(int argc, char *argv[])
 
     context->setContextProperty("dataStore", &dt);
     qmlRegisterType<Exercise>("com.pz.exercise",1,0,"Exercise");
+    qmlRegisterType<Exercise>("com.pz.singleset",1,0,"SingleSet");
+    qmlRegisterType<Exercise>("com.pz.workout",1,0,"Workout");
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,

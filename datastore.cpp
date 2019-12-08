@@ -1,4 +1,4 @@
-#include "datastore.h"
+#include "datastore.hh"
 #include <QDebug>
 #include <QFile>
 #include <QDir>
