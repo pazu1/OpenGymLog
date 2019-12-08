@@ -1,0 +1,38 @@
+{
+	"Flat Barbell BenchPress": {
+		"Category" : "Chest",
+		"Type" : "WeightReps"
+		},
+	"Chin Up": {
+		"Category" : "Back",
+		"Type" : "WeightReps"
+	},
+	"Barbell Bicep Curl": {
+		"Category" : "Bicep",
+		"Type" : "WeightReps"
+        },
+        "Deadlift": {
+                "Category" : "Back",
+                "Type" : "WeightReps"
+        },
+        "Overhead Press": {
+                "Category" : "Shoulders",
+                "Type" : "WeightReps"
+        },
+        "Squat": {
+                "Category" : "Legs",
+                "Type" : "WeightReps"
+        },
+        "Dumbell Lateral Raise": {
+                "Category" : "Shoulders",
+                "Type" : "WeightReps"
+        },
+        "Skullcursher": {
+                "Category" : "Triceps",
+                "Type" : "WeightReps"
+        },
+        "T-bar row": {
+                "Category" : "back",
+                "Type" : "WeightReps"
+        }
+}
