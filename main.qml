@@ -19,57 +19,42 @@ ApplicationWindow {
     property var scale_factor: (width+height)/(480+855)
     property var scale_y: height/855
     property var scale_x: width/480
-
-
-    /*Connections {
-        // On sataStore's signal 'increaseOne' do txtCount.txt = ms
-        target: dataStore
-        onIncreaseOne: txtCount.text = ms // ms = parameter of 'increaseOne'
-    }*/
-
-    /*
-    Column {
-        id: firstColumn
-        Text {
-            id: txtCount
-            text: dataStore.message // updated when ever messageChanged is emitted
-            // -> READs by calling message (getter)
-        }
-
-        Button {
-            id: btnUpdate
-            text: "click me"
-            onClicked: dataStore.callMeFromQml() // calls a void slot, no parameters; else you need Q_INVOKABLE
+    property var exercises: []
+    function updateExercises() {
+        for(var i = 0; i<dataStore.getExerciseAmount(); i++){
+            exercises.push(dataStore.getExerciseAt(i))
         }
     }
-
-    Column {
-        anchors.left: firstColumn.right
-        TextEdit {
-            id: txtEdit
-            height: txtCount.height
-            width: btnEdit.width
-        }
-
-        Button {
-            id: btnEdit
-            text: "update property"
-            onClicked: dataStore.message = txtEdit.text // WRITEs by calling setMessage (setter)
-        }
-
-        Button {
-            text: "Q_INVOKABLE"
-            onClicked: {
-                var result = dataStore.qInvokeExample("This is passed from QML to c++");
-                console.log("Result got from c++ to QML " + result)
-            }
-        }
-    }*/
 
     Item {id: addSetsView; width: root.width; height:root.height
         visible: false
         property var exercise_name: "add new"
 
+        ScrollView {
+            id: selectedExerciseSetsSW
+            x: 0
+            y: pane.height
+            width: root.width
+            height: root.height-pane.height
+
+            Column {
+                id: oneExerciseWorkoutCO
+                width: selectedExerciseSetsSW.width
+                height: selectedExerciseSetsSW.height
+                ItemDelegate {
+                    id: singleSet
+                    width: selectedExerciseSetsSW.width
+                    height: selectedExerciseSetsSW.height*0.1
+                    property var name: "yes."
+                    function setName(new_name){
+                        name = new_name
+                    }
+                    text: name
+                }
+
+            }
+
+        }
 
         Pane {
             id: pane
@@ -102,32 +87,32 @@ ApplicationWindow {
         Text {
             id: wText
             x: weightField.x-width*0.7
-            y: weightField.y
+            y: weightField.y+weightField.height*0.25
             width: 120*scale_x
-            height: 40*scale_y
+            height: 66
             color: "#959694"
             text: qsTr("weight:")
             styleColor: "#d0a2a2"
-            font.pixelSize: 22
+            font.pixelSize: 22*scale_y
         }
 
         Text {
             id: rText
             x: repsField.x-width*0.7
-            y: repsField.y
+            y: repsField.y+repsField.height*0.25
             width: 120*scale_x
             height: 40*scale_y
             color: "#959694"
             text: qsTr("reps:")
-            font.pixelSize: 22
+            font.pixelSize: 22*scale_y
         }
 
         TextField {
             id: weightField
             x: 200*scale_x
-            y: 120*scale_y
+            y: (repsField.y-repsField.height)
             width: 80
-            height: 40*scale_y
+            height: 60*scale_y
             text: qsTr("")
             inputMethodHints: Qt.ImhFormattedNumbersOnly
         }
@@ -137,6 +122,7 @@ ApplicationWindow {
             x: 200*scale_x
             y: 160*scale_y
             width: 80
+            height: 60*scale_y
             text: qsTr("")
             inputMethodHints: Qt.ImhFormattedNumbersOnly
         }
@@ -148,9 +134,12 @@ ApplicationWindow {
             width: 107*scale_x
             height: 55*scale_y
             text: qsTr("Add set")
+            onClicked:{
+                var weight = parseFloat(weightField.text)
+                var reps = parseInt(repsField.text)
+                dataStore.addSingleSet(addSetsView.exercise_name, weight, reps)
+            }
         }
-
-
 
     }
 
@@ -167,7 +156,10 @@ ApplicationWindow {
             modal: true
             focus: true
             closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
-            onOpened: searchItemsColumn.populateWithItems()
+            onOpened: {
+                root.updateExercises()
+                searchItemsColumn.populateWithItems()
+            }
 
             TextField {
                 id: searchField
@@ -207,7 +199,7 @@ ApplicationWindow {
                     id: createdSearchItem
 
                     ItemDelegate {
-                        id: itemRoot
+                        id: searchItem
                         width: searchItemsColumn.width
                         height: searchItemsColumn.height*0.07
                         property var name: "none"
@@ -215,10 +207,15 @@ ApplicationWindow {
                             name = new_name
                         }
                         text: name
+                        onNameChanged: {
+                            if (name === "none")
+                                destroy()
+                        }
+
                         onClicked: {
                             mainView.visible = false
                             addSetsView.visible = true
-                            addSetsView.exercise_name = itemRoot.name
+                            addSetsView.exercise_name = searchItem.name
                             // TODO:
                             // create C++ object for this exercise on this date
                             // upon opening addSetsView, retrieve created object from C++
@@ -232,24 +229,21 @@ ApplicationWindow {
                     width: popupScrollView.width
                     height: popupScrollView.height
 
+
                     function populateWithItems() {
 
-                        // Clear items first
-                        searchItemsColumn.children = [] // TODO: this shit dont work
+                        // Clear children items
+                        for(var c = searchItemsColumn.children.length; c > 0 ; c--) {
+                            console.log("destroying: " + c)
+                            searchItemsColumn.children[c-1].destroy()
+                        }
 
-                        // Load and create new items
+                        // Create new children items
+                        console.log(dataStore.getExerciseAmount())
                         for(var i = 0; i<dataStore.getExerciseAmount(); i++){
                             var search_item = createdSearchItem.createObject(searchItemsColumn)
-                            /*
-                        var component = Qt.createComponent("exrcNameSearchItem.qml")
-                        component.createObject(searchItemsColumn)*/
+                            search_item.setName(root.exercises[i].getName())
                         }
-                        for (var n = 0; n < children.length; n++)
-                        {
-                            children[n].setName(dataStore.getExerciseAt(n).getName())
-                        }
-
-
                         popupScrollView.clip = true
                     }
 
@@ -257,7 +251,7 @@ ApplicationWindow {
                     {
                         for(var i = searchItemsColumn.children.length; i > 0 ; i--) {
                             searchItemsColumn.children[i-1].visible = true
-                            if (!searchItemsColumn.children[i-1].name.includes(search_word))
+                            if (!searchItemsColumn.children[i-1].name.toUpperCase().includes(search_word.toUpperCase()))
                                 searchItemsColumn.children[i-1].visible = false
                         }
                     }
@@ -305,7 +299,5 @@ ApplicationWindow {
             anchors.bottomMargin: 40
 
         }
-
     }
-
 }

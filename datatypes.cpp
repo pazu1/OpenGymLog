@@ -4,9 +4,13 @@ Exercise::Exercise(QObject *parent)
 {
 }
 
-SingleSet::SingleSet(QObject *parent)
+SingleSet::SingleSet(Exercise* ex, float weight, int reps):
+    m_ex(ex),
+    m_weight(weight),
+    m_reps(reps)
 {
 }
+
 
 Workout::Workout(QObject *parent)
 {

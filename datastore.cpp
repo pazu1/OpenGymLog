@@ -62,9 +62,11 @@ int DataStore::qInvokeExample(QString str)
     return m_count;
 }
 
-Exercise* DataStore::getExerciseAt(int pos)
+Exercise* DataStore::getExerciseAt(int pos) const
 {
-    return m_excercise_DB.at(pos);
+    if (pos < m_excercise_DB.length())
+        return m_excercise_DB.at(pos);
+    return nullptr;
 }
 
 int DataStore::getExerciseAmount() const
@@ -72,14 +74,15 @@ int DataStore::getExerciseAmount() const
     return m_excercise_DB.size();
 }
 
-Exercise* DataStore::getTestEx()
+void DataStore::addSingleSet(QString ex_name, float weight, int reps)
 {
-    Exercise* tst = new Exercise();
-    tst->setName("Name From C++");
-    tst->setBodyPart("Chest");
-    return tst;
-}
+    SingleSet* new_set = new SingleSet(getExerciseByName(ex_name),weight,reps);
+    QDate current = QDate::currentDate();
 
+    if (!m_workouts.count(current))
+        m_workouts[current] = new Workout();
+    m_workouts[current]->addSet(new_set);
+}
 
 void DataStore::callMeFromQml()
 {
@@ -103,4 +106,16 @@ void DataStore::loadExerciseDB()
         m_excercise_DB.append(e);
     }
 
+}
+
+Exercise *DataStore::getExerciseByName(QString name)
+{
+    for (Exercise* e : m_excercise_DB)
+    {
+        if (e->getName() == name)
+        {
+            return e;
+        }
+    }
+    return nullptr;
 }

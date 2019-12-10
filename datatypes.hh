@@ -30,7 +30,7 @@ class SingleSet : public QObject
 {
     Q_OBJECT
 public:
-    explicit SingleSet(QObject *parent = nullptr);
+    SingleSet(Exercise* ex, float weight, int reps);
     Q_INVOKABLE Exercise* getExercise(){return m_ex;}
     Q_INVOKABLE float getWeight(){return m_weight;}
     Q_INVOKABLE int getReps(){return m_reps;}
@@ -38,6 +38,10 @@ private:
     Exercise* m_ex;
     float m_weight;
     int m_reps;
+
+signals:
+    void exerciseChanged();
+    void weightChanged();
 };
 
 class Workout : public QObject
@@ -45,10 +49,10 @@ class Workout : public QObject
     Q_OBJECT
 public:
     explicit Workout(QObject *parent = nullptr);
+    void addSet(SingleSet* to_add){m_sets.append(to_add);}
     Q_INVOKABLE int getSetCount(QString by_exercise_name = "");
     Q_INVOKABLE SingleSet *getSetAt(int index);
 private:
-    QDate m_date;
     QList<SingleSet*> m_sets;
 };
 

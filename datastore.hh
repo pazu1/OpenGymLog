@@ -15,7 +15,6 @@ using namespace std;
 class DataStore : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString message READ message WRITE setMessage NOTIFY messageChanged)
 
 public:
     explicit DataStore(QObject *parent = nullptr);
@@ -23,9 +22,9 @@ public:
     void setMessage(QString str);
     bool createDeviceExerciseDB();
     Q_INVOKABLE int qInvokeExample(QString str);
-    Q_INVOKABLE Exercise* getExerciseAt(int pos);
+    Q_INVOKABLE Exercise* getExerciseAt(int pos) const;
     Q_INVOKABLE int getExerciseAmount() const;
-    Q_INVOKABLE Exercise* getTestEx();
+    Q_INVOKABLE void addSingleSet(QString ex_name, float weight, int reps);
 
 signals:
     void messageChanged(); // lets all QML components know, that message was changed
@@ -36,11 +35,12 @@ public slots:
 
 private:
     void loadExerciseDB();
+    Exercise* getExerciseByName(QString name);
 
     int m_count = 0;
     QString msg;
 
-    //std::map<QDate,std::vector<SetsAcross>> m_workout_days;
+    map<QDate,Workout*> m_workouts;
     QList<Exercise*> m_excercise_DB;
     QString m_device_path;
 };
