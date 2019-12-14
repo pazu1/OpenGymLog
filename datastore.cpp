@@ -5,6 +5,7 @@
 #include <QStandardPaths>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QJsonArray>
 
 DataStore::DataStore(QObject *parent) : QObject(parent)
 {
@@ -14,25 +15,34 @@ DataStore::DataStore(QObject *parent) : QObject(parent)
     QDir dir;
     if (!dir.exists(m_device_path))
     {
-        qDebug() << "Path does not exist. Creating...";
+        qDebug() << "Path "+m_device_path+" does not exist. Creating...";
         if (dir.mkpath(m_device_path))
             qDebug() << "Path created";
     }
 
     createDeviceExerciseDB();
     loadExerciseDB();
+    writeSaveData();
+
+    m_selected_date = QDate::currentDate();
 }
 
-void DataStore::setMessage(QString str)
+void DataStore::setSelectedDate(QDate date)
 {
-    msg = str;
-    emit messageChanged();
+    m_selected_date = date;
+    emit selectedDateChanged();
+}
+
+void DataStore::scrollDate(int amount)
+{
+    m_selected_date = m_selected_date.addDays(amount);
+    emit selectedDateChanged();
 }
 
 bool DataStore::createDeviceExerciseDB()
 {
 
-    QFile device_file(m_device_path + "/AGLExerciseData.json");
+    QFile device_file(m_device_path + "/OGLExerciseData.json");
 
     if (device_file.exists()) // && device_file contains all loc exercises
         return false;
@@ -74,25 +84,21 @@ int DataStore::getExerciseAmount() const
     return m_excercise_DB.size();
 }
 
-void DataStore::addSingleSet(QString ex_name, float weight, int reps)
+void DataStore::addSingleSet(QDate date, QString ex_name, float weight, int reps)
 {
     SingleSet* new_set = new SingleSet(getExerciseByName(ex_name),weight,reps);
-    QDate current = QDate::currentDate();
 
-    if (!m_workouts.count(current))
-        m_workouts[current] = new Workout();
-    m_workouts[current]->addSet(new_set);
+    if (!m_workouts.count(date))
+        m_workouts[date] = new Workout();
+
+    m_workouts[date]->addSet(new_set);
+    writeSaveData();
 }
 
-void DataStore::callMeFromQml()
-{
-    m_count++;
-    setMessage(QString::number(m_count)+" hits");
-}
 
 void DataStore::loadExerciseDB()
 {
-    QFile device_DB(m_device_path + "/AGLExerciseData.json");
+    QFile device_DB(m_device_path + "/OGLExerciseData.json");
     device_DB.open(QIODevice::ReadOnly | QIODevice::Text);
     QString text_DB = device_DB.readAll();
     device_DB.close();
@@ -118,4 +124,40 @@ Exercise *DataStore::getExerciseByName(QString name)
         }
     }
     return nullptr;
+}
+
+bool DataStore::writeSaveData()
+{
+    QFile save_file(m_device_path + "/OGLSaveData.json");
+    QJsonObject save_obj;
+
+    /*
+    if (save_file.exists())
+    {
+        qDebug() << "File exists";
+        save_file.open(QIODevice::ReadOnly | QIODevice::Text);
+        QString save_txt = save_file.readAll();
+        QJsonDocument save_doc = QJsonDocument::fromJson(save_txt.toUtf8());
+        save_obj = save_doc.object();
+        save_file.close();
+    } */
+    for (pair<QDate, Workout*> n : m_workouts)
+    {
+        QString date_str = n.first.toString();
+
+        QJsonArray sets;
+        for (SingleSet* s : n.second->getSets())
+        {
+            QJsonObject set_obj;
+            set_obj.insert("Exercise", s->getExercise()->getName());
+            set_obj.insert("Weight", s->getWeight());
+            set_obj.insert("Reps", s->getReps());
+            set_obj.insert("Amount", s->getAmount());
+            sets.append(set_obj);
+        }
+        save_obj.insert(date_str,sets);
+        qDebug() <<save_obj[date_str].toArray().first().toObject()["Exercise"].toString();
+        qDebug() <<QString::number(save_obj[date_str].toArray().first().toObject()["Weight"].toDouble());
+
+    }
 }

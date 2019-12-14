@@ -16,6 +16,7 @@ ApplicationWindow {
     title: qsTr("QML&C++")
     Material.theme: Material.Dark
     Material.accent: Material.Purple
+    property date selectedDate: dataStore.selectedDate
     property var scale_factor: (width+height)/(480+855)
     property var scale_y: height/855
     property var scale_x: width/480
@@ -39,17 +40,18 @@ ApplicationWindow {
 
             Column {
                 id: oneExerciseWorkoutCO
-                width: selectedExerciseSetsSW.width
+                x: 36
+                width: selectedExerciseSetsSW.width*0.8
                 height: selectedExerciseSetsSW.height
                 ItemDelegate {
                     id: singleSet
-                    width: selectedExerciseSetsSW.width
-                    height: selectedExerciseSetsSW.height*0.1
-                    property var name: "yes."
-                    function setName(new_name){
-                        name = new_name
-                    }
-                    text: name
+                    width: oneExerciseWorkoutCO.width
+                    height: oneExerciseWorkoutCO.height*0.1
+                    text: addSetsView.exercise_name + ": "+ sets + "x" + reps + " " + weight + " kg"
+                    font.pixelSize: 22*scale_x
+                    property var reps: 0
+                    property var sets: 0
+                    property var weight: 0.0
                 }
 
             }
@@ -63,7 +65,7 @@ ApplicationWindow {
         }
 
         ToolBar {
-            id: toolBar
+            id: toolBarAS
             x: 0
             y: 0
             width: root.width
@@ -74,8 +76,8 @@ ApplicationWindow {
                 id: element
                 x: 0
                 y: 0
-                width: toolBar.width
-                height: toolBar.height
+                width: toolBarAS.width
+                height: toolBarAS.height
                 color: "#000000"
                 text: addSetsView.exercise_name
                 verticalAlignment: Text.AlignVCenter
@@ -114,6 +116,7 @@ ApplicationWindow {
             width: 80
             height: 60*scale_y
             text: qsTr("")
+            font.pixelSize: 22*scale_y
             inputMethodHints: Qt.ImhFormattedNumbersOnly
         }
 
@@ -124,6 +127,7 @@ ApplicationWindow {
             width: 80
             height: 60*scale_y
             text: qsTr("")
+            font.pixelSize: 22*scale_y
             inputMethodHints: Qt.ImhFormattedNumbersOnly
         }
 
@@ -137,7 +141,7 @@ ApplicationWindow {
             onClicked:{
                 var weight = parseFloat(weightField.text)
                 var reps = parseInt(repsField.text)
-                dataStore.addSingleSet(addSetsView.exercise_name, weight, reps)
+                dataStore.addSingleSet(selectedDate,addSetsView.exercise_name, weight, reps)
             }
         }
 
@@ -161,101 +165,124 @@ ApplicationWindow {
                 searchItemsColumn.populateWithItems()
             }
 
-            TextField {
-                id: searchField
+                TextField {
+                    id: searchField
 
-                text: ""
-                width: addWOSPopup.width
-                height: addWOSPopup.height*0.07
-                placeholderText: " type to search"
+                    text: ""
+                    width: addWOSPopup.width
+                    height: addWOSPopup.height*0.07
+                    placeholderText: " type to search"
 
-                onTextEdited:
-                    searchItemsColumn.searchParse(text)
-            }
-
-            TabBar {
-                id: tabBar
-                y: addWOSPopup.height-height
-                position: TabBar.Footer
-                width: addWOSPopup.width
-                anchors.bottom: addWOSPopup.bottom
-                TabButton {
-                    id: cancelButton
-                    text: "Cancel"
-                    hoverEnabled: false
-                    onClicked:
-                        addWOSPopup.close()
+                    onTextEdited:
+                        searchItemsColumn.searchParse(text)
                 }
-            }
 
-            ScrollView {
-                id: popupScrollView
-                width: parent.width
-                y: searchField.height
-                height: parent.height-cancelButton.height-searchField.height
-                ScrollBar.vertical.policy: ScrollBar.AlwaysOff
-
-                Component {
-                    id: createdSearchItem
-
-                    ItemDelegate {
-                        id: searchItem
-                        width: searchItemsColumn.width
-                        height: searchItemsColumn.height*0.07
-                        property var name: "none"
-                        function setName(new_name){
-                            name = new_name
-                        }
-                        text: name
-                        onNameChanged: {
-                            if (name === "none")
-                                destroy()
-                        }
-
-                        onClicked: {
-                            mainView.visible = false
-                            addSetsView.visible = true
-                            addSetsView.exercise_name = searchItem.name
-                            // TODO:
-                            // create C++ object for this exercise on this date
-                            // upon opening addSetsView, retrieve created object from C++
+                TabBar {
+                    id: tabBar
+                    y: addWOSPopup.height-height
+                    position: TabBar.Footer
+                    width: addWOSPopup.width
+                    anchors.bottom: addWOSPopup.bottom
+                    TabButton {
+                        id: cancelButton
+                        text: "Cancel"
+                        hoverEnabled: false
+                        onClicked:
                             addWOSPopup.close()
-                        }
                     }
                 }
 
-                Column {
-                    id: searchItemsColumn
-                    width: popupScrollView.width
-                    height: popupScrollView.height
+                ScrollView {
+                    id: popupScrollView
+                    width: parent.width
+                    y: searchField.height
+                    height: parent.height-cancelButton.height-searchField.height
+                    ScrollBar.vertical.policy: ScrollBar.AlwaysOff
 
+                    Component {
+                        id: createdSearchItem
 
-                    function populateWithItems() {
+                        ItemDelegate {
+                            id: searchItem
+                            width: searchItemsColumn.width
+                            height: searchItemsColumn.height*0.07
+                            property var name: "none"
+                            function setName(new_name){
+                                name = new_name
+                            }
+                            text: name
+                            onNameChanged: {
+                                if (name === "none")
+                                    destroy()
+                            }
 
-                        // Clear children items
-                        for(var c = searchItemsColumn.children.length; c > 0 ; c--) {
-                            console.log("destroying: " + c)
-                            searchItemsColumn.children[c-1].destroy()
+                            onClicked: {
+                                mainView.visible = false
+                                addSetsView.visible = true
+                                addSetsView.exercise_name = searchItem.name
+                                // TODO:
+                                // create C++ object for this exercise on this date
+                                // upon opening addSetsView, retrieve created object from C++
+                                addWOSPopup.close()
+                            }
                         }
-
-                        // Create new children items
-                        console.log(dataStore.getExerciseAmount())
-                        for(var i = 0; i<dataStore.getExerciseAmount(); i++){
-                            var search_item = createdSearchItem.createObject(searchItemsColumn)
-                            search_item.setName(root.exercises[i].getName())
-                        }
-                        popupScrollView.clip = true
                     }
 
-                    function searchParse(search_word)
-                    {
-                        for(var i = searchItemsColumn.children.length; i > 0 ; i--) {
-                            searchItemsColumn.children[i-1].visible = true
-                            if (!searchItemsColumn.children[i-1].name.toUpperCase().includes(search_word.toUpperCase()))
-                                searchItemsColumn.children[i-1].visible = false
+                    Column {
+                        id: searchItemsColumn
+                        width: popupScrollView.width
+                        height: popupScrollView.height
+
+
+                        function populateWithItems() {
+
+                            // Clear children items
+                            for(var c = searchItemsColumn.children.length; c > 0 ; c--) {
+                                console.log("destroying: " + c)
+                                searchItemsColumn.children[c-1].destroy()
+                            }
+
+                            // Create new children items
+                            console.log(dataStore.getExerciseAmount())
+                            for(var i = 0; i<dataStore.getExerciseAmount(); i++){
+                                var search_item = createdSearchItem.createObject(searchItemsColumn)
+                                search_item.setName(root.exercises[i].getName())
+                            }
+                            popupScrollView.clip = true
+                        }
+
+                        function searchParse(search_word)
+                        {
+                            for(var i = searchItemsColumn.children.length; i > 0 ; i--) {
+                                searchItemsColumn.children[i-1].visible = true
+                                if (!searchItemsColumn.children[i-1].name.toUpperCase().includes(search_word.toUpperCase()))
+                                    searchItemsColumn.children[i-1].visible = false
+                            }
                         }
                     }
                 }
+        }
+
+        ToolBar {
+            id: toolBarMain
+            x: 0
+            y: 0
+            z: 1
+            width: root.width
+            height: 66*scale_y
+            opacity: 1
+            Material.background: Material.Purple
+
+            Text {
+                x: 0
+                y: 0
+                width: toolBarMain.width
+                height: toolBarMain.height
+                color: "#000000"
+                text: selectedDate.toDateString()
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+                font.pixelSize: 22*scale_y
             }
         }
 
@@ -263,7 +290,7 @@ ApplicationWindow {
             id: scrollView
             x: 12
             width: root.width*0.95
-            anchors.topMargin: root.height*0.065
+            anchors.topMargin: root.height*0.095
             anchors.bottom: parent.bottom
             anchors.top: parent.top
             anchors.bottomMargin: 0
@@ -286,12 +313,14 @@ ApplicationWindow {
             visible: true
             font.pointSize: 28
             font.bold: true
+            Material.background: Material.Purple
+            Material.foreground: "#000000"
             onClicked: {
                 addWOSPopup.open()
 
                 var component = Qt.createComponent("wosItem.qml")
                 component.createObject(columnWosItems)
-                //component.Material.theme = root.theme*/
+
             }
             anchors.right: parent.right
             anchors.rightMargin: 40

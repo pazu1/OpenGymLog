@@ -5,6 +5,7 @@
 #include <QObject>
 #include <QDate>
 
+using namespace std;
 
 class Exercise : public QObject
 {
@@ -34,10 +35,13 @@ public:
     Q_INVOKABLE Exercise* getExercise(){return m_ex;}
     Q_INVOKABLE float getWeight(){return m_weight;}
     Q_INVOKABLE int getReps(){return m_reps;}
+    Q_INVOKABLE int getAmount() {return m_amount;}
+    void incrementAmount(){m_amount++;}
 private:
     Exercise* m_ex;
     float m_weight;
     int m_reps;
+    int m_amount; // eg. for 5x10 at same weight this value is 5
 
 signals:
     void exerciseChanged();
@@ -49,11 +53,13 @@ class Workout : public QObject
     Q_OBJECT
 public:
     explicit Workout(QObject *parent = nullptr);
-    void addSet(SingleSet* to_add){m_sets.append(to_add);}
+    void addSet(SingleSet* to_add);
+    vector<SingleSet*> getSets(){return m_sets;}
+
     Q_INVOKABLE int getSetCount(QString by_exercise_name = "");
     Q_INVOKABLE SingleSet *getSetAt(int index);
 private:
-    QList<SingleSet*> m_sets;
+    vector<SingleSet*> m_sets;
 };
 
 
