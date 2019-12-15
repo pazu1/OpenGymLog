@@ -156,8 +156,14 @@ bool DataStore::writeSaveData()
             sets.append(set_obj);
         }
         save_obj.insert(date_str,sets);
-        qDebug() <<save_obj[date_str].toArray().first().toObject()["Exercise"].toString();
-        qDebug() <<QString::number(save_obj[date_str].toArray().first().toObject()["Weight"].toDouble());
+        //qDebug() <<save_obj[date_str].toArray().first().toObject()["Exercise"].toString();
+        //qDebug() <<QString::number(save_obj[date_str].toArray().first().toObject()["Weight"].toDouble());
 
     }
+    QJsonDocument save_doc(save_obj);
+    if (save_doc.isNull())
+        return false;
+    save_file.open(QFile::WriteOnly);
+    save_file.write(save_doc.toJson());
+    return true;
 }
