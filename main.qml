@@ -6,6 +6,7 @@ import QtQuick.Controls.Material 2.12
 import com.pz.exercise 1.0
 import com.pz.singleset 1.0
 import com.pz.workout 1.0
+import "Constants.js" as Constants
 
 ApplicationWindow {
     id: root
@@ -15,21 +16,68 @@ ApplicationWindow {
     visible: true
     title: qsTr("QML&C++")
     Material.theme: Material.Dark
-    Material.accent: Material.Purple
+    Material.accent: Constants.accent1
     property date selectedDate: dataStore.selectedDate
     property var scale_factor: (width+height)/(480+855)
     property var scale_y: height/855
     property var scale_x: width/480
     property var exercises: []
     function updateExercises() {
-        for(var i = 0; i<dataStore.getExerciseAmount(); i++){
+        for (var i = 0; i<dataStore.getExerciseAmount(); i++){
             exercises.push(dataStore.getExerciseAt(i))
         }
     }
 
+
     Item {id: addSetsView; width: root.width; height:root.height
         visible: false
+
         property var exercise_name: "add new"
+        property var sets: []
+        onVisibleChanged: {
+            if (visible === true)
+                loadSets()
+        }
+
+        function loadSets(){
+            var workout = dataStore.getWorkout(selectedDate)
+            if (workout !== null)
+            {
+                // Clear previous components
+                for (var d = oneExerciseWorkoutCO.children.length; d > 0; d-- )
+                {
+                    oneExerciseWorkoutCO.children[d-1].destroy()
+                }
+                sets = []
+
+                // Populate sets array and create new components
+                for (var i = 0; i<workout.getSetCount(); i++)
+                {
+
+                    if (workout.getSetAt(i).getExercise().getName() === exercise_name)
+                    {
+                        sets.push(workout.getSetAt(i))
+                        var item = createdSetBar.createObject(oneExerciseWorkoutCO)
+                        item.setProps(workout.getSetAt(i))
+                    }
+                }
+            }
+        }
+
+        Pane {
+            id: backPane
+            width: root.width
+            height: root.height
+            Material.background: Constants.backgroundDark
+        }
+
+        Component {
+            id: createdSetBar
+            SingleSetBar {
+                width: oneExerciseWorkoutCO.width
+                height: oneExerciseWorkoutCO.height*0.1
+            }
+        }
 
         ScrollView {
             id: selectedExerciseSetsSW
@@ -37,29 +85,21 @@ ApplicationWindow {
             y: pane.height
             width: root.width
             height: root.height-pane.height
+            ScrollBar.vertical.policy: ScrollBar.AlwaysOff
 
             Column {
                 id: oneExerciseWorkoutCO
-                x: 36
-                width: selectedExerciseSetsSW.width*0.8
+                spacing: 5*root.scale_y
+                x: 25*scale_x
+                width: selectedExerciseSetsSW.width*0.9
                 height: selectedExerciseSetsSW.height
-                ItemDelegate {
-                    id: singleSet
-                    width: oneExerciseWorkoutCO.width
-                    height: oneExerciseWorkoutCO.height*0.1
-                    text: addSetsView.exercise_name + ": "+ sets + "x" + reps + " " + weight + " kg"
-                    font.pixelSize: 22*scale_x
-                    property var reps: 0
-                    property var sets: 0
-                    property var weight: 0.0
-                }
-
             }
 
         }
 
         Pane {
             id: pane
+            Material.background: Constants.foregroundDark
             width: root.width
             height: repsField.y+repsField.height
         }
@@ -70,7 +110,7 @@ ApplicationWindow {
             y: 0
             width: root.width
             height: 66*scale_y
-            Material.background: Material.Purple
+            Material.background: Constants.accent1
 
             Text {
                 id: element
@@ -142,6 +182,8 @@ ApplicationWindow {
                 var weight = parseFloat(weightField.text)
                 var reps = parseInt(repsField.text)
                 dataStore.addSingleSet(selectedDate,addSetsView.exercise_name, weight, reps)
+                addSetsView.loadSets()
+
             }
         }
 
@@ -165,102 +207,102 @@ ApplicationWindow {
                 searchItemsColumn.populateWithItems()
             }
 
-                TextField {
-                    id: searchField
+            TextField {
+                id: searchField
 
-                    text: ""
-                    width: addWOSPopup.width
-                    height: addWOSPopup.height*0.07
-                    placeholderText: " type to search"
+                text: ""
+                width: addWOSPopup.width
+                height: addWOSPopup.height*0.07
+                placeholderText: " type to search"
 
-                    onTextEdited:
-                        searchItemsColumn.searchParse(text)
+                onTextEdited:
+                    searchItemsColumn.searchParse(text)
+            }
+
+            TabBar {
+                id: tabBar
+                y: addWOSPopup.height-height
+                position: TabBar.Footer
+                width: addWOSPopup.width
+                anchors.bottom: addWOSPopup.bottom
+                TabButton {
+                    id: cancelButton
+                    text: "Cancel"
+                    hoverEnabled: false
+                    onClicked:
+                        addWOSPopup.close()
                 }
+            }
 
-                TabBar {
-                    id: tabBar
-                    y: addWOSPopup.height-height
-                    position: TabBar.Footer
-                    width: addWOSPopup.width
-                    anchors.bottom: addWOSPopup.bottom
-                    TabButton {
-                        id: cancelButton
-                        text: "Cancel"
-                        hoverEnabled: false
-                        onClicked:
+            ScrollView {
+                id: popupScrollView
+                width: parent.width
+                y: searchField.height
+                height: parent.height-cancelButton.height-y
+                ScrollBar.vertical.policy: ScrollBar.AlwaysOff
+
+                Component {
+                    id: createdSearchItem
+
+                    ItemDelegate {
+                        id: searchItem
+                        width: searchItemsColumn.width
+                        height: searchItemsColumn.height*0.07
+                        property var name: "none"
+                        function setName(new_name){
+                            name = new_name
+                        }
+                        text: name
+                        onNameChanged: {
+                            if (name === "none")
+                                destroy()
+                        }
+
+                        onClicked: {
+                            mainView.visible = false
+                            addSetsView.visible = true
+                            addSetsView.exercise_name = searchItem.name
+                            // TODO:
+                            // create C++ object for this exercise on this date
+                            // upon opening addSetsView, retrieve created object from C++
                             addWOSPopup.close()
-                    }
-                }
-
-                ScrollView {
-                    id: popupScrollView
-                    width: parent.width
-                    y: searchField.height
-                    height: parent.height-cancelButton.height-searchField.height
-                    ScrollBar.vertical.policy: ScrollBar.AlwaysOff
-
-                    Component {
-                        id: createdSearchItem
-
-                        ItemDelegate {
-                            id: searchItem
-                            width: searchItemsColumn.width
-                            height: searchItemsColumn.height*0.07
-                            property var name: "none"
-                            function setName(new_name){
-                                name = new_name
-                            }
-                            text: name
-                            onNameChanged: {
-                                if (name === "none")
-                                    destroy()
-                            }
-
-                            onClicked: {
-                                mainView.visible = false
-                                addSetsView.visible = true
-                                addSetsView.exercise_name = searchItem.name
-                                // TODO:
-                                // create C++ object for this exercise on this date
-                                // upon opening addSetsView, retrieve created object from C++
-                                addWOSPopup.close()
-                            }
-                        }
-                    }
-
-                    Column {
-                        id: searchItemsColumn
-                        width: popupScrollView.width
-                        height: popupScrollView.height
-
-
-                        function populateWithItems() {
-
-                            // Clear children items
-                            for(var c = searchItemsColumn.children.length; c > 0 ; c--) {
-                                console.log("destroying: " + c)
-                                searchItemsColumn.children[c-1].destroy()
-                            }
-
-                            // Create new children items
-                            console.log(dataStore.getExerciseAmount())
-                            for(var i = 0; i<dataStore.getExerciseAmount(); i++){
-                                var search_item = createdSearchItem.createObject(searchItemsColumn)
-                                search_item.setName(root.exercises[i].getName())
-                            }
-                            popupScrollView.clip = true
-                        }
-
-                        function searchParse(search_word)
-                        {
-                            for(var i = searchItemsColumn.children.length; i > 0 ; i--) {
-                                searchItemsColumn.children[i-1].visible = true
-                                if (!searchItemsColumn.children[i-1].name.toUpperCase().includes(search_word.toUpperCase()))
-                                    searchItemsColumn.children[i-1].visible = false
-                            }
                         }
                     }
                 }
+
+                Column {
+                    id: searchItemsColumn
+                    width: popupScrollView.width
+                    height: popupScrollView.height
+
+
+                    function populateWithItems() {
+
+                        // Clear children items
+                        for(var c = searchItemsColumn.children.length; c > 0 ; c--) {
+                            console.log("destroying: " + c)
+                            searchItemsColumn.children[c-1].destroy()
+                        }
+
+                        // Create new children items
+                        console.log(dataStore.getExerciseAmount())
+                        for(var i = 0; i<dataStore.getExerciseAmount(); i++){
+                            var search_item = createdSearchItem.createObject(searchItemsColumn)
+                            search_item.setName(root.exercises[i].getName())
+                        }
+                        popupScrollView.clip = true
+                    }
+
+                    function searchParse(search_word)
+                    {
+                        for(var i = searchItemsColumn.children.length; i > 0 ; i--) {
+                            searchItemsColumn.children[i-1].visible = true
+                            if (!searchItemsColumn.children[i-1].name.toUpperCase().includes(search_word.toUpperCase()))
+                                searchItemsColumn.children[i-1].visible = false
+                        }
+                    }
+                }
+            }
         }
 
         ToolBar {
@@ -271,7 +313,7 @@ ApplicationWindow {
             width: root.width
             height: 66*scale_y
             opacity: 1
-            Material.background: Material.Purple
+            Material.background: Constants.accent1
 
             Text {
                 x: 0
@@ -303,6 +345,18 @@ ApplicationWindow {
             }
         }
 
+        Text {
+            id: debug
+            x: root.width*0.1
+            y: root.height*0.9
+            z: 10
+            width: 300
+            height: 82
+            color: "#00e290"
+            text: qsTr("Text")
+            font.pixelSize: 12
+        }
+
         RoundButton {
             id: addWOSButton
             x: 338
@@ -313,14 +367,12 @@ ApplicationWindow {
             visible: true
             font.pointSize: 28
             font.bold: true
-            Material.background: Material.Purple
+            Material.background: Constants.accent1
             Material.foreground: "#000000"
             onClicked: {
                 addWOSPopup.open()
-
                 var component = Qt.createComponent("wosItem.qml")
                 component.createObject(columnWosItems)
-
             }
             anchors.right: parent.right
             anchors.rightMargin: 40
@@ -328,5 +380,7 @@ ApplicationWindow {
             anchors.bottomMargin: 40
 
         }
+
+
     }
 }

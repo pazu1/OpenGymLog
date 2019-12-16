@@ -31,6 +31,7 @@ class SingleSet : public QObject
 {
     Q_OBJECT
 public:
+    SingleSet(QObject *parent = nullptr);
     SingleSet(Exercise* ex, float weight, int reps);
     Q_INVOKABLE Exercise* getExercise(){return m_ex;}
     Q_INVOKABLE float getWeight(){return m_weight;}
@@ -56,7 +57,7 @@ public:
     void addSet(SingleSet* to_add);
     vector<SingleSet*> getSets(){return m_sets;}
 
-    Q_INVOKABLE int getSetCount(QString by_exercise_name = "");
+    Q_INVOKABLE int getSetCount();
     Q_INVOKABLE SingleSet *getSetAt(int index);
 private:
     vector<SingleSet*> m_sets;

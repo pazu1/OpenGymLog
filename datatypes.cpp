@@ -4,6 +4,10 @@ Exercise::Exercise(QObject *parent)
 {
 }
 
+SingleSet::SingleSet(QObject *parent)
+{
+}
+
 SingleSet::SingleSet(Exercise* ex, float weight, int reps):
     m_ex(ex),
     m_weight(weight),
@@ -32,7 +36,7 @@ void Workout::addSet(SingleSet *to_add)
     m_sets.push_back(to_add);
 }
 
-int Workout::getSetCount(QString by_exercise_name)
+int Workout::getSetCount()
 {
     return int(m_sets.size());
 }

@@ -79,6 +79,13 @@ Exercise* DataStore::getExerciseAt(int pos) const
     return nullptr;
 }
 
+Workout *DataStore::getWorkout(QDate day) const
+{
+    if ( m_workouts.find(day) != m_workouts.end())
+        return m_workouts.at(day);
+    return nullptr;
+}
+
 int DataStore::getExerciseAmount() const
 {
     return m_excercise_DB.size();
@@ -93,6 +100,11 @@ void DataStore::addSingleSet(QDate date, QString ex_name, float weight, int reps
 
     m_workouts[date]->addSet(new_set);
     writeSaveData();
+}
+
+QString DataStore::getDevicePath()
+{
+    return m_device_path;
 }
 
 

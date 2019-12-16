@@ -25,8 +25,10 @@ public:
     Q_INVOKABLE void scrollDate(int amount);
     Q_INVOKABLE int qInvokeExample(QString str);
     Q_INVOKABLE Exercise* getExerciseAt(int pos) const;
+    Q_INVOKABLE Workout* getWorkout(QDate day) const;
     Q_INVOKABLE int getExerciseAmount() const;
     Q_INVOKABLE void addSingleSet(QDate date, QString ex_name, float weight, int reps);
+    Q_INVOKABLE QString getDevicePath();
 
 signals:
     void selectedDateChanged();
