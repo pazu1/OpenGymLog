@@ -6,6 +6,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QQmlEngine>
 
 DataStore::DataStore(QObject *parent) : QObject(parent)
 {
@@ -69,14 +70,22 @@ bool DataStore::createDeviceExerciseDB()
 Exercise* DataStore::getExerciseAt(int pos) const
 {
     if (pos < m_excercise_DB.length())
-        return m_excercise_DB.at(pos);
+    {
+        Exercise* found =  m_excercise_DB.at(pos);
+        QQmlEngine::setObjectOwnership(found, QQmlEngine::CppOwnership);
+        return found;
+    }
     return nullptr;
 }
 
 Workout *DataStore::getWorkout(QDate day) const
 {
     if ( m_workouts.find(day) != m_workouts.end())
-        return m_workouts.at(day);
+    {
+        Workout* found = m_workouts.at(day);
+        QQmlEngine::setObjectOwnership(found, QQmlEngine::CppOwnership);
+        return found;
+    }
     return nullptr;
 }
 
@@ -125,6 +134,7 @@ Exercise *DataStore::getExerciseByName(QString name)
     {
         if (e->getName() == name)
         {
+            QQmlEngine::setObjectOwnership(e, QQmlEngine::CppOwnership);
             return e;
         }
     }

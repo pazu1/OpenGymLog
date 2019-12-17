@@ -32,6 +32,12 @@ ApplicationWindow {
     {
         addSetsView.visible = visible
         mainView.visible = !visible
+        if (visible)
+        {
+            console.log("Empty sets")
+            addSetsView.loadSets()
+        }
+        else addSetsView.clearSets()
     }
 
     onClosing: {
@@ -45,42 +51,45 @@ ApplicationWindow {
     Item {id: addSetsView; width: root.width; height:root.height
         visible: false
 
-        property var exercise_name: "add new"
+        property string exercise_name: "add new"
         property var sets: []
 
-        onVisibleChanged: {
-            if (visible === true)
-                loadSets()
+        function clearSets(){
+            for (var d = oneExerciseWorkoutCO.children.length; d > 0; d-- )
+            {
+                oneExerciseWorkoutCO.children[d-1].destroy()
+            }
+            sets.length = 0;
         }
 
-
         function loadSets(){
+
             var workout = dataStore.getWorkout(selectedDate)
             if (workout !== null)
             {
-                // Clear previous components
-                for (var d = oneExerciseWorkoutCO.children.length; d > 0; d-- )
-                {
-                    oneExerciseWorkoutCO.children[d-1].destroy()
-                }
-                sets = []
-
-                // Populate sets array and create new components
-                var index = 0
+                // Populate sets array
                 for (var i = 0; i<workout.getSetCount(); i++)
                 {
-
-                    if (workout.getSetAt(i).getExercise().getName() === exercise_name)
+                    var set = workout.getSetAt(i)
+                    if (set.getExercise().getName() == exercise_name)
                     {
-                        var new_set = workout.getSetAt(i)
-                        sets.push(new_set)
-                        for (var n = 0; n < new_set.getAmount(); n++)
-                        {
-                            index++
-                            var item = createdSetBar.createObject(oneExerciseWorkoutCO)
-                            item.setProps(index,new_set)
-                        }
+                        sets.push(set)
                     }
+                }
+                createComponents()
+            }
+        }
+
+        function createComponents(){
+            var index = 0
+            for (var setI = 0 ; setI < sets.length; setI++)
+            {
+                var current_set = sets[setI]
+                for (var n = 0; n < current_set.getAmount(); n++)
+                {
+                    index++
+                    var item = createdSetBar.createObject(oneExerciseWorkoutCO)
+                    item.setProps(index,current_set)
                 }
             }
         }
@@ -105,7 +114,7 @@ ApplicationWindow {
             x: 0
             y: pane.height+5*scale_y
             width: root.width
-            height: root.height-pane.height-tabBarAS.height-5*scale_y
+            height: root.height-pane.height-tabBarAS.height-10*scale_y
             ScrollBar.vertical.policy: ScrollBar.AlwaysOff
 
             Column {
@@ -158,7 +167,10 @@ ApplicationWindow {
                 icon.height: 34*scale_factor
                 icon.width: 34*scale_factor
                 display: AbstractButton.IconOnly
-                onClicked: toggleSetsView(false)
+                onClicked:{
+                    toggleSetsView(false)
+                }
+
             }
 
             Text {
@@ -230,6 +242,7 @@ ApplicationWindow {
                 var weight = parseFloat(weightField.text)
                 var reps = parseInt(repsField.text)
                 dataStore.addSingleSet(selectedDate,addSetsView.exercise_name, weight, reps)
+                addSetsView.clearSets()
                 addSetsView.loadSets()
             }
         }
@@ -305,8 +318,8 @@ ApplicationWindow {
                         }
 
                         onClicked: {
-                            root.toggleSetsView(true)
                             addSetsView.exercise_name = searchItem.name
+                            root.toggleSetsView(true)
                             // TODO:
                             // create C++ object for this exercise on this date
                             // upon opening addSetsView, retrieve created object from C++
@@ -325,7 +338,7 @@ ApplicationWindow {
 
                         // Clear children items
                         for(var c = searchItemsColumn.children.length; c > 0 ; c--) {
-                            console.log("destroying: " + c)
+                            //console.log("destroying: " + c)
                             searchItemsColumn.children[c-1].destroy()
                         }
 

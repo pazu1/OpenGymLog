@@ -1,4 +1,6 @@
 #include "datatypes.hh"
+#include <QDebug>
+#include <QQmlEngine>
 
 Exercise::Exercise(QObject *parent)
 {
@@ -40,7 +42,16 @@ int Workout::getSetCount()
     return int(m_sets.size());
 }
 
-SingleSet *Workout::getSetAt(int index)
+SingleSet* Workout::getSetAt(int index)
 {
-    return getSets()[index];
+    SingleSet* found = m_sets.at(index);
+    if (found == nullptr)
+    {
+        qDebug("What");
+        return nullptr;
+    }
+    QString st = found->getExercise()->getName();
+    qDebug() << st;
+    QQmlEngine::setObjectOwnership(found, QQmlEngine::CppOwnership);
+    return found;
 }

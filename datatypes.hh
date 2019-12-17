@@ -51,7 +51,7 @@ public:
     vector<SingleSet*> getSets(){return m_sets;}
 
     Q_INVOKABLE int getSetCount();
-    Q_INVOKABLE SingleSet *getSetAt(int index);
+    Q_INVOKABLE SingleSet* getSetAt(int index);
 private:
     vector<SingleSet*> m_sets;
 };

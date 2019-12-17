@@ -15,6 +15,7 @@ Item {
         t2.text = containedSet.getReps()+" reps"
         t3.text = containedSet.getWeight()+" kg"
     }
+
     Pane {
         id: pane
         x: 0
