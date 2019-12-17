@@ -28,16 +28,31 @@ ApplicationWindow {
         }
     }
 
+    function toggleSetsView(visible)
+    {
+        addSetsView.visible = visible
+        mainView.visible = !visible
+    }
+
+    onClosing: {
+        if (addSetsView.visible)
+        {
+            close.accepted = false
+            toggleSetsView(false)
+        }
+    }
 
     Item {id: addSetsView; width: root.width; height:root.height
         visible: false
 
         property var exercise_name: "add new"
         property var sets: []
+
         onVisibleChanged: {
             if (visible === true)
                 loadSets()
         }
+
 
         function loadSets(){
             var workout = dataStore.getWorkout(selectedDate)
@@ -51,14 +66,20 @@ ApplicationWindow {
                 sets = []
 
                 // Populate sets array and create new components
+                var index = 0
                 for (var i = 0; i<workout.getSetCount(); i++)
                 {
 
                     if (workout.getSetAt(i).getExercise().getName() === exercise_name)
                     {
-                        sets.push(workout.getSetAt(i))
-                        var item = createdSetBar.createObject(oneExerciseWorkoutCO)
-                        item.setProps(workout.getSetAt(i))
+                        var new_set = workout.getSetAt(i)
+                        sets.push(new_set)
+                        for (var n = 0; n < new_set.getAmount(); n++)
+                        {
+                            index++
+                            var item = createdSetBar.createObject(oneExerciseWorkoutCO)
+                            item.setProps(index,new_set)
+                        }
                     }
                 }
             }
@@ -82,14 +103,14 @@ ApplicationWindow {
         ScrollView {
             id: selectedExerciseSetsSW
             x: 0
-            y: pane.height
+            y: pane.height+5*scale_y
             width: root.width
-            height: root.height-pane.height
+            height: root.height-pane.height-tabBarAS.height-5*scale_y
             ScrollBar.vertical.policy: ScrollBar.AlwaysOff
 
             Column {
                 id: oneExerciseWorkoutCO
-                spacing: 5*root.scale_y
+                spacing: 5*scale_y
                 x: 25*scale_x
                 width: selectedExerciseSetsSW.width*0.9
                 height: selectedExerciseSetsSW.height
@@ -104,6 +125,25 @@ ApplicationWindow {
             height: repsField.y+repsField.height
         }
 
+        TabBar {
+            id: tabBarAS
+            y: addSetsView.height-height
+            position: TabBar.Footer
+            width: addSetsView.width
+            anchors.bottom: addSetsView.bottom
+            anchors.bottomMargin: 0
+            Material.background: Constants.foregroundDark
+            TabButton {
+                text: "log"
+                hoverEnabled: false
+            }
+            TabButton {
+                text: "graph"
+                hoverEnabled: false
+            }
+
+        }
+
         ToolBar {
             id: toolBarAS
             x: 0
@@ -111,6 +151,15 @@ ApplicationWindow {
             width: root.width
             height: 66*scale_y
             Material.background: Constants.accent1
+            ToolButton {
+                y: parent.height*0.5 - height*0.5
+                icon.source: "qrc:/icons/arrow_back-24px.svg"
+                icon.color: "#000000"
+                icon.height: 34*scale_factor
+                icon.width: 34*scale_factor
+                display: AbstractButton.IconOnly
+                onClicked: toggleSetsView(false)
+            }
 
             Text {
                 id: element
@@ -132,9 +181,8 @@ ApplicationWindow {
             y: weightField.y+weightField.height*0.25
             width: 120*scale_x
             height: 66
-            color: "#959694"
+            color: Constants.text1
             text: qsTr("weight:")
-            styleColor: "#d0a2a2"
             font.pixelSize: 22*scale_y
         }
 
@@ -144,7 +192,7 @@ ApplicationWindow {
             y: repsField.y+repsField.height*0.25
             width: 120*scale_x
             height: 40*scale_y
-            color: "#959694"
+            color: Constants.text1
             text: qsTr("reps:")
             font.pixelSize: 22*scale_y
         }
@@ -183,10 +231,8 @@ ApplicationWindow {
                 var reps = parseInt(repsField.text)
                 dataStore.addSingleSet(selectedDate,addSetsView.exercise_name, weight, reps)
                 addSetsView.loadSets()
-
             }
         }
-
     }
 
     Item {id: mainView; width: root.width; height:root.height
@@ -259,8 +305,7 @@ ApplicationWindow {
                         }
 
                         onClicked: {
-                            mainView.visible = false
-                            addSetsView.visible = true
+                            root.toggleSetsView(true)
                             addSetsView.exercise_name = searchItem.name
                             // TODO:
                             // create C++ object for this exercise on this date
@@ -303,6 +348,12 @@ ApplicationWindow {
                     }
                 }
             }
+        }
+
+        Pane {
+            height: root.height
+            width: root.width
+            Material.background: Constants.backgroundDark
         }
 
         ToolBar {
@@ -380,7 +431,5 @@ ApplicationWindow {
             anchors.bottomMargin: 40
 
         }
-
-
     }
 }

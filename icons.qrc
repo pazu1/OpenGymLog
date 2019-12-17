@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>icons/arrow_back-24px.svg</file>
+        <file>icons/menu-24px.svg</file>
+    </qresource>
+</RCC>

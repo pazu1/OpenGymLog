@@ -9,6 +9,7 @@
 
 DataStore::DataStore(QObject *parent) : QObject(parent)
 {
+    m_selected_date = QDate::currentDate();
     m_device_path = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
 
     // Create path
@@ -18,13 +19,13 @@ DataStore::DataStore(QObject *parent) : QObject(parent)
         qDebug() << "Path "+m_device_path+" does not exist. Creating...";
         if (dir.mkpath(m_device_path))
             qDebug() << "Path created";
+        else qDebug() << "Error in creating path";
     }
 
     createDeviceExerciseDB();
     loadExerciseDB();
-    writeSaveData();
-
-    m_selected_date = QDate::currentDate();
+    writeSaveData(); // TODO: Don't call here
+    readSaveData();
 }
 
 void DataStore::setSelectedDate(QDate date)
@@ -41,7 +42,6 @@ void DataStore::scrollDate(int amount)
 
 bool DataStore::createDeviceExerciseDB()
 {
-
     QFile device_file(m_device_path + "/OGLExerciseData.json");
 
     if (device_file.exists()) // && device_file contains all loc exercises
@@ -64,12 +64,6 @@ bool DataStore::createDeviceExerciseDB()
     device_file.close();
 
     return true;
-}
-
-int DataStore::qInvokeExample(QString str)
-{
-    qDebug() << str.toLatin1();
-    return m_count;
 }
 
 Exercise* DataStore::getExerciseAt(int pos) const
@@ -107,7 +101,6 @@ QString DataStore::getDevicePath()
     return m_device_path;
 }
 
-
 void DataStore::loadExerciseDB()
 {
     QFile device_DB(m_device_path + "/OGLExerciseData.json");
@@ -143,16 +136,6 @@ bool DataStore::writeSaveData()
     QFile save_file(m_device_path + "/OGLSaveData.json");
     QJsonObject save_obj;
 
-    /*
-    if (save_file.exists())
-    {
-        qDebug() << "File exists";
-        save_file.open(QIODevice::ReadOnly | QIODevice::Text);
-        QString save_txt = save_file.readAll();
-        QJsonDocument save_doc = QJsonDocument::fromJson(save_txt.toUtf8());
-        save_obj = save_doc.object();
-        save_file.close();
-    } */
     for (pair<QDate, Workout*> n : m_workouts)
     {
         QString date_str = n.first.toString();
@@ -177,5 +160,11 @@ bool DataStore::writeSaveData()
         return false;
     save_file.open(QFile::WriteOnly);
     save_file.write(save_doc.toJson());
+    save_file.close();
+    return true;
+}
+
+bool DataStore::readSaveData()
+{
     return true;
 }

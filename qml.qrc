@@ -4,5 +4,6 @@
         <file>wosItem.qml</file>
         <file>SingleSetBar.qml</file>
         <file>Constants.js</file>
+        <file>icons/arrow_back-24px.svg</file>
     </qresource>
 </RCC>

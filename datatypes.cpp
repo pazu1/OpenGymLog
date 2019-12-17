@@ -16,7 +16,6 @@ SingleSet::SingleSet(Exercise* ex, float weight, int reps):
     m_amount = 1;
 }
 
-
 Workout::Workout(QObject *parent)
 {
 }

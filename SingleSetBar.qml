@@ -6,14 +6,14 @@ import QtQuick.Controls.Material 2.12
 import com.pz.singleset 1.0
 import "Constants.js" as Constants
 
-
 Item {
     id: singleSetBarRoot
     width: 200
     height: 60
-    function setProps(containedSet) {
-        baseItem.text = containedSet.getAmount()+"x"+containedSet.getReps()+"   "+containedSet.getWeight()+" kg"
-
+    function setProps(index, containedSet) {
+        t1.text = index+"."
+        t2.text = containedSet.getReps()+" reps"
+        t3.text = containedSet.getWeight()+" kg"
     }
     Pane {
         id: pane
@@ -28,7 +28,47 @@ Item {
         id: baseItem
         width: singleSetBarRoot.width
         height: singleSetBarRoot.height
-        text: "none"
         font.pixelSize: 22*scale_x
+
+        Text {
+            id: t1
+            x: singleSetBarRoot.width*0.02
+            anchors.verticalCenter: parent.verticalCenter
+            color: Constants.text1
+            text: qsTr("Text")
+            font.pixelSize: 22*scale_x
+        }
+
+        ToolSeparator {
+            id: toolSeparator
+            anchors.left: parent.left
+            anchors.leftMargin: parent.width*0.15
+            anchors.verticalCenter: parent.verticalCenter
+        }
+
+        Text {
+            id: t2
+            x: singleSetBarRoot.width*0.3
+            anchors.verticalCenter: parent.verticalCenter
+            color: Constants.text1
+            text: qsTr("Text")
+            font.pixelSize: 22*scale_x
+        }
+
+        ToolSeparator {
+            id: toolSeparator1
+            anchors.left: parent.left
+            anchors.leftMargin: t3.x - (t3.x-t2.x)*0.5 + t2.height*0.5
+            anchors.verticalCenter: parent.verticalCenter
+        }
+        Text {
+            id: t3
+            x: singleSetBarRoot.width*0.7
+            anchors.verticalCenter: parent.verticalCenter
+            color: Constants.text1
+            text: qsTr("Text")
+            font.pixelSize: 22*scale_x
+        }
+
     }
 }

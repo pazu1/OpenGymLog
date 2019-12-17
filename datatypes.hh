@@ -20,10 +20,6 @@ public:
 private:
     QString m_name;
     QString m_body_part;
-
-signals:
-
-public slots:
 };
 
 
@@ -44,9 +40,6 @@ private:
     int m_reps;
     int m_amount; // eg. for 5x10 at same weight this value is 5
 
-signals:
-    void exerciseChanged();
-    void weightChanged();
 };
 
 class Workout : public QObject
@@ -63,6 +56,4 @@ private:
     vector<SingleSet*> m_sets;
 };
 
-
 #endif // EXERCISE_HH
-

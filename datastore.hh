@@ -23,7 +23,6 @@ public:
     QDate selectedDate() {return m_selected_date;}
     void setSelectedDate(QDate date);
     Q_INVOKABLE void scrollDate(int amount);
-    Q_INVOKABLE int qInvokeExample(QString str);
     Q_INVOKABLE Exercise* getExerciseAt(int pos) const;
     Q_INVOKABLE Workout* getWorkout(QDate day) const;
     Q_INVOKABLE int getExerciseAmount() const;
@@ -37,12 +36,10 @@ private:
     void loadExerciseDB();
     Exercise* getExerciseByName(QString name);
 
-
-    // Write m_workouts into JSON
+    // Write m_workouts to a JSON file on device
     bool writeSaveData();
-
-    int m_count = 0;
-    QString msg;
+    // Populate m_workouts with data saved on the device
+    bool readSaveData();
 
     map<QDate,Workout*> m_workouts;
     QList<Exercise*> m_excercise_DB;
