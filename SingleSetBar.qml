@@ -4,7 +4,7 @@ import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.12
 import com.pz.singleset 1.0
-import "Constants.js" as Constants
+import "Constants.js" as CT
 
 Item {
     id: singleSetBarRoot
@@ -20,7 +20,7 @@ Item {
         id: pane
         x: 0
         y: 0
-        Material.background: Constants.foregroundDark
+        Material.background: CT.foregroundDark
         width: singleSetBarRoot.width
         height: singleSetBarRoot.height
     }
@@ -35,7 +35,7 @@ Item {
             id: t1
             x: singleSetBarRoot.width*0.02
             anchors.verticalCenter: parent.verticalCenter
-            color: Constants.text1
+            color: CT.text1
             text: qsTr("Text")
             font.pixelSize: 22*scale_x
         }
@@ -51,7 +51,7 @@ Item {
             id: t2
             x: singleSetBarRoot.width*0.3
             anchors.verticalCenter: parent.verticalCenter
-            color: Constants.text1
+            color: CT.text1
             text: qsTr("Text")
             font.pixelSize: 22*scale_x
         }
@@ -66,7 +66,7 @@ Item {
             id: t3
             x: singleSetBarRoot.width*0.7
             anchors.verticalCenter: parent.verticalCenter
-            color: Constants.text1
+            color: CT.text1
             text: qsTr("Text")
             font.pixelSize: 22*scale_x
         }

@@ -5,5 +5,7 @@
         <file>SingleSetBar.qml</file>
         <file>Constants.js</file>
         <file>icons/arrow_back-24px.svg</file>
+        <file>SetsView.qml</file>
+        <file>MainView.qml</file>
     </qresource>
 </RCC>
