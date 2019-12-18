@@ -10,6 +10,40 @@ import "Constants.js" as Constants
 
 Item {
     width: root.width; height:root.height
+
+    function clearWosComponents()
+    {
+        for (var d = columnWosItems.children.length; d > 0; d-- )
+            columnWosItems.children[d-1].destroy()
+    }
+
+    // Create components for workout sets on selected day
+    function loadWosItems()
+    {
+        // Clear components
+        clearWosComponents()
+
+        var names = []
+        var workout = dataStore.getWorkout(selectedDate)
+        if (workout !== null)
+        {
+            // Populate sets array
+            for (var i = 0; i<workout.getSetCount(); i++)
+            {
+                var set_name = workout.getSetAt(i).getExercise().getName()
+                if (!names.includes(set_name))
+                    names.push(set_name)
+            }
+            // Create components
+            for (var n = 0; n<names.length; n++)
+            {
+                var component = Qt.createComponent("wosItem.qml")
+                var created_obj = component.createObject(columnWosItems)
+                created_obj.setProps(names[n])
+            }
+        }
+    }
+
     Popup {
         id: addWOSPopup
         x: root.width*(0.15/2)
@@ -104,7 +138,7 @@ Item {
                     console.log(dataStore.getExerciseAmount())
                     for(var i = 0; i<dataStore.getExerciseAmount(); i++){
                         var search_item = createdSearchItem.createObject(searchItemsColumn)
-                        search_item.setName(root.exercises[i].getName())
+                        search_item.setName(root.exercisesDB[i].getName())
                     }
                     popupScrollView.clip = true
                 }
@@ -193,8 +227,6 @@ Item {
         Material.foreground: "#000000"
         onClicked: {
             addWOSPopup.open()
-            var component = Qt.createComponent("wosItem.qml")
-            component.createObject(columnWosItems)
         }
         anchors.right: parent.right
         anchors.rightMargin: 40

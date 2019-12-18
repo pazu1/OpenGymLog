@@ -1,7 +1,6 @@
 .pragma library
 
 // Themes
-
 var backgroundDark = "#121212"
 var foregroundDark = "#1e1e1e"
 

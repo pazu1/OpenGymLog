@@ -21,10 +21,11 @@ ApplicationWindow {
     property var scale_factor: (width+height)/(480+855)
     property var scale_y: height/855
     property var scale_x: width/480
-    property var exercises: []
+    property var exercisesDB: []
+
     function updateExercises() {
         for (var i = 0; i<dataStore.getExerciseAmount(); i++){
-            exercises.push(dataStore.getExerciseAt(i))
+            exercisesDB.push(dataStore.getExerciseAt(i))
         }
     }
 
@@ -37,7 +38,15 @@ ApplicationWindow {
             console.log("Empty sets")
             addSetsView.loadSets()
         }
-        else addSetsView.clearSets()
+        else
+        {
+            addSetsView.clearSets()
+            mainView.loadWosItems()
+        }
+    }
+
+    Component.onCompleted: {
+        mainView.loadWosItems()
     }
 
     onClosing: {
