@@ -1,4 +1,5 @@
 #include "datatypes.hh"
+
 #include <QDebug>
 #include <QQmlEngine>
 
@@ -10,12 +11,12 @@ SingleSet::SingleSet(QObject *parent)
 {
 }
 
-SingleSet::SingleSet(Exercise* ex, float weight, int reps):
+SingleSet::SingleSet(Exercise* ex, float weight, int reps, int amount):
     m_ex(ex),
     m_weight(weight),
-    m_reps(reps)
+    m_reps(reps),
+	m_amount(amount)
 {
-    m_amount = 1;
 }
 
 Workout::Workout(QObject *parent)

@@ -28,12 +28,13 @@ class SingleSet : public QObject
     Q_OBJECT
 public:
     SingleSet(QObject *parent = nullptr);
-    SingleSet(Exercise* ex, float weight, int reps);
+    SingleSet(Exercise* ex, float weight, int reps, int amount = 1);
     Q_INVOKABLE Exercise* getExercise(){return m_ex;}
     Q_INVOKABLE float getWeight(){return m_weight;}
     Q_INVOKABLE int getReps(){return m_reps;}
     Q_INVOKABLE int getAmount() {return m_amount;}
     void incrementAmount(){m_amount++;}
+
 private:
     Exercise* m_ex;
     float m_weight;

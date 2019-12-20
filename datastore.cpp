@@ -25,8 +25,8 @@ DataStore::DataStore(QObject *parent) : QObject(parent)
 
     createDeviceExerciseDB();
     loadExerciseDB();
-    writeSaveData(); // TODO: Don't call here
-    readSaveData();
+	if (!readSaveData())
+		qDebug() << "Error: could not read save data";
 }
 
 void DataStore::setSelectedDate(QDate date)
@@ -65,6 +65,11 @@ bool DataStore::createDeviceExerciseDB()
     device_file.close();
 
     return true;
+}
+
+QDate DataStore::selectedDate()
+{
+    return m_selected_date;
 }
 
 Exercise* DataStore::getExerciseAt(int pos) const
@@ -143,12 +148,13 @@ Exercise *DataStore::getExerciseByName(QString name)
 
 bool DataStore::writeSaveData()
 {
+
     QFile save_file(m_device_path + "/OGLSaveData.json");
     QJsonObject save_obj;
 
     for (pair<QDate, Workout*> n : m_workouts)
     {
-        QString date_str = n.first.toString();
+        qint64 j_date = n.first.toJulianDay();
 
         QJsonArray sets;
         for (SingleSet* s : n.second->getSets())
@@ -160,7 +166,7 @@ bool DataStore::writeSaveData()
             set_obj.insert("Amount", s->getAmount());
             sets.append(set_obj);
         }
-        save_obj.insert(date_str,sets);
+        save_obj.insert(QString::number(j_date),sets);
         //qDebug() <<save_obj[date_str].toArray().first().toObject()["Exercise"].toString();
         //qDebug() <<QString::number(save_obj[date_str].toArray().first().toObject()["Weight"].toDouble());
 
@@ -176,5 +182,34 @@ bool DataStore::writeSaveData()
 
 bool DataStore::readSaveData()
 {
+	QFile save_file(m_device_path + "/OGLSaveData.json");
+	if (!save_file.exists())
+		return false;
+	save_file.open(QIODevice::ReadOnly | QIODevice::Text);
+	QString text_DB = save_file.readAll();
+	save_file.close();
+	QJsonObject save_obj = QJsonDocument::fromJson(text_DB.toUtf8()).object();
+
+	foreach(const QString & key, save_obj.keys())
+	{
+		QDate f_date = QDate::fromJulianDay(key.toInt());
+		QJsonArray f_array = save_obj.value(key).toArray();
+		if (f_date.isNull() || f_array.isEmpty())
+			return false;
+		Workout* f_workout = new Workout();
+		for (QJsonValue element : f_array)
+		{
+			QJsonObject f_obj = element.toObject();
+
+			SingleSet* f_set = new SingleSet(getExerciseByName(f_obj["Exercise"].toString()),
+				(float)f_obj["Weight"].toDouble(),
+				f_obj["Reps"].toInt(),
+				f_obj["Amount"].toInt());
+
+			f_workout->addSet(f_set);
+		}
+		m_workouts[f_date] = f_workout;
+	}
+
     return true;
 }

@@ -11,7 +11,6 @@
 
 using namespace std;
 
-
 class DataStore : public QObject
 {
     Q_OBJECT
@@ -20,7 +19,7 @@ class DataStore : public QObject
 public:
     explicit DataStore(QObject *parent = nullptr);
     bool createDeviceExerciseDB();
-    QDate selectedDate() {return m_selected_date;}
+    QDate selectedDate();
     void setSelectedDate(QDate date);
     Q_INVOKABLE void scrollDate(int amount);
     Q_INVOKABLE Exercise* getExerciseAt(int pos) const;
