@@ -27,20 +27,26 @@ Item {
         var workout = dataStore.getWorkout(selectedDate)
         if (workout !== null)
         {
-            // Populate sets array
+            // Populate sets array & create components
             for (var i = 0; i<workout.getSetCount(); i++)
             {
                 var set_name = workout.getSetAt(i).getExercise().getName()
                 if (!names.includes(set_name))
+                {
                     names.push(set_name)
+                    var component = Qt.createComponent("wosItem.qml")
+                    var created_obj = component.createObject(columnWosItems)
+                    created_obj.setProps(set_name, workout)
+                }
             }
             // Create components
+            /*
             for (var n = 0; n<names.length; n++)
             {
                 var component = Qt.createComponent("wosItem.qml")
                 var created_obj = component.createObject(columnWosItems)
                 created_obj.setProps(names[n])
-            }
+            }*/
         }
     }
 

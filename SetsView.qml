@@ -71,8 +71,8 @@ Item {
             y: parent.height*0.5 - height*0.5
             icon.source: "qrc:/icons/arrow_back-24px.svg"
             icon.color: "#000000"
-            icon.height: 34*scale_factor
-            icon.width: 34*scale_factor
+            icon.height: 34*scale
+            icon.width: 34*scale
             display: AbstractButton.IconOnly
             onClicked:{
                 toggleSetsView(false)

@@ -18,7 +18,6 @@ ApplicationWindow {
     Material.theme: Material.Dark
     Material.accent: CT.accent1
     property date selectedDate: dataStore.selectedDate
-    property var scale_factor: (width+height)/(480+855)
     property var scale_y: height/855
     property var scale_x: width/480
     property var exercisesDB: []
@@ -85,7 +84,6 @@ ApplicationWindow {
                 itemAt(currentIndex).loadWosItems()
             }
 
-
             MainView{id: mainView}
             MainView{id: r_mainView}
         }
@@ -117,8 +115,8 @@ ApplicationWindow {
                 y: parent.height*0.5 - height*0.5
                 icon.source: "qrc:/icons/arrow_back_ios-24px.svg"
                 icon.color: "#000000"
-                icon.height: 34*scale_factor
-                icon.width: 34*scale_factor
+                icon.height: 34*scale
+                icon.width: 34*scale
                 display: AbstractButton.IconOnly
                 onClicked: swipeV.decrementCurrentIndex()
             }
@@ -129,8 +127,8 @@ ApplicationWindow {
                 anchors.rightMargin: 0
                 icon.source: "qrc:/icons/arrow_forward_ios-24px.svg"
                 icon.color: "#000000"
-                icon.height: 34*scale_factor
-                icon.width: 34*scale_factor
+                icon.height: 34*scale
+                icon.width: 34*scale
                 display: AbstractButton.IconOnly
                 onClicked: swipeV.incrementCurrentIndex()
             }
@@ -140,8 +138,8 @@ ApplicationWindow {
             id: addWOSButton
             x: 338
             y: 584
-            width: 75*root.scale_factor
-            height: 75*root.scale_factor
+            width: 75*scale
+            height: 75*scale
             text: "+"
             visible: true
             font.pointSize: 28

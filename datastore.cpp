@@ -53,13 +53,6 @@ bool DataStore::createDeviceExerciseDB()
     QString loc_text = loc_file.readAll();
     loc_file.close();
 
-    /*
-    QJsonDocument loc_doc = QJsonDocument::fromJson(loc_text.toUtf8());
-    QJsonObject loc_exercises_obj = loc_doc.object();
-
-    QJsonValue test = loc_exercises_obj.value("Chin Up");
-    qDebug() << test["Category"].toString();*/
-
     device_file.open(QIODevice::ReadWrite);
     device_file.write(loc_text.toUtf8());
     device_file.close();
