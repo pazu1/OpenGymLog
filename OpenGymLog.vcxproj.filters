@@ -56,20 +56,12 @@
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    
-    
-    
-    
     <CustomBuild Include="debug\moc_predefs.h.cbt">
       <Filter>Generated Files</Filter>
     </CustomBuild>
     <CustomBuild Include="release\moc_predefs.h.cbt">
       <Filter>Generated Files</Filter>
     </CustomBuild>
-    
-    
-    
-    
   </ItemGroup>
   <ItemGroup>
     <None Include="Constants.js">
@@ -93,5 +85,22 @@
     <None Include="wosItem.qml">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="SetsView.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="MainView.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Test.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="OpenGymLog.rc" />
   </ItemGroup>
 </Project>

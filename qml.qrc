@@ -7,5 +7,8 @@
         <file>icons/arrow_back-24px.svg</file>
         <file>SetsView.qml</file>
         <file>MainView.qml</file>
+        <file>AddSetsPage.qml</file>
+        <file>icons/arrow_back_ios-24px.svg</file>
+        <file>icons/arrow_forward_ios-24px.svg</file>
     </qresource>
 </RCC>

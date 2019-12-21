@@ -153,7 +153,7 @@
       <IgnoreImportLibrary>true</IgnoreImportLibrary>
       <OutputFile>$(OutDir)\OpenGymLog.exe</OutputFile>
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Link>
     <Midl>
@@ -222,6 +222,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Constants.js" />
+    <None Include="MainView.qml" />
+    <None Include="SetsView.qml" />
     <None Include="SingleSetBar.qml" />
     <None Include="exercises.json" />
     <None Include="main.qml" />
@@ -233,7 +235,14 @@
       <InitFuncName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">qml</InitFuncName>
       <InitFuncName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">qml</InitFuncName>
     </QtRcc>
+    <None Include="Test.qml" />
     <None Include="wosItem.qml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="OpenGymLog.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

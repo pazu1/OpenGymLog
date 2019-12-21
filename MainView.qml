@@ -1,6 +1,6 @@
 import QtQuick 2.12
 import QtQuick.Window 2.12
-import QtQuick.Controls 2.12
+import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.12
 import com.pz.exercise 1.0
@@ -42,6 +42,11 @@ Item {
                 created_obj.setProps(names[n])
             }
         }
+    }
+
+    function openPopup()
+    {
+        addWOSPopup.open()
     }
 
     Popup {
@@ -161,29 +166,6 @@ Item {
         Material.background: Constants.backgroundDark
     }
 
-    ToolBar {
-        id: toolBarMain
-        x: 0
-        y: 0
-        z: 1
-        width: root.width
-        height: 66*scale_y
-        opacity: 1
-        Material.background: Constants.accent1
-
-        Text {
-            x: 0
-            y: 0
-            width: toolBarMain.width
-            height: toolBarMain.height
-            color: "#000000"
-            text: selectedDate.toDateString()
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            font.pixelSize: 22*scale_y
-        }
-    }
-
     ScrollView {
         id: scrollView
         x: 12
@@ -211,28 +193,6 @@ Item {
         color: "#00e290"
         text: qsTr("Text")
         font.pixelSize: 12
-    }
-
-    RoundButton {
-        id: addWOSButton
-        x: 338
-        y: 584
-        width: 75*root.scale_factor
-        height: 75*root.scale_factor
-        text: "+"
-        visible: true
-        font.pointSize: 28
-        font.bold: true
-        Material.background: Constants.accent1
-        Material.foreground: "#000000"
-        onClicked: {
-            addWOSPopup.open()
-        }
-        anchors.right: parent.right
-        anchors.rightMargin: 40
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 40
-
     }
 }
 
