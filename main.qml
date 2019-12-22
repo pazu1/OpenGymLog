@@ -34,7 +34,6 @@ ApplicationWindow {
         mainViewContainer.visible = !visible
         if (visible)
         {
-            console.log("Empty sets")
             addSetsView.loadAddSetsPage()
         }
         else

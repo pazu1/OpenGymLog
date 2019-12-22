@@ -25,7 +25,7 @@ DataStore::DataStore(QObject *parent) : QObject(parent)
 
     createDeviceExerciseDB();
     loadExerciseDB();
-	if (!readSaveData())
+    if (!readSaveData())
 		qDebug() << "Error: could not read save data";
 }
 
@@ -108,6 +108,16 @@ QString DataStore::getDevicePath()
     return m_device_path;
 }
 
+void DataStore::deleteObject(SingleSet *to_delete)
+{
+    int decreased;
+    if (to_delete->getAmount() == 1)
+        decreased = 0;
+    else
+        decreased = to_delete->getAmount()-1;
+    to_delete->setAmount(decreased);
+}
+
 void DataStore::loadExerciseDB()
 {
     QFile device_DB(m_device_path + "/OGLExerciseData.json");
@@ -148,17 +158,20 @@ bool DataStore::writeSaveData()
     for (pair<QDate, Workout*> n : m_workouts)
     {
         qint64 j_date = n.first.toJulianDay();
-
         QJsonArray sets;
         for (SingleSet* s : n.second->getSets())
         {
             QJsonObject set_obj;
+            if (s->getAmount() == 0) // Set with an amount of 0 means it has been deleted.
+                continue;            // No need to save it.
             set_obj.insert("Exercise", s->getExercise()->getName());
             set_obj.insert("Weight", s->getWeight());
             set_obj.insert("Reps", s->getReps());
             set_obj.insert("Amount", s->getAmount());
             sets.append(set_obj);
         }
+        if (sets.size() == 0) // Don't save days with no content.
+            continue;
         save_obj.insert(QString::number(j_date),sets);
         //qDebug() <<save_obj[date_str].toArray().first().toObject()["Exercise"].toString();
         //qDebug() <<QString::number(save_obj[date_str].toArray().first().toObject()["Weight"].toDouble());
@@ -187,7 +200,7 @@ bool DataStore::readSaveData()
 	{
 		QDate f_date = QDate::fromJulianDay(key.toInt());
 		QJsonArray f_array = save_obj.value(key).toArray();
-		if (f_date.isNull() || f_array.isEmpty())
+        if (f_date.isNull())
 			return false;
 		Workout* f_workout = new Workout();
 		for (QJsonValue element : f_array)

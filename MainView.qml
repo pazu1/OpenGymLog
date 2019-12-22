@@ -30,6 +30,9 @@ Item {
             // Populate sets array & create components
             for (var i = 0; i<workout.getSetCount(); i++)
             {
+
+                if (workout.getSetAt == null)
+                    console.log("null set")
                 var set_name = workout.getSetAt(i).getExercise().getName()
                 if (!names.includes(set_name))
                 {
@@ -141,12 +144,10 @@ Item {
 
                     // Clear children items
                     for(var c = searchItemsColumn.children.length; c > 0 ; c--) {
-                        //console.log("destroying: " + c)
                         searchItemsColumn.children[c-1].destroy()
                     }
 
                     // Create new children items
-                    console.log(dataStore.getExerciseAmount())
                     for(var i = 0; i<dataStore.getExerciseAmount(); i++){
                         var search_item = createdSearchItem.createObject(searchItemsColumn)
                         search_item.setName(root.exercisesDB[i].getName())

@@ -22,16 +22,17 @@ Item {
                 for (var n = 0; n < workout.getSetAt(i).getAmount(); n++)
                 {
                     var item = createdSubSet.createObject(column)
-                    item.setText(workout.getSetAt(i).getReps()+" reps    "+workout.getSetAt(i).getWeight()+" kg")
+                    item.setText(workout.getSetAt(i).getReps()+" reps               "+workout.getSetAt(i).getWeight()+" kg")
                 }
             }
         }
-
+        if (column.children.length == 0)
+            destroy()
     }
 
     Component {
         id: createdSubSet
-        Pane {
+        Item {
             width: parent.width*0.92
             height: 30*scale
             anchors.horizontalCenter: parent.horizontalCenter
@@ -42,7 +43,9 @@ Item {
             }
 
             Text {
-                y:-5*scale
+                y:5*scale
+                anchors.left: parent.left
+                anchors.leftMargin: parent.width*0.03
                 id: txt
                 text: "0x0"
                 color: CT.text1
@@ -52,9 +55,23 @@ Item {
     }
 
     Button {
+        id: bottomButton
+        height: column.height+button.height+2*scale
+        width: parent.width*0.92
+        anchors.horizontalCenter: parent.horizontalCenter
+        hoverEnabled: false
+        Material.background: CT.foregroundDark
+        onClicked: {
+            addSetsView.exercise_name = name
+            root.toggleSetsView(true)
+        }
+    }
+
+    Button {
         id: button
         x: 0
         y: 0
+        z: 1
         width: parent.width
         height: 55*scale
         Material.background: CT.foregroundDark
@@ -78,8 +95,7 @@ Item {
     }
     Column {
         id: column
-        spacing: 2*scale
-        y: button.height
+        y: button.height-5*scale
         width: parent.width
     }
 }

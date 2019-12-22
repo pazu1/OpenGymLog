@@ -33,6 +33,7 @@ public:
     Q_INVOKABLE float getWeight(){return m_weight;}
     Q_INVOKABLE int getReps(){return m_reps;}
     Q_INVOKABLE int getAmount() {return m_amount;}
+    int setAmount(int value){m_amount = value;}
     void incrementAmount(){m_amount++;}
 
 private:

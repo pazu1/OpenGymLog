@@ -48,11 +48,9 @@ SingleSet* Workout::getSetAt(int index)
     SingleSet* found = m_sets.at(index);
     if (found == nullptr)
     {
-        qDebug("What");
         return nullptr;
     }
     QString st = found->getExercise()->getName();
-    qDebug() << st;
     QQmlEngine::setObjectOwnership(found, QQmlEngine::CppOwnership);
     return found;
 }

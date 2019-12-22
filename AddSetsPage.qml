@@ -14,7 +14,6 @@ Item {
         id: createdSetBar
         SingleSetBar {
             width: oneExerciseWorkoutCO.width
-            height: oneExerciseWorkoutCO.height*0.085
         }
     }
 
