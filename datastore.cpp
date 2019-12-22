@@ -26,7 +26,7 @@ DataStore::DataStore(QObject *parent) : QObject(parent)
     createDeviceExerciseDB();
     loadExerciseDB();
     if (!readSaveData())
-		qDebug() << "Error: could not read save data";
+        qDebug() << "Error: could not read save data";
 }
 
 void DataStore::setSelectedDate(QDate date)
@@ -106,16 +106,6 @@ void DataStore::addSingleSet(QDate date, QString ex_name, float weight, int reps
 QString DataStore::getDevicePath()
 {
     return m_device_path;
-}
-
-void DataStore::deleteObject(SingleSet *to_delete)
-{
-    int decreased;
-    if (to_delete->getAmount() == 1)
-        decreased = 0;
-    else
-        decreased = to_delete->getAmount()-1;
-    to_delete->setAmount(decreased);
 }
 
 void DataStore::loadExerciseDB()
@@ -208,7 +198,7 @@ bool DataStore::readSaveData()
 			QJsonObject f_obj = element.toObject();
 
 			SingleSet* f_set = new SingleSet(getExerciseByName(f_obj["Exercise"].toString()),
-				(float)f_obj["Weight"].toDouble(),
+                (float)f_obj["Weight"].toDouble(),
 				f_obj["Reps"].toInt(),
 				f_obj["Amount"].toInt());
 

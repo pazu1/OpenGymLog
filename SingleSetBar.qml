@@ -54,9 +54,8 @@ Item {
         anchors.right: parent.right
         anchors.rightMargin: 30*scale
         onClicked: {
-            dataStore.deleteObject(obj_set)
+            obj_set.decreaseAmount()
             loadAddSetsPage()
-            //singleSetBarRoot.destroy()
         }
     }
 
