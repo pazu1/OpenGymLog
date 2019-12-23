@@ -108,6 +108,24 @@ QString DataStore::getDevicePath()
     return m_device_path;
 }
 
+void DataStore::deleteSet(SingleSet* to_delete)
+{
+    for (pair<QDate, Workout*> n : m_workouts)
+    {
+        std::vector<SingleSet*> sets = n.second->getSets();
+        for (SingleSet* s : sets)
+        {
+            if (s == to_delete && s->decreaseAmount() == 0)
+            {
+                n.second->getSets().pop_back();
+                // let QML garbage collection handle the deletion
+                QQmlEngine::setObjectOwnership(s, QQmlEngine::JavaScriptOwnership);
+            }
+        }
+    }
+    writeSaveData();
+}
+
 void DataStore::loadExerciseDB()
 {
     QFile device_DB(m_device_path + "/OGLExerciseData.json");
@@ -141,7 +159,6 @@ Exercise *DataStore::getExerciseByName(QString name)
 
 bool DataStore::writeSaveData()
 {
-
     QFile save_file(m_device_path + "/OGLSaveData.json");
     QJsonObject save_obj;
 

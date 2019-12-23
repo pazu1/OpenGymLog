@@ -27,6 +27,7 @@ public:
     Q_INVOKABLE int getExerciseAmount() const;
     Q_INVOKABLE void addSingleSet(QDate date, QString ex_name, float weight, int reps);
     Q_INVOKABLE QString getDevicePath();
+    Q_INVOKABLE void deleteSet(SingleSet* to_delete);
 
 signals:
     void selectedDateChanged();

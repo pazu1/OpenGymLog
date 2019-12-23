@@ -19,11 +19,12 @@ SingleSet::SingleSet(Exercise* ex, float weight, int reps, int amount):
 {
 }
 
-void SingleSet::decreaseAmount()
+int SingleSet::decreaseAmount()
 {
     if (m_amount == 1)
         m_amount = 0;
     else m_amount--;
+    return m_amount;
 }
 
 Workout::Workout(QObject *parent)

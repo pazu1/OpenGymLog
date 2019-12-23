@@ -54,7 +54,9 @@ Item {
         anchors.right: parent.right
         anchors.rightMargin: 30*scale
         onClicked: {
-            obj_set.decreaseAmount()
+            // TODO: write proper dynamic deletion algorithm
+            dataStore.deleteSet(obj_set)
+            // prev: obj_set.decreaseAmount()
             loadAddSetsPage()
         }
     }
