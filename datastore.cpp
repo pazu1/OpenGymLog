@@ -92,8 +92,10 @@ int DataStore::getExerciseAmount() const
     return m_excercise_DB.size();
 }
 
-void DataStore::addSingleSet(QDate date, QString ex_name, float weight, int reps)
+bool DataStore::addSingleSet(QDate date, QString ex_name, float weight, int reps)
 {
+    if (reps == 0 || QString::number(weight) == "nan")
+        return false;
     SingleSet* new_set = new SingleSet(getExerciseByName(ex_name),weight,reps);
 
     if (!m_workouts.count(date))
@@ -101,9 +103,17 @@ void DataStore::addSingleSet(QDate date, QString ex_name, float weight, int reps
 
     m_workouts[date]->addSet(new_set);
     writeSaveData();
+    return true;
 }
 
-QString DataStore::getDevicePath()
+bool DataStore::addExercise(QString name, QString category)
+{
+    Exercise* created_ex = new Exercise(name,category);
+    m_excercise_DB.push_back(created_ex);
+    return true; // TODO: write to device file
+}
+
+QString DataStore::getDevicePath() const
 {
     return m_device_path;
 }
@@ -126,6 +136,17 @@ void DataStore::deleteSet(SingleSet* to_delete)
     writeSaveData();
 }
 
+QStringList DataStore::getCategories() const
+{
+    QStringList f_categories;
+    for (Exercise* e : m_excercise_DB)
+    {
+        if (!f_categories.contains(e->getBodyPart(), Qt::CaseInsensitive))
+            f_categories.push_back(e->getBodyPart());
+    }
+    return f_categories;
+}
+
 void DataStore::loadExerciseDB()
 {
     QFile device_DB(m_device_path + "/OGLExerciseData.json");
@@ -141,6 +162,14 @@ void DataStore::loadExerciseDB()
         e->setBodyPart(value["Category"].toString());
         m_excercise_DB.append(e);
     }
+
+}
+
+bool DataStore::writeExerciseDB()
+{
+    QFile device_DB(m_device_path + "/OGLExerciseData.json");
+    device_DB.open(QIODevice::WriteOnly | QIODevice::Text);
+    QJsonObject db_json;
 
 }
 
@@ -213,8 +242,11 @@ bool DataStore::readSaveData()
 		for (QJsonValue element : f_array)
 		{
 			QJsonObject f_obj = element.toObject();
+            Exercise* f_ex = getExerciseByName(f_obj["Exercise"].toString());
+            if (!f_ex)
+                continue;
 
-			SingleSet* f_set = new SingleSet(getExerciseByName(f_obj["Exercise"].toString()),
+            SingleSet* f_set = new SingleSet(f_ex,
                 (float)f_obj["Weight"].toDouble(),
 				f_obj["Reps"].toInt(),
 				f_obj["Amount"].toInt());

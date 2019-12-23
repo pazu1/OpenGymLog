@@ -23,6 +23,7 @@ ApplicationWindow {
     property var exercisesDB: []
 
     function updateExercises() {
+        exercisesDB.length = 0
         for (var i = 0; i<dataStore.getExerciseAmount(); i++){
             exercisesDB.push(dataStore.getExerciseAt(i))
         }

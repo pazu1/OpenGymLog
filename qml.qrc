@@ -10,5 +10,7 @@
         <file>AddSetsPage.qml</file>
         <file>icons/arrow_back_ios-24px.svg</file>
         <file>icons/arrow_forward_ios-24px.svg</file>
+        <file>PopupSearchPage.qml</file>
+        <file>PopupAddExPage.qml</file>
     </qresource>
 </RCC>

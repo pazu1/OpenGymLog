@@ -25,21 +25,25 @@ public:
     Q_INVOKABLE Exercise* getExerciseAt(int pos) const;
     Q_INVOKABLE Workout* getWorkout(QDate day) const;
     Q_INVOKABLE int getExerciseAmount() const;
-    Q_INVOKABLE void addSingleSet(QDate date, QString ex_name, float weight, int reps);
-    Q_INVOKABLE QString getDevicePath();
+    Q_INVOKABLE bool addSingleSet(QDate date, QString ex_name, float weight, int reps);
+    Q_INVOKABLE bool addExercise(QString name, QString category);
+    Q_INVOKABLE QString getDevicePath() const;
     Q_INVOKABLE void deleteSet(SingleSet* to_delete);
+    Q_INVOKABLE QStringList getCategories() const;
 
 signals:
     void selectedDateChanged();
 
 private:
     void loadExerciseDB();
-    Exercise* getExerciseByName(QString name);
+    bool writeExerciseDB();
 
     // Write m_workouts to a JSON file on device
     bool writeSaveData();
     // Populate m_workouts with data saved on the device
     bool readSaveData();
+
+    Exercise* getExerciseByName(QString name);
 
     map<QDate,Workout*> m_workouts;
     QList<Exercise*> m_excercise_DB;

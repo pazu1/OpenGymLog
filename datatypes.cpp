@@ -7,6 +7,12 @@ Exercise::Exercise(QObject *parent)
 {
 }
 
+Exercise::Exercise(QString name, QString category):
+    m_name(name),
+    m_body_part(category)
+{
+}
+
 SingleSet::SingleSet(QObject *parent)
 {
 }

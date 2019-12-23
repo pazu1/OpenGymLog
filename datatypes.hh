@@ -11,7 +11,8 @@ class Exercise : public QObject
 {
     Q_OBJECT
 public:
-    explicit Exercise(QObject *parent = nullptr);
+    Exercise(QObject *parent = nullptr);
+    Exercise(QString name, QString category);
     Q_INVOKABLE QString getName() {return m_name;}
     Q_INVOKABLE QString getBodyPart(){return m_body_part;}
     Q_INVOKABLE void setName(QString na) {m_name = na;}
@@ -41,7 +42,6 @@ private:
     float m_weight;
     int m_reps;
     int m_amount; // eg. for 5x10 at same weight this value is 5
-
 };
 
 class Workout : public QObject
