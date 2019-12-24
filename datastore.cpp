@@ -108,9 +108,11 @@ bool DataStore::addSingleSet(QDate date, QString ex_name, float weight, int reps
 
 bool DataStore::addExercise(QString name, QString category)
 {
+    if (name.length() == 0 || databaseContains(name))
+        return false;
     Exercise* created_ex = new Exercise(name,category);
     m_excercise_DB.push_back(created_ex);
-    return true; // TODO: write to device file
+    return writeExerciseDB();
 }
 
 QString DataStore::getDevicePath() const
@@ -167,10 +169,24 @@ void DataStore::loadExerciseDB()
 
 bool DataStore::writeExerciseDB()
 {
-    QFile device_DB(m_device_path + "/OGLExerciseData.json");
-    device_DB.open(QIODevice::WriteOnly | QIODevice::Text);
     QJsonObject db_json;
 
+    for (Exercise* e : m_excercise_DB)
+    {
+        QJsonObject json_ex_params;
+        json_ex_params.insert("Category", e->getBodyPart());
+        json_ex_params.insert("Type", "WeightReps"); // TODO: implement e->getType()
+        db_json.insert(e->getName(), json_ex_params);
+    }
+
+    QJsonDocument save_doc(db_json);
+    if (save_doc.isNull())
+        return false;
+    QFile db_file(m_device_path + "/OGLExerciseData.json");
+    db_file.open(QIODevice::WriteOnly);
+    db_file.write(save_doc.toJson());
+    db_file.close();
+    return true;
 }
 
 Exercise *DataStore::getExerciseByName(QString name)
@@ -184,6 +200,16 @@ Exercise *DataStore::getExerciseByName(QString name)
         }
     }
     return nullptr;
+}
+
+bool DataStore::databaseContains(QString name)
+{
+    for (Exercise* e : m_excercise_DB)
+    {
+        if (e->getName().toUpper() == name.toUpper())
+            return true;
+    }
+    return false;
 }
 
 bool DataStore::writeSaveData()
@@ -209,10 +235,8 @@ bool DataStore::writeSaveData()
         if (sets.size() == 0) // Don't save days with no content.
             continue;
         save_obj.insert(QString::number(j_date),sets);
-        //qDebug() <<save_obj[date_str].toArray().first().toObject()["Exercise"].toString();
-        //qDebug() <<QString::number(save_obj[date_str].toArray().first().toObject()["Weight"].toDouble());
-
     }
+
     QJsonDocument save_doc(save_obj);
     if (save_doc.isNull())
         return false;

@@ -45,6 +45,8 @@ private:
 
     Exercise* getExerciseByName(QString name);
 
+    bool databaseContains(QString name);
+
     map<QDate,Workout*> m_workouts;
     QList<Exercise*> m_excercise_DB;
     QString m_device_path;

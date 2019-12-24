@@ -14,7 +14,7 @@ ApplicationWindow {
     height: 855
     color: "#000000"
     visible: true
-    title: qsTr("QML&C++")
+    title: qsTr("OpenGymLog")
     Material.theme: Material.Dark
     Material.accent: CT.accent1
     property date selectedDate: dataStore.selectedDate
@@ -59,7 +59,6 @@ ApplicationWindow {
     SetsView{id:addSetsView}
 
     MainView{id: l_mainView}
-
 
     // Scroll related elements for main view
     Item {

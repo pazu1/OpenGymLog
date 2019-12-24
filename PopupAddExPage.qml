@@ -71,11 +71,11 @@ Item {
 
         ToolButton {
             id: cancelButton
-            text: "Cancel"
+            text: "back"
             hoverEnabled: false
             width: parent.width / 2
             onClicked:
-                addWOSPopup.close()
+                addWOSPopup.toggleAddExPage(false)
         }
         ToolSeparator {
             anchors.horizontalCenter: parent.horizontalCenter
@@ -89,11 +89,13 @@ Item {
             width: parent.width / 2
             onClicked:
             {
-                dataStore.addExercise(nameFld.text,ctgCombo.currentText)
-                root.updateExercises()
-                addSetsView.exercise_name = nameFld.text
-                root.toggleSetsView(true)
-                addWOSPopup.close()
+                if (dataStore.addExercise(nameFld.text,ctgCombo.currentText))
+                {
+                    root.updateExercises()
+                    addSetsView.exercise_name = nameFld.text
+                    root.toggleSetsView(true)
+                    addWOSPopup.close()
+                }
             }
         }
     }
