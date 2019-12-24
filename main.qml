@@ -58,9 +58,8 @@ ApplicationWindow {
 
     SetsView{id:addSetsView}
 
+    // Scroll related elements for main view, TODO: move to own file
     MainView{id: l_mainView}
-
-    // Scroll related elements for main view
     Item {
         id: mainViewContainer
         anchors.fill: parent
@@ -88,21 +87,43 @@ ApplicationWindow {
         }
 
         ToolBar {
-            id: toolBarMain
-            x: 0
-            y: 0
+            id: mainBar
+            anchors.top: parent.top
             z: 1
             width: root.width
             height: 66*scale_y
             opacity: 1
             Material.background: CT.accent1
 
+            ToolButton {
+                id: dMenuButton
+                anchors.left: parent.left
+                anchors.leftMargin: 10*scale_x
+                icon.source: "qrc:/icons/more_vert-24px.svg"
+                icon.height: 34*scale
+                icon.width: 34*scale
+                icon.color: "#000000"
+                anchors.verticalCenter: parent.verticalCenter
+                onClicked: dMenu.open()
+            }
+        }
+
+        ToolBar {
+            id: navigationBar
+            x: 0
+            y: mainBar.height
+            z: 1
+            width: root.width
+            height: 45*scale_y
+            opacity: 1
+            Material.background: CT.foregroundDark
+
             Text {
                 x: 0
                 y: 0
-                width: toolBarMain.width
-                height: toolBarMain.height
-                color: "#000000"
+                width: navigationBar.width
+                height: navigationBar.height
+                color: CT.text1
                 text: selectedDate.toDateString()
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
@@ -113,7 +134,7 @@ ApplicationWindow {
                 id: navBack
                 y: parent.height*0.5 - height*0.5
                 icon.source: "qrc:/icons/arrow_back_ios-24px.svg"
-                icon.color: "#000000"
+                icon.color: CT.text1
                 icon.height: 34*scale
                 icon.width: 34*scale
                 display: AbstractButton.IconOnly
@@ -125,7 +146,7 @@ ApplicationWindow {
                 anchors.right: parent.right
                 anchors.rightMargin: 0
                 icon.source: "qrc:/icons/arrow_forward_ios-24px.svg"
-                icon.color: "#000000"
+                icon.color: CT.text1
                 icon.height: 34*scale
                 icon.width: 34*scale
                 display: AbstractButton.IconOnly
@@ -153,6 +174,61 @@ ApplicationWindow {
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 40
 
+        }
+
+        // TODO: move to own file
+        Drawer {
+            id: dMenu
+            z: 2
+            width: 0.7 * root.width
+            height: root.height
+            Material.background: CT.foregroundDark
+            onClosed: toggleSettings(false)
+
+            function toggleSettings(enable)
+            {
+                dMenuMain.visible = !enable
+                dSettings.visible = enable
+            }
+
+            Item {
+                id: dMenuMain
+                anchors.fill: parent
+                ScrollView {
+                    anchors.fill: parent
+                    Column {
+                        id: dContent
+                        anchors.top: parent.top
+                        anchors.topMargin: 40*scale
+                        anchors.bottom: parent.bottom
+                        anchors.bottomMargin: 0
+                        width: parent.width
+                        spacing: 10*scale
+                        ItemDelegate {
+                            id: settingsButton
+                            text: "Settings"
+                            width: dMenuMain.width*0.9
+                            onClicked: dMenu.toggleSettings(true)
+                        }
+                        ItemDelegate {
+                            id: licenseButton
+                            text: "Show license"
+                            width: dMenuMain.width*0.9
+                        }
+                        ItemDelegate {
+                            id: githubButton
+                            text: "View on GitHub"
+                            width: dMenuMain.width*0.9
+                        }
+                    }
+                }
+            }
+
+            Item {
+                id: dSettings
+                anchors.fill: parent
+
+            }
         }
     }
 }

@@ -91,12 +91,12 @@ Item {
 
     ScrollView {
         id: scrollView
-        x: 12
-        width: root.width*0.95
-        anchors.topMargin: root.height*0.095
+        anchors.horizontalCenter: parent.horizontalCenter
+        width: root.width*0.9
         anchors.bottom: parent.bottom
-        anchors.top: parent.top
         anchors.bottomMargin: 0
+        anchors.top: parent.top
+        anchors.topMargin: mainBar.height + navigationBar.height+12*scale
         ScrollBar.vertical.policy: ScrollBar.AlwaysOff
 
         Column {
