@@ -21,7 +21,7 @@ Item {
         }
         var line = chart.series(0)
         line.color = CT.accent1
-        line.removePoints(0,line.count)
+        line.removePoints(0,line.count) // empty graph
         line.pointsVisible = true
 
         maxes = []
@@ -45,7 +45,7 @@ Item {
 
     ChartView {
         id: chart
-        height: parent.height*0.4
+        height: parent.height*0.55
         width: parent.width
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
@@ -69,7 +69,7 @@ Item {
                 id: axisY
                 min: 0
                 max: 250
-                tickCount: 8
+                tickCount: 6
                 gridVisible: false
                 labelFormat: "%.0f"
                 labelsColor: CT.text1

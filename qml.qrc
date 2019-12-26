@@ -14,5 +14,6 @@
         <file>PopupAddExPage.qml</file>
         <file>icons/more_vert-24px.svg</file>
         <file>GraphPage.qml</file>
+        <file>icons/menu-24px.svg</file>
     </qresource>
 </RCC>

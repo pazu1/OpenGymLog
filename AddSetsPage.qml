@@ -135,7 +135,9 @@ Item {
             var weight = parseFloat(weightField.text)
             var reps = parseInt(repsField.text)
             if (dataStore.addSingleSet(selectedDate,addSetsView.exercise_name, weight, reps))
-                loadAddSetsPage()
+            {
+                updateSetElements()
+            }
         }
     }
 }

@@ -55,7 +55,7 @@ Item {
         anchors.rightMargin: 30*scale
         onClicked: {
             dataStore.deleteSet(obj_set)
-            loadAddSetsPage()
+            updateSetElements()
         }
     }
 

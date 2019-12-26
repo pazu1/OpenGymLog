@@ -15,14 +15,10 @@ Item {
     property string exercise_name: "add new"
     property var sets: []
 
-    onVisibleChanged: {
-        if (visible)
-            pageTEMP.makeGraph(exercise_name)
-    }
-
-    function loadAddSetsPage(){
+    function updateSetElements(){
         page1.clearSets()
         page1.loadSets()
+        pageTEMP.makeGraph(exercise_name)
     }
     Pane {
         width: root.width

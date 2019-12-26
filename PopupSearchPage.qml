@@ -22,7 +22,7 @@ Item {
         width: parent.width
         height: parent.height*0.07
         placeholderText: " type to search"
-        onTextEdited:
+        onTextChanged:
             searchItemsColumn.searchParse(text)
     }
 

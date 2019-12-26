@@ -44,7 +44,7 @@ ApplicationWindow {
         addSetsView.visible = visible
         mainViewContainer.visible = !visible
         if (visible)
-            addSetsView.loadAddSetsPage()
+            addSetsView.updateSetElements()
         else
             swipeV.itemAt(1).loadWosItems()
     }
@@ -106,7 +106,7 @@ ApplicationWindow {
                 id: dMenuButton
                 anchors.left: parent.left
                 anchors.leftMargin: 10*scale_x
-                icon.source: "qrc:/icons/more_vert-24px.svg"
+                icon.source: "qrc:/icons/menu-24px.svg"
                 icon.height: 34*scale
                 icon.width: 34*scale
                 icon.color: "#000000"
