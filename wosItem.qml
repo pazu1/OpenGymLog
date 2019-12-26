@@ -22,7 +22,7 @@ Item {
                 for (var n = 0; n < workout.getSetAt(i).getAmount(); n++)
                 {
                     var item = createdSubSet.createObject(column)
-                    item.setText(workout.getSetAt(i).getReps()+" reps               "+workout.getSetAt(i).getWeight()+" kg")
+                    item.setText(workout.getSetAt(i).getReps()+" reps               "+workout.getSetAt(i).getWeight()+" "+cfg.unit)
                 }
             }
         }
@@ -49,7 +49,7 @@ Item {
                 id: txt
                 text: "0x0"
                 color: CT.text1
-                font.pixelSize: scale*16
+                font.pixelSize: font_m*scale
             }
         }
     }
@@ -90,7 +90,7 @@ Item {
             y: 9*scale
             color: CT.text1
             text: name
-            font.pixelSize: scale*22
+            font.pixelSize: font_b*scale
         }
     }
     Column {

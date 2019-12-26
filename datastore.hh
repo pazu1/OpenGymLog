@@ -5,6 +5,8 @@
 
 #include <QObject>
 #include <QString>
+#include <QVariantList>
+#include <QVariantMap>
 
 #include <map>
 #include <memory>
@@ -30,6 +32,8 @@ public:
     Q_INVOKABLE QString getDevicePath() const;
     Q_INVOKABLE void deleteSet(SingleSet* to_delete);
     Q_INVOKABLE QStringList getCategories() const;
+    Q_INVOKABLE QVariantList getEstOneRepMaxes(QString ex) const;
+    Q_INVOKABLE QVariantList getDaysOfExercise(QString ex) const;
 
 signals:
     void selectedDateChanged();
@@ -46,6 +50,8 @@ private:
     Exercise* getExerciseByName(QString name);
 
     bool databaseContains(QString name);
+
+    float static epleyFormula(float w, int r);
 
     map<QDate,Workout*> m_workouts;
     QList<Exercise*> m_excercise_DB;

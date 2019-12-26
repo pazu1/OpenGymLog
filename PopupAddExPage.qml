@@ -24,7 +24,7 @@ Item {
         anchors.leftMargin: 15*scale
         anchors.top: parent.top
         anchors.topMargin: 40*scale
-        font.pixelSize: 22*scale_x
+        font.pixelSize: font_b*scale
         color: CT.text1
     }
 
@@ -34,7 +34,7 @@ Item {
         anchors.rightMargin: 8*scale
         anchors.top: parent.top
         anchors.topMargin: 30*scale
-        font.pixelSize: 22*scale_x
+        font.pixelSize: font_b*scale
         width: parent.width*0.5
     }
 
@@ -45,19 +45,18 @@ Item {
         anchors.leftMargin: 15*scale
         anchors.top: parent.top
         anchors.topMargin: 120*scale
-        font.pixelSize: 22*scale_x
+        font.pixelSize: font_b*scale
         color: CT.text1
     }
 
     ComboBox {
         id: ctgCombo
-        editable: true
         anchors.right: parent.right
         anchors.rightMargin: 8*scale
         anchors.top: parent.top
         anchors.topMargin: 110*scale
         width: parent.width*0.5
-        font.pixelSize: 22*scale_x
+        font.pixelSize: font_b*scale
         model: []
     }
 

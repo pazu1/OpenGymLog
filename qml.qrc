@@ -13,5 +13,6 @@
         <file>PopupSearchPage.qml</file>
         <file>PopupAddExPage.qml</file>
         <file>icons/more_vert-24px.svg</file>
+        <file>GraphPage.qml</file>
     </qresource>
 </RCC>

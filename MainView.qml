@@ -105,18 +105,4 @@ Item {
             height: scrollView.height
         }
     }
-
-    Text {
-        id: debug
-        x: root.width*0.1
-        y: root.height*0.9
-        z: 10
-        width: 300
-        height: 82
-        color: "#00e290"
-        text: qsTr("Text")
-        font.pixelSize: 12
-    }
 }
-
-

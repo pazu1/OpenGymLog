@@ -65,7 +65,7 @@ Item {
         height: 40*scale
         anchors.top: parent.top
         anchors.topMargin: 0
-        font.pixelSize: 22*scale_x
+        font.pixelSize: font_b*scale
 
         onClicked:
         {
@@ -78,7 +78,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             color: CT.text1
             text: qsTr("Text")
-            font.pixelSize: 22*scale_x
+            font.pixelSize: font_b*scale
         }
 
         ToolSeparator {
@@ -94,7 +94,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             color: CT.text1
             text: qsTr("Text")
-            font.pixelSize: 22*scale_x
+            font.pixelSize: font_b*scale
         }
 
         ToolSeparator {
@@ -109,7 +109,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             color: CT.text1
             text: qsTr("Text")
-            font.pixelSize: 22*scale_x
+            font.pixelSize: font_b*scale
         }
     }
 }

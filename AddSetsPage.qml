@@ -57,13 +57,6 @@ Item {
         }
     }
 
-    Pane {
-        id: backPane
-        width: root.width
-        height: root.height
-        Material.background: CT.backgroundDark
-    }
-
     ScrollView {
         id: selectedExerciseSetsSW
         x: 0
@@ -95,7 +88,7 @@ Item {
         height: 66
         color: CT.text1
         text: qsTr("weight:")
-        font.pixelSize: 22*scale_y
+        font.pixelSize: font_b*scale
     }
 
     Text {
@@ -106,7 +99,7 @@ Item {
         height: 40*scale_y
         color: CT.text1
         text: qsTr("reps:")
-        font.pixelSize: 22*scale_y
+        font.pixelSize: font_b*scale
     }
 
     TextField {
@@ -116,7 +109,7 @@ Item {
         width: 80
         height: 60*scale_y
         text: qsTr("")
-        font.pixelSize: 22*scale_y
+        font.pixelSize: font_b*scale
         inputMethodHints: Qt.ImhFormattedNumbersOnly
     }
 
@@ -127,7 +120,7 @@ Item {
         width: 80
         height: 60*scale_y
         text: qsTr("")
-        font.pixelSize: 22*scale_y
+        font.pixelSize: font_b*scale
         inputMethodHints: Qt.ImhFormattedNumbersOnly
     }
 

@@ -15,9 +15,19 @@ Item {
     property string exercise_name: "add new"
     property var sets: []
 
+    onVisibleChanged: {
+        if (visible)
+            pageTEMP.makeGraph(exercise_name)
+    }
+
     function loadAddSetsPage(){
         page1.clearSets()
         page1.loadSets()
+    }
+    Pane {
+        width: root.width
+        height: root.height
+        Material.background: CT.backgroundDark
     }
 
     SwipeView {
@@ -33,7 +43,7 @@ Item {
                 graphButton.toggle()
         }
         AddSetsPage{ id: page1 }
-        AddSetsPage{ id: pageTEMP }
+        GraphPage{ id: pageTEMP }
 
     }
 
@@ -68,7 +78,7 @@ Item {
         height: 66*scale_y
         Material.background: CT.accent1
         ToolButton {
-            y: parent.height*0.5 - height*0.5
+            anchors.verticalCenter: parent.verticalCenter
             icon.source: "qrc:/icons/arrow_back-24px.svg"
             icon.color: "#000000"
             icon.height: 34*scale
@@ -90,7 +100,7 @@ Item {
             text: addSetsView.exercise_name
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
-            font.pixelSize: 22*scale_y
+            font.pixelSize: font_b*scale
         }
     }
 }

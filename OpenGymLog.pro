@@ -1,6 +1,7 @@
 QT += quick
 QT += quickcontrols2
 QT += svg
+QT += charts
 
 CONFIG += c++11
 

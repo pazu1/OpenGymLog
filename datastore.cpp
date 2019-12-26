@@ -15,9 +15,10 @@ DataStore::DataStore(QObject *parent) : QObject(parent)
 
     // Create path
     QDir dir;
+    qDebug() << "Save path: "+m_device_path;
     if (!dir.exists(m_device_path))
     {
-        qDebug() << "Path "+m_device_path+" does not exist. Creating...";
+        qDebug() << "Path does not exist. Creating...";
         if (dir.mkpath(m_device_path))
             qDebug() << "Path created";
         else qDebug() << "Error in creating path";
@@ -149,6 +150,66 @@ QStringList DataStore::getCategories() const
     return f_categories;
 }
 
+QVariantList DataStore::getEstOneRepMaxes(QString ex) const
+{
+    QVariantList maxes;
+    for (pair<QDate, Workout*> n : m_workouts)
+    {
+        float f_highest = 0.f;
+        // Find highest Est1RM for this day
+        for (SingleSet* s : n.second->getSets())
+        {
+            if (s->getExercise()->getName() == ex)
+            {
+                float estMax = epleyFormula(s->getWeight(),s->getReps());
+                if (estMax > f_highest)
+                {
+                    if (f_highest > 0.f)
+                        maxes.removeLast();
+                    f_highest = estMax;
+                    maxes.push_back(estMax);
+                }
+            }
+        }
+
+    }
+    return maxes;
+}
+
+
+QVariantList DataStore::getDaysOfExercise(QString ex) const
+{
+    QVariantList days;
+    for (pair<QDate, Workout*> n : m_workouts)
+    {
+        // Fill days as keys for this exercise
+        for (SingleSet* s : n.second->getSets())
+        {
+            if (s->getExercise()->getName() == ex)
+            {
+                if (!days.contains(n.first))
+                    days.push_back(n.first);
+            }
+        }
+    }
+    if (days.isEmpty())
+        return days;
+    // Add numeric value to each day-key
+    QVariantList day_numbers;
+    QDate first_day = days.first().toDate();
+    for (QVariant v: days)
+    {
+        QDate d = v.toDate();
+        qint64 amount = first_day.daysTo(d);
+        day_numbers.push_back(amount);
+        //qDebug() << QString::number(amount);
+
+    }
+    return day_numbers;
+}
+
+
+
 void DataStore::loadExerciseDB()
 {
     QFile device_DB(m_device_path + "/OGLExerciseData.json");
@@ -210,6 +271,12 @@ bool DataStore::databaseContains(QString name)
             return true;
     }
     return false;
+}
+
+float DataStore::epleyFormula(float w, int r)
+{
+    float res = (float)w*(1.f+(r/30.f));
+    return res;
 }
 
 bool DataStore::writeSaveData()

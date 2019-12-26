@@ -1,8 +1,9 @@
 import QtQuick 2.12
 import QtQuick.Window 2.12
-import QtQuick.Controls 2.3
+import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.12
+import Qt.labs.settings 1.0
 import com.pz.exercise 1.0
 import com.pz.singleset 1.0
 import com.pz.workout 1.0
@@ -21,6 +22,15 @@ ApplicationWindow {
     property var scale_y: height/855
     property var scale_x: width/480
     property var exercisesDB: []
+    property int font_s: 14
+    property int font_m: 16
+    property int font_b: 22
+
+    Settings {
+        id: cfg
+        property string unit: "kg"
+        property int theme: 0
+    }
 
     function updateExercises() {
         exercisesDB.length = 0
@@ -34,18 +44,15 @@ ApplicationWindow {
         addSetsView.visible = visible
         mainViewContainer.visible = !visible
         if (visible)
-        {
             addSetsView.loadAddSetsPage()
-        }
         else
-        {
             swipeV.itemAt(1).loadWosItems()
-        }
     }
 
     Component.onCompleted: {
         mainView.loadWosItems()
         swipeV.insertItem(0,l_mainView)
+
     }
 
     onClosing: {
@@ -91,7 +98,7 @@ ApplicationWindow {
             anchors.top: parent.top
             z: 1
             width: root.width
-            height: 66*scale_y
+            height: 66*scale
             opacity: 1
             Material.background: CT.accent1
 
@@ -114,7 +121,7 @@ ApplicationWindow {
             y: mainBar.height
             z: 1
             width: root.width
-            height: 45*scale_y
+            height: 45*scale
             opacity: 1
             Material.background: CT.foregroundDark
 
@@ -127,7 +134,7 @@ ApplicationWindow {
                 text: selectedDate.toDateString()
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
-                font.pixelSize: 22*scale_y
+                font.pixelSize: font_b*scale
             }
 
             ToolButton {
@@ -135,8 +142,8 @@ ApplicationWindow {
                 y: parent.height*0.5 - height*0.5
                 icon.source: "qrc:/icons/arrow_back_ios-24px.svg"
                 icon.color: CT.text1
-                icon.height: 34*scale
-                icon.width: 34*scale
+                icon.height: 25*scale
+                icon.width: 25*scale
                 display: AbstractButton.IconOnly
                 onClicked: swipeV.decrementCurrentIndex()
             }
@@ -147,8 +154,8 @@ ApplicationWindow {
                 anchors.rightMargin: 0
                 icon.source: "qrc:/icons/arrow_forward_ios-24px.svg"
                 icon.color: CT.text1
-                icon.height: 34*scale
-                icon.width: 34*scale
+                icon.height: 25*scale
+                icon.width: 25*scale
                 display: AbstractButton.IconOnly
                 onClicked: swipeV.incrementCurrentIndex()
             }
@@ -180,15 +187,16 @@ ApplicationWindow {
         Drawer {
             id: dMenu
             z: 2
-            width: 0.7 * root.width
+            width: 0.8 * root.width
             height: root.height
             Material.background: CT.foregroundDark
             onClosed: toggleSettings(false)
 
             function toggleSettings(enable)
             {
-                dMenuMain.visible = !enable
+                dContent.visible = !enable
                 dSettings.visible = enable
+                dSettings.forceActiveFocus()
             }
 
             Item {
@@ -207,27 +215,85 @@ ApplicationWindow {
                         ItemDelegate {
                             id: settingsButton
                             text: "Settings"
-                            width: dMenuMain.width*0.9
+                            font.pixelSize: font_s*scale
+                            width: dMenuMain.width
                             onClicked: dMenu.toggleSettings(true)
                         }
                         ItemDelegate {
                             id: licenseButton
                             text: "Show license"
-                            width: dMenuMain.width*0.9
+                            font.pixelSize: font_s*scale
+                            width: dMenuMain.width
                         }
                         ItemDelegate {
                             id: githubButton
                             text: "View on GitHub"
-                            width: dMenuMain.width*0.9
+                            font.pixelSize: font_s*scale
+                            width: dMenuMain.width
                         }
                     }
                 }
             }
-
             Item {
                 id: dSettings
                 anchors.fill: parent
+                visible: false
+                ToolBar {
+                    anchors.top: parent.top
+                    width: parent.width
+                    height: 66*scale
+                    Material.background: CT.backgroundDark
+                    ToolButton {
+                        anchors.verticalCenter: parent.verticalCenter
+                        icon.source: "qrc:/icons/arrow_back-24px.svg"
+                        icon.color: CT.text1
+                        icon.height: 34*scale
+                        icon.width: 34*scale
+                        display: AbstractButton.IconOnly
+                        onClicked:{
+                            dMenu.toggleSettings(false)
+                        }
+                    }
+                    Text {
+                        text: "Settings"
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                        font.pointSize: font_b*scale
+                        color: CT.text1
+                    }
+                }
 
+
+                Column {
+                    anchors.top: parent.top
+                    anchors.topMargin: 78*scale
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 0
+                    width: parent.width
+                    spacing: 10*scale
+
+                    Text {
+                        text: "General:"
+                        color: CT.text1
+                        font.pointSize: font_m*scale
+                        leftPadding: 15*scale
+
+                    }
+
+                    ItemDelegate {
+                        text:"Measuring unit: " + cfg.unit
+                        font.pixelSize: font_s*scale
+                        width: parent.width
+                        onClicked: contextMenu.popup()
+                    }
+
+                    Menu {
+                            id: contextMenu
+                            z:3
+                            MenuItem {text: "Kilograms (kg)"; onClicked: cfg.unit = "kg"}
+                            MenuItem { text: "Pounds (lb)"; onClicked: cfg.unit = "lb"}
+                    }
+                }
             }
         }
     }
