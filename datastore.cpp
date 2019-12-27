@@ -178,12 +178,11 @@ QVariantList DataStore::getEstOneRepMaxes(QString ex) const
 }
 
 
-QVariantList DataStore::getDaysOfExercise(QString ex) const
+QVariantList DataStore::getDaysOfExercise(QString ex, bool as_integers) const
 {
     QVariantList days;
     for (pair<QDate, Workout*> n : m_workouts)
     {
-        // Fill days as keys for this exercise
         for (SingleSet* s : n.second->getSets())
         {
             if (s->getExercise()->getName() == ex)
@@ -195,7 +194,9 @@ QVariantList DataStore::getDaysOfExercise(QString ex) const
     }
     if (days.isEmpty())
         return days;
-    // Add numeric value to each day-key
+    if (!as_integers)
+        return days;
+    // Find the distance of each day from the first instance of exercise
     QVariantList day_numbers;
     QDate first_day = days.first().toDate();
     for (QVariant v: days)
@@ -203,13 +204,9 @@ QVariantList DataStore::getDaysOfExercise(QString ex) const
         QDate d = v.toDate();
         qint64 amount = first_day.daysTo(d);
         day_numbers.push_back(amount);
-        //qDebug() << QString::number(amount);
-
     }
     return day_numbers;
 }
-
-
 
 void DataStore::loadExerciseDB()
 {

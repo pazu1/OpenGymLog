@@ -18,7 +18,7 @@ Item {
     function updateSetElements(){
         page1.clearSets()
         page1.loadSets()
-        pageTEMP.makeGraph(exercise_name)
+        page2.makeGraph(exercise_name)
     }
     Pane {
         width: root.width
@@ -39,7 +39,7 @@ Item {
                 graphButton.toggle()
         }
         AddSetsPage{ id: page1 }
-        GraphPage{ id: pageTEMP }
+        GraphPage{ id: page2 }
 
     }
 

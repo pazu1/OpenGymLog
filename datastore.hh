@@ -33,7 +33,7 @@ public:
     Q_INVOKABLE void deleteSet(SingleSet* to_delete);
     Q_INVOKABLE QStringList getCategories() const;
     Q_INVOKABLE QVariantList getEstOneRepMaxes(QString ex) const;
-    Q_INVOKABLE QVariantList getDaysOfExercise(QString ex) const;
+    Q_INVOKABLE QVariantList getDaysOfExercise(QString ex, bool as_integers = true) const;
 
 signals:
     void selectedDateChanged();

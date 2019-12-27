@@ -9,11 +9,12 @@ import com.pz.workout 1.0
 import "Constants.js" as CT
 
 Item {
-    property var maxes: []
-    property var highest
+    property var dates: []
 
     function makeGraph(ex_name)
     {
+        var maxes = []
+        var highest = []
         highest = 0
         if (chart.count == 0)
         {
@@ -26,10 +27,11 @@ Item {
 
         maxes = []
         maxes = dataStore.getEstOneRepMaxes(ex_name)
-        axisX.max = maxes.length
 
         var days = []
         days = dataStore.getDaysOfExercise(ex_name)
+
+        dates = dataStore.getDaysOfExercise(ex_name, false)
 
         var day = 0
         for (var i = 0; i< maxes.length; i++)
@@ -41,6 +43,10 @@ Item {
         }
         axisX.max = day
         axisY.max = highest+(highest/4)
+        axisY.applyNiceNumbers()
+
+        dayFirst.text = dates[0].toLocaleString(Qt.locale("en_EN"),"dd MMM yy")
+        dayLast.text = dates.slice(-1)[0].toLocaleString(Qt.locale("en_EN"),"dd MMM yy")
     }
 
     ChartView {
@@ -56,23 +62,41 @@ Item {
         backgroundRoundness: 0
         antialiasing: true
 
-
         ValueAxis {
-                id: axisX
-                min: 0
-                max: 10
-                gridVisible: false
-                labelFormat: "%.0f"
-                labelsColor: CT.text1
+            id: axisX
+            min: 0
+            max: 10
+            gridVisible: false
+            labelsVisible: false
         }
         ValueAxis {
-                id: axisY
-                min: 0
-                max: 250
-                tickCount: 6
-                gridVisible: false
-                labelFormat: "%.0f "+ cfg.unit
-                labelsColor: CT.text1
+            id: axisY
+            min: 0
+            max: 250
+            tickCount: 6
+            gridVisible: false
+            labelFormat: "%.0f "+ cfg.unit
+            labelsColor: CT.text1
+        }
+        Text {
+            id: dayFirst
+            text: ""
+            anchors.left: parent.left
+            anchors.leftMargin: 25*scale
+            anchors.top: chart.bottom
+            anchors.topMargin: -23*scale
+            color: CT.text1
+            font.pixelSize: font_s
+        }
+        Text {
+            id: dayLast
+            text: ""
+            anchors.right: parent.right
+            anchors.rightMargin: 25*scale
+            anchors.top: chart.bottom
+            anchors.topMargin: -23*scale
+            color: CT.text1
+            font.pixelSize: font_s
         }
     }
 }
