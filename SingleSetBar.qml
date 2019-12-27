@@ -34,7 +34,7 @@ Item {
         obj_set = containedSet
         t1.text = index+"."
         t2.text = obj_set.getReps()+" reps"
-        t3.text = obj_set.getWeight()+" kg"
+        t3.text = obj_set.getWeight()+" "+cfg.unit
     }
 
     Pane {

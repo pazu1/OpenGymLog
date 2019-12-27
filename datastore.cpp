@@ -1,4 +1,5 @@
 #include "datastore.hh"
+#include "utils.hh"
 #include <QDebug>
 #include <QFile>
 #include <QDir>
@@ -271,12 +272,6 @@ bool DataStore::databaseContains(QString name)
             return true;
     }
     return false;
-}
-
-float DataStore::epleyFormula(float w, int r)
-{
-    float res = (float)w*(1.f+(r/30.f));
-    return res;
 }
 
 bool DataStore::writeSaveData()

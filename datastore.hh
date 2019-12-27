@@ -51,8 +51,6 @@ private:
 
     bool databaseContains(QString name);
 
-    float static epleyFormula(float w, int r);
-
     map<QDate,Workout*> m_workouts;
     QList<Exercise*> m_excercise_DB;
     QString m_device_path;

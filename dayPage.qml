@@ -1,4 +1,4 @@
-import QtQuick 2.12
+import QtQuick 2.0
 import QtQuick.Window 2.12
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
@@ -9,7 +9,19 @@ import com.pz.workout 1.0
 import "Constants.js" as CT
 
 Item {
-    width: root.width; height:root.height
+    function getText()
+    {
+        return "index: "+index
+    }
+    anchors.fill: parent
+
+    Text {
+        id: noWorkoutTxt
+        anchors.centerIn: parent
+        visible: false
+        color: CT.text1
+        text: "No workouts on this day."
+    }
 
     function clearWosComponents()
     {
@@ -17,12 +29,10 @@ Item {
             columnWosItems.children[d-1].destroy()
     }
 
-    // Create components for workout sets on selected day
+    // Clear and create new components for workout sets on selected day
     function loadWosItems()
     {
-        // Clear components
         clearWosComponents()
-
         var names = []
         var workout = dataStore.getWorkout(selectedDate)
         if (workout !== null)
@@ -31,8 +41,6 @@ Item {
             for (var i = 0; i<workout.getSetCount(); i++)
             {
 
-                if (workout.getSetAt == null)
-                    console.log("null set")
                 var set_name = workout.getSetAt(i).getExercise().getName()
                 if (!names.includes(set_name))
                 {
@@ -43,50 +51,16 @@ Item {
                 }
             }
         }
+        noWorkoutTxt.visible = (names.length == 0)
     }
 
-    function openPopup()
+    function getAmountOfSets()
     {
-        addWOSPopup.open()
-    }
-
-    Popup {
-        id: addWOSPopup
-        x: root.width*(0.15/2)
-        y: root.height*(0.15/2)
-        width: root.width*0.85
-        height: root.height*0.85
-        Material.background: CT.foregroundDark
-        horizontalPadding: 0
-        verticalPadding: 0
-        clip: true
-        modal: true
-        focus: true
-        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
-        onOpened: {
-            root.updateExercises()
-            srchPage.refreshItems()
-        }
-        onClosed: {
-            toggleAddExPage(false)
-        }
-
-        function toggleAddExPage(enable)
-        {
-            srchPage.visible = !enable
-            addxPage.visible = enable
-        }
-
-        PopupSearchPage {id: srchPage}
-        PopupAddExPage {id: addxPage; visible: false}
-
-
-    }
-
-    Pane {
-        height: root.height
-        width: root.width
-        Material.background: CT.backgroundDark
+        if (columnWosItems.children.length == 0)
+            noWorkoutTxt.visible = true
+        else
+            noWorkoutTxt.visible = false
+        return columnWosItems.children.length
     }
 
     ScrollView {
@@ -106,3 +80,4 @@ Item {
         }
     }
 }
+

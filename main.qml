@@ -1,6 +1,6 @@
 import QtQuick 2.12
 import QtQuick.Window 2.12
-import QtQuick.Controls 2.4
+import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.12
 import Qt.labs.settings 1.0
@@ -46,13 +46,13 @@ ApplicationWindow {
         if (visible)
             addSetsView.updateSetElements()
         else
-            swipeV.itemAt(1).loadWosItems()
+        {
+            view.currentItem.item.loadWosItems()
+        }
     }
 
     Component.onCompleted: {
-        mainView.loadWosItems()
-        swipeV.insertItem(0,l_mainView)
-
+        view.currentItem.item.loadWosItems()
     }
 
     onClosing: {
@@ -63,34 +63,50 @@ ApplicationWindow {
         }
     }
 
-    SetsView{id:addSetsView}
+    SetsView {id: addSetsView}
 
-    // Scroll related elements for main view, TODO: move to own file
-    MainView{id: l_mainView}
+    // Scroll related elements for day pages
     Item {
         id: mainViewContainer
         anchors.fill: parent
-        SwipeView {
-            id: swipeV
+
+        Pane {
             anchors.fill: parent
-            interactive: false
-            onCurrentIndexChanged: // TODO: fix; swiping to the left causes issues
+            Material.background: CT.backgroundDark
+        }
+
+        PathView {
+            id: view
+            anchors.fill: parent
+            snapMode: PathView.SnapToItem
+            model: ["dayPage.qml","dayPage.qml","dayPage.qml"]
+            delegate: Loader {
+                width: parent.width
+                height: parent.height
+                source: modelData
+            }
+            property var prev_index
+
+            onDragStarted: prev_index = currentIndex
+
+            onCurrentIndexChanged:
             {
-                if (currentIndex == 0)
-                {
-                    dataStore.scrollDate(-1)
-                    moveItem(2,0)
-                }
-                else if (currentIndex == 2)
-                {
+                // embarrassing if-else -statement
+                if (((prev_index > currentIndex)&& !( currentIndex == 0  && prev_index == 2)) || (currentIndex == 2 && prev_index == 0))
                     dataStore.scrollDate(1)
-                    moveItem(0,2)
-                }
-                itemAt(currentIndex).loadWosItems()
+                else if (prev_index < currentIndex || (currentIndex == 0 && prev_index == 2))
+                    dataStore.scrollDate(-1)
+
+                prev_index = currentIndex
+
+                currentItem.item.loadWosItems()
             }
 
-            MainView{id: mainView}
-            MainView{id: r_mainView}
+            path: Path {
+                startX: view.width/2; startY: view.height/2
+                PathQuad { x: view.width/2; y: view.height*view.model.length; controlX: -view.width; controlY: view.height/2 }
+                PathQuad { x: view.width/2; y: view.height/2; controlX: view.width * view.model.length; controlY: view.height/2 }
+            }
         }
 
         ToolBar {
@@ -145,7 +161,7 @@ ApplicationWindow {
                 icon.height: 25*scale
                 icon.width: 25*scale
                 display: AbstractButton.IconOnly
-                onClicked: swipeV.decrementCurrentIndex()
+                onClicked: view.incrementCurrentIndex()
             }
             ToolButton {
                 id: navForw
@@ -157,7 +173,7 @@ ApplicationWindow {
                 icon.height: 25*scale
                 icon.width: 25*scale
                 display: AbstractButton.IconOnly
-                onClicked: swipeV.incrementCurrentIndex()
+                onClicked: view.decrementCurrentIndex()
             }
         }
 
@@ -174,7 +190,7 @@ ApplicationWindow {
             Material.background: CT.accent1
             Material.foreground: "#000000"
             onClicked: {
-                swipeV.itemAt(1).openPopup()
+                addWOSPopup.open()
             }
             anchors.right: parent.right
             anchors.rightMargin: 40
@@ -183,7 +199,39 @@ ApplicationWindow {
 
         }
 
-        // TODO: move to own file
+        // Popup for adding sets / creating workout
+        Popup {
+            id: addWOSPopup
+            x: root.width*(0.15/2)
+            y: root.height*(0.15/2)
+            width: root.width*0.85
+            height: root.height*0.85
+            Material.background: CT.foregroundDark
+            horizontalPadding: 0
+            verticalPadding: 0
+            clip: true
+            modal: true
+            focus: true
+            closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+            onOpened: {
+                root.updateExercises()
+                srchPage.refreshItems()
+            }
+            onClosed: {
+                toggleAddExPage(false)
+            }
+
+            function toggleAddExPage(enable)
+            {
+                srchPage.visible = !enable
+                addxPage.visible = enable
+            }
+
+            PopupSearchPage {id: srchPage}
+            PopupAddExPage {id: addxPage; visible: false}
+        }
+
+        // Settings
         Drawer {
             id: dMenu
             z: 2
@@ -196,7 +244,6 @@ ApplicationWindow {
             {
                 dContent.visible = !enable
                 dSettings.visible = enable
-                dSettings.forceActiveFocus()
             }
 
             Item {
@@ -273,6 +320,7 @@ ApplicationWindow {
                     spacing: 10*scale
 
                     Text {
+                        id:label1
                         text: "General:"
                         color: CT.text1
                         font.pointSize: font_m*scale
@@ -288,10 +336,22 @@ ApplicationWindow {
                     }
 
                     Menu {
-                            id: contextMenu
-                            z:3
-                            MenuItem {text: "Kilograms (kg)"; onClicked: cfg.unit = "kg"}
-                            MenuItem { text: "Pounds (lb)"; onClicked: cfg.unit = "lb"}
+                        id: contextMenu
+                        z:3
+                        MenuItem {
+                            text: "Kilograms (kg)"
+                            onClicked: {
+                                cfg.unit = "kg"
+                                view.currentItem.item.loadWosItems()
+                            }
+                        }
+                        MenuItem {
+                            text: "Pounds (lb)"
+                            onClicked: {
+                                cfg.unit = "lb"
+                                view.currentItem.item.loadWosItems()
+                            }
+                        }
                     }
                 }
             }

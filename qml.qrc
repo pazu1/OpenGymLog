@@ -6,7 +6,6 @@
         <file>Constants.js</file>
         <file>icons/arrow_back-24px.svg</file>
         <file>SetsView.qml</file>
-        <file>MainView.qml</file>
         <file>AddSetsPage.qml</file>
         <file>icons/arrow_back_ios-24px.svg</file>
         <file>icons/arrow_forward_ios-24px.svg</file>
@@ -15,5 +14,6 @@
         <file>icons/more_vert-24px.svg</file>
         <file>GraphPage.qml</file>
         <file>icons/menu-24px.svg</file>
+        <file>dayPage.qml</file>
     </qresource>
 </RCC>

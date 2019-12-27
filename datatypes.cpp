@@ -54,7 +54,13 @@ void Workout::addSet(SingleSet *to_add)
 
 int Workout::getSetCount()
 {
-    return int(m_sets.size());
+    int count = 0;
+    for (SingleSet* s: m_sets)
+    {
+        if (s->getAmount() != 0)
+            count++;
+    }
+    return count;
 }
 
 SingleSet* Workout::getSetAt(int index)
