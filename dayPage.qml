@@ -38,9 +38,9 @@ Item {
         if (workout !== null)
         {
             // Populate sets array & create components
+            noWorkoutTxt.visible = (workout.getSetCount(true) == 0)
             for (var i = 0; i<workout.getSetCount(); i++)
             {
-
                 var set_name = workout.getSetAt(i).getExercise().getName()
                 if (!names.includes(set_name))
                 {
@@ -51,7 +51,8 @@ Item {
                 }
             }
         }
-        noWorkoutTxt.visible = (names.length == 0)
+        else
+            noWorkoutTxt.visible = true
     }
 
     function getAmountOfSets()

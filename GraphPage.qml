@@ -71,10 +71,9 @@ Item {
                 max: 250
                 tickCount: 6
                 gridVisible: false
-                labelFormat: "%.0f"
+                labelFormat: "%.0f "+ cfg.unit
                 labelsColor: CT.text1
         }
-
     }
 }
 

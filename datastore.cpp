@@ -160,7 +160,7 @@ QVariantList DataStore::getEstOneRepMaxes(QString ex) const
         // Find highest Est1RM for this day
         for (SingleSet* s : n.second->getSets())
         {
-            if (s->getExercise()->getName() == ex)
+            if (s->getExercise()->getName() == ex && s->getAmount() != 0)
             {
                 float estMax = epleyFormula(s->getWeight(),s->getReps());
                 if (estMax > f_highest)

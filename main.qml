@@ -85,7 +85,7 @@ ApplicationWindow {
                 height: parent.height
                 source: modelData
             }
-            property var prev_index
+            property var prev_index: 0
 
             onDragStarted: prev_index = currentIndex
 
@@ -96,6 +96,8 @@ ApplicationWindow {
                     dataStore.scrollDate(1)
                 else if (prev_index < currentIndex || (currentIndex == 0 && prev_index == 2))
                     dataStore.scrollDate(-1)
+
+                console.log(currentIndex)
 
                 prev_index = currentIndex
 

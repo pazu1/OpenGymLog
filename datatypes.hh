@@ -52,7 +52,7 @@ public:
     void addSet(SingleSet* to_add);
     vector<SingleSet*> getSets(){return m_sets;}
 
-    Q_INVOKABLE int getSetCount();
+    Q_INVOKABLE int getSetCount(bool exclude_zero_sets = false);
     Q_INVOKABLE SingleSet* getSetAt(int index);
 private:
     vector<SingleSet*> m_sets;
