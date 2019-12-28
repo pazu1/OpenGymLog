@@ -95,10 +95,11 @@ Item {
         width: parent.width
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 0
-        Material.background: CT.foregroundLight
+        Material.background: CT.backgroundDark
         ToolButton {
             id: cancelButton
             text: "Cancel"
+            Material.foreground: CT.text1
             hoverEnabled: false
             width: parent.width / 2
             onClicked: addWOSPopup.close()
@@ -109,7 +110,8 @@ Item {
 
         ToolButton {
             id: addExButton
-            text: "Add exercise"
+            text: "New exercise"
+            Material.foreground: CT.text1
             hoverEnabled: false
             anchors.right: parent.right
             anchors.rightMargin: 0

@@ -1,11 +1,9 @@
 <RCC>
     <qresource prefix="/">
-        <file>main.qml</file>
         <file>wosItem.qml</file>
         <file>SingleSetBar.qml</file>
         <file>Constants.js</file>
         <file>icons/arrow_back-24px.svg</file>
-        <file>SetsView.qml</file>
         <file>AddSetsPage.qml</file>
         <file>icons/arrow_back_ios-24px.svg</file>
         <file>icons/arrow_forward_ios-24px.svg</file>
@@ -15,5 +13,8 @@
         <file>GraphPage.qml</file>
         <file>icons/menu-24px.svg</file>
         <file>dayPage.qml</file>
+        <file>Alert.qml</file>
+        <file>main.qml</file>
+        <file>SetsView.qml</file>
     </qresource>
 </RCC>

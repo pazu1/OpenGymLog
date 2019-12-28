@@ -7,8 +7,8 @@
 		"Category" : "Back",
 		"Type" : "WeightReps"
 	},
-	"Barbell Bicep Curl": {
-		"Category" : "Bicep",
+        "Barbell Bicep Curl": {
+                "Category" : "Biceps",
 		"Type" : "WeightReps"
         },
         "Deadlift": {

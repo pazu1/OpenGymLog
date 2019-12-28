@@ -135,9 +135,9 @@ Item {
             var weight = parseFloat(weightField.text)
             var reps = parseInt(repsField.text)
             if (dataStore.addSingleSet(selectedDate,addSetsView.exercise_name, weight, reps))
-            {
                 updateSetElements()
-            }
+            else
+                rootAlert.showAlert(toolBarAS.y + toolBarAS.height, true, "Couldn't add set. Please enter valid reps and weight.")
         }
     }
 }

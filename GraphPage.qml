@@ -1,5 +1,6 @@
 import QtQuick 2.12
 import QtQuick.Window 2.12
+import QtQuick.Controls 2.3
 import QtQuick.Controls.Material 2.12
 import QtCharts 2.3
 import Qt.labs.settings 1.0
@@ -10,6 +11,8 @@ import "Constants.js" as CT
 
 Item {
     property var dates: []
+    property var line
+    clip: true
 
     function makeGraph(ex_name)
     {
@@ -19,19 +22,23 @@ Item {
         if (chart.count == 0)
         {
             chart.createSeries(ChartView.SeriesTypeLine,"test",axisX,axisY)
+            line = chart.series(0)
+            line.color = CT.accent1
+            line.pointsVisible = true
         }
-        var line = chart.series(0)
-        line.color = CT.accent1
         line.removePoints(0,line.count) // empty graph
-        line.pointsVisible = true
 
         maxes = []
         maxes = dataStore.getEstOneRepMaxes(ex_name)
 
         var days = []
         days = dataStore.getDaysOfExercise(ex_name)
-
         dates = dataStore.getDaysOfExercise(ex_name, false)
+
+        if (dates.length == 0 || days.length == 0)
+        {
+            return
+        }
 
         var day = 0
         for (var i = 0; i< maxes.length; i++)
@@ -49,6 +56,21 @@ Item {
         dayLast.text = dates.slice(-1)[0].toLocaleString(Qt.locale("en_EN"),"dd MMM yy")
     }
 
+    ToolBar {
+        Material.background: CT.backgroundDark
+        anchors.top: parent.top
+        anchors.topMargin: 66*scale
+        height: 45*scale
+        width: parent.width
+        Text {
+            text: "Estimated 1 Rep Max"
+            font.pixelSize: font_b
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            color: CT.text1
+        }
+    }
+
     ChartView {
         id: chart
         height: parent.height*0.55
@@ -57,7 +79,7 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         title: ""
         legend.visible: false
-        backgroundColor: CT.backgroundDark
+        backgroundColor: "#00000000"
         plotAreaColor: "#000000"
         backgroundRoundness: 0
         antialiasing: true
@@ -68,6 +90,7 @@ Item {
             max: 10
             gridVisible: false
             labelsVisible: false
+            tickCount: 2
         }
         ValueAxis {
             id: axisY
@@ -86,7 +109,7 @@ Item {
             anchors.top: chart.bottom
             anchors.topMargin: -23*scale
             color: CT.text1
-            font.pixelSize: font_s
+            font.pixelSize: font_s*scale
         }
         Text {
             id: dayLast
@@ -96,7 +119,7 @@ Item {
             anchors.top: chart.bottom
             anchors.topMargin: -23*scale
             color: CT.text1
-            font.pixelSize: font_s
+            font.pixelSize: font_s*scale
         }
     }
 }

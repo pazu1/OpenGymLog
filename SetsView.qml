@@ -71,7 +71,7 @@ Item {
         x: 0
         y: 0
         width: root.width
-        height: 66*scale_y
+        height: 66*scale
         Material.background: CT.accent1
         ToolButton {
             anchors.verticalCenter: parent.verticalCenter

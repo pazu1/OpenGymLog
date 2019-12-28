@@ -94,7 +94,10 @@ Item {
                     addSetsView.exercise_name = nameFld.text
                     root.toggleSetsView(true)
                     addWOSPopup.close()
+                    rootAlert.showAlert(mainBar.y + mainBar.height,false,"Created exercise: " + nameFld.text)
                 }
+                else
+                    popupAlert.showAlert(0,true,"Error: Invalid exercise name")
             }
         }
     }

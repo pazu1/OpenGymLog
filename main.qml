@@ -26,6 +26,12 @@ ApplicationWindow {
     property int font_m: 16
     property int font_b: 22
 
+    Alert {
+        id: rootAlert
+        z: 10
+        y: 160*scale
+    }
+
     Settings {
         id: cfg
         property string unit: "kg"
@@ -39,10 +45,12 @@ ApplicationWindow {
         }
     }
 
-    function toggleSetsView(visible)
+    function toggleSetsView(enabled)
     {
-        addSetsView.visible = visible
-        mainViewContainer.visible = !visible
+        addSetsView.visible = enabled
+        mainViewContainer.visible = !enabled
+        dMenu.interactive = !enabled
+
         if (visible)
             addSetsView.updateSetElements()
         else
@@ -227,6 +235,11 @@ ApplicationWindow {
             {
                 srchPage.visible = !enable
                 addxPage.visible = enable
+            }
+            Alert {
+                id: popupAlert
+                z: 10
+                y: 160*scale
             }
 
             PopupSearchPage {id: srchPage}
