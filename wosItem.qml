@@ -22,7 +22,8 @@ Item {
                 for (var n = 0; n < workout.getSetAt(i).getAmount(); n++)
                 {
                     var item = createdSubSet.createObject(column)
-                    item.setText(workout.getSetAt(i).getReps()+" reps               "+workout.getSetAt(i).getWeight()+" "+cfg.unit)
+                    var form_w = (Math.round(workout.getSetAt(i).getWeight()*100) / 100).toFixed(2);
+                    item.setText(workout.getSetAt(i).getReps()+" reps               "+form_w+" "+cfg.unit)
                 }
             }
         }

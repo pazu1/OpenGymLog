@@ -35,10 +35,14 @@ Item {
         days = dataStore.getDaysOfExercise(ex_name)
         dates = dataStore.getDaysOfExercise(ex_name, false)
 
-        if (dates.length == 0 || days.length == 0)
+        if (dates.length == 0 || days.length < 2)
         {
+            chart.visible = false
+            issueText.visible = true
             return
         }
+        issueText.visible = false
+        chart.visible = true
 
         var day = 0
         for (var i = 0; i< maxes.length; i++)
@@ -54,6 +58,15 @@ Item {
 
         dayFirst.text = dates[0].toLocaleString(Qt.locale("en_EN"),"dd MMM yy")
         dayLast.text = dates.slice(-1)[0].toLocaleString(Qt.locale("en_EN"),"dd MMM yy")
+    }
+
+    Text {
+        id: issueText
+        text: qsTr("Not enough records on this exercise to display a graph.")
+        visible: false
+        color: CT.text1
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
     }
 
     ToolBar {

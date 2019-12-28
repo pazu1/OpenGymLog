@@ -51,12 +51,10 @@ ApplicationWindow {
         mainViewContainer.visible = !enabled
         dMenu.interactive = !enabled
 
-        if (visible)
+        if (enabled)
             addSetsView.updateSetElements()
         else
-        {
             view.currentItem.item.loadWosItems()
-        }
     }
 
     Component.onCompleted: {

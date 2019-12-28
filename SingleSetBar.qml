@@ -32,9 +32,10 @@ Item {
 
     function setProps(index, containedSet) {
         obj_set = containedSet
+        var form_w = (Math.round(obj_set.getWeight()*100) / 100).toFixed(2);
         t1.text = index+"."
         t2.text = obj_set.getReps()+" reps"
-        t3.text = obj_set.getWeight()+" "+cfg.unit
+        t3.text = form_w+" "+cfg.unit
     }
 
     Pane {
