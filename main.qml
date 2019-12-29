@@ -190,7 +190,7 @@ ApplicationWindow {
             anchors.right: parent.right
             anchors.rightMargin: 40*scale
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: 40*scale
+            anchors.bottomMargin: 30*scale
             width: 75*scale
             height: 75*scale
             text: "+"
