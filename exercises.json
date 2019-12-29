@@ -1,15 +1,51 @@
 {
-	"Flat Barbell BenchPress": {
+        "Incline Barbell Bench Press": {
+                "Category" : "Chest",
+                "Type" : "WeightReps"
+        },
+        "Incline Dumbbell Bench Press": {
+                "Category" : "Chest",
+                "Type" : "WeightReps"
+        },
+        "Decline Barbell Bench Press": {
+                "Category" : "Chest",
+                "Type" : "WeightReps"
+        },
+        "Decline Dumbbell Bench Press": {
+                "Category" : "Chest",
+                "Type" : "WeightReps"
+        },
+        "Flat Barbell Bench Press": {
 		"Category" : "Chest",
 		"Type" : "WeightReps"
-		},
+        },
+        "Dumbbell BenchPress": {
+                "Category" : "Chest",
+                "Type" : "WeightReps"
+        },
+        "Cable Chest Fly": {
+                "Category" : "Chest",
+                "Type" : "WeightReps"
+        },
 	"Chin Up": {
 		"Category" : "Back",
 		"Type" : "WeightReps"
 	},
-        "Barbell Bicep Curl": {
+        "Barbell Curl": {
                 "Category" : "Biceps",
 		"Type" : "WeightReps"
+        },
+        "EZ-bar Curl": {
+                "Category" : "Biceps",
+                "Type" : "WeightReps"
+        },
+        "Dumbbell Curl": {
+                "Category" : "Biceps",
+                "Type" : "WeightReps"
+        },
+        "Dumbbell Hammer Curl": {
+                "Category" : "Biceps",
+                "Type" : "WeightReps"
         },
         "Deadlift": {
                 "Category" : "Back",
@@ -19,20 +55,52 @@
                 "Category" : "Shoulders",
                 "Type" : "WeightReps"
         },
-        "Squat": {
+        "Barbell Back Squat": {
                 "Category" : "Legs",
                 "Type" : "WeightReps"
         },
-        "Dumbell Lateral Raise": {
+        "Barbell Front Squat": {
+                "Category" : "Legs",
+                "Type" : "WeightReps"
+        },
+        "Safety-bar Squat": {
+                "Category" : "Legs",
+                "Type" : "WeightReps"
+        },
+        "Dumbbell Lateral Raise": {
                 "Category" : "Shoulders",
                 "Type" : "WeightReps"
         },
-        "Skullcursher": {
+        "EZ-bar Skullcursher": {
                 "Category" : "Triceps",
                 "Type" : "WeightReps"
         },
-        "T-bar row": {
-                "Category" : "back",
+        "Dumbbell Skullcursher": {
+                "Category" : "Triceps",
+                "Type" : "WeightReps"
+        },
+        "T-bar Row": {
+                "Category" : "Back",
+                "Type" : "WeightReps"
+        },
+        "Barbell Row": {
+                "Category" : "Back",
+                "Type" : "WeightReps"
+        },
+        "Upright Row": {
+                "Category" : "Back",
+                "Type" : "WeightReps"
+        },
+        "Lat Pulldown": {
+                "Category" : "Back",
+                "Type" : "WeightReps"
+        },
+        "Crunch": {
+                "Category" : "Abs",
+                "Type" : "WeightReps"
+        },
+        "Leg Raise": {
+                "Category" : "Abs",
                 "Type" : "WeightReps"
         }
 }
