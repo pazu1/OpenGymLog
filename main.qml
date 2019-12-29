@@ -2,7 +2,7 @@ import QtQuick 2.12
 import QtQuick.Window 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.3
-import QtQuick.Controls.Material 2.12
+import QtQuick.Controls.Material 2.3
 import Qt.labs.settings 1.0
 import com.pz.exercise 1.0
 import com.pz.singleset 1.0
@@ -187,8 +187,10 @@ ApplicationWindow {
 
         RoundButton {
             id: addWOSButton
-            x: 338
-            y: 584
+            anchors.right: parent.right
+            anchors.rightMargin: 40*scale
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 40*scale
             width: 75*scale
             height: 75*scale
             text: "+"
@@ -200,11 +202,6 @@ ApplicationWindow {
             onClicked: {
                 addWOSPopup.open()
             }
-            anchors.right: parent.right
-            anchors.rightMargin: 40
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 40
-
         }
 
         // Popup for adding sets / creating workout
@@ -221,13 +218,16 @@ ApplicationWindow {
             modal: true
             focus: true
             closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+            Overlay.modal: Rectangle {
+                    color: "#85000000"
+                }
             onOpened: {
                 root.updateExercises()
                 srchPage.refreshItems()
             }
             onClosed: {
                 toggleAddExPage(false)
-            }
+            } 
 
             function toggleAddExPage(enable)
             {
@@ -244,7 +244,7 @@ ApplicationWindow {
             PopupAddExPage {id: addxPage; visible: false}
         }
 
-        // Settings
+        // Drawer menu
         Drawer {
             id: dMenu
             z: 2
@@ -252,6 +252,9 @@ ApplicationWindow {
             height: root.height
             Material.background: CT.foregroundDark
             onClosed: toggleSettings(false)
+            Overlay.modal: Rectangle {
+                    color: "#85000000"
+                }
 
             function toggleSettings(enable)
             {
@@ -280,16 +283,18 @@ ApplicationWindow {
                             onClicked: dMenu.toggleSettings(true)
                         }
                         ItemDelegate {
-                            id: licenseButton
-                            text: "Show license"
-                            font.pixelSize: font_s*scale
-                            width: dMenuMain.width
-                        }
-                        ItemDelegate {
                             id: githubButton
                             text: "View on GitHub"
                             font.pixelSize: font_s*scale
                             width: dMenuMain.width
+                            onClicked: Qt.openUrlExternally("https://github.com/pazu1/OpenGymLog")
+                        }
+                        ItemDelegate {
+                            id: licenseButton
+                            text: "Show license (GPL v3)"
+                            font.pixelSize: font_s*scale
+                            width: dMenuMain.width
+                            onClicked: Qt.openUrlExternally("https://www.gnu.org/licenses/gpl-3.0.html")
                         }
                     }
                 }
@@ -325,10 +330,13 @@ ApplicationWindow {
 
 
                 Column {
+                    id: settingsColumn
                     anchors.top: parent.top
                     anchors.topMargin: 78*scale
                     anchors.bottom: parent.bottom
                     anchors.bottomMargin: 0
+                    anchors.left: parent.left
+                    anchors.leftMargin: 20*scale
                     width: parent.width
                     spacing: 10*scale
 
@@ -337,32 +345,30 @@ ApplicationWindow {
                         text: "General:"
                         color: CT.text1
                         font.pointSize: font_m*scale
-                        leftPadding: 15*scale
-
                     }
+                    Row {
+                        spacing: 20*scale
 
-                    ItemDelegate {
-                        text:"Measuring unit: " + cfg.unit
-                        font.pixelSize: font_s*scale
-                        width: parent.width
-                        onClicked: contextMenu.popup()
-                    }
-
-                    Menu {
-                        id: contextMenu
-                        z:3
-                        MenuItem {
-                            text: "Kilograms (kg)"
-                            onClicked: {
-                                cfg.unit = "kg"
-                                view.currentItem.item.loadWosItems()
-                            }
+                        Text {
+                            text:"Measuring unit:"
+                            font.pixelSize: font_s*scale
+                            color: CT.text1
+                            anchors.verticalCenter: parent.verticalCenter
                         }
-                        MenuItem {
-                            text: "Pounds (lb)"
-                            onClicked: {
-                                cfg.unit = "lb"
-                                view.currentItem.item.loadWosItems()
+                        ComboBox {
+                            z:2
+                            width: settingsColumn.width*0.5
+                            x:0
+                            font.pixelSize: font_s*scale
+                            model: [ "Kilograms (kg)", "Pounds (lb)"]
+                            popup.z: 2
+                            onCurrentIndexChanged: {
+                                if (currentIndex == 0)
+                                    cfg.unit = "kg"
+                                else
+                                    cfg.unit = "lb"
+                                if (view.currentItem != null)
+                                    view.currentItem.item.loadWosItems()
                             }
                         }
                     }

@@ -60,9 +60,11 @@ Item {
     ScrollView {
         id: selectedExerciseSetsSW
         x: 0
-        y: pane.height+5*scale_y
+        anchors.top: pane.bottom
+        anchors.topMargin: 5*scale
         width: root.width
-        height: root.height-pane.height-tabBarAS.height-10*scale_y
+        height: root.height-pane.height-tabBarAS.height-toolBarAS.height-10*scale
+        anchors.bottomMargin: 0
         ScrollBar.vertical.policy: ScrollBar.AlwaysOff
 
         Column {
@@ -77,59 +79,63 @@ Item {
     Pane {
         id: pane
         Material.background: CT.foregroundDark
+        anchors.top: parent.top
+        anchors.topMargin: toolBarAS.height
         width: root.width
-        height: repsField.y+repsField.height
+        height: root.height*0.2
     }
-    Text {
-        id: wText
-        x: weightField.x-width*0.7
-        y: weightField.y+weightField.height*0.25
-        width: 120*scale_x
-        height: 66
-        color: CT.text1
-        text: qsTr("weight:")
-        font.pixelSize: font_b*scale
-    }
-
-    Text {
-        id: rText
-        x: repsField.x-width*0.7
-        y: repsField.y+repsField.height*0.25
-        width: 120*scale_x
-        height: 40*scale_y
-        color: CT.text1
-        text: qsTr("reps:")
-        font.pixelSize: font_b*scale
-    }
-
-    TextField {
-        id: weightField
-        x: 200*scale_x
-        y: (repsField.y-repsField.height)
-        width: 80
-        height: 60*scale_y
-        text: qsTr("")
-        font.pixelSize: font_b*scale
-        inputMethodHints: Qt.ImhFormattedNumbersOnly
-    }
-
-    TextField {
-        id: repsField
-        x: 200*scale_x
-        y: 160*scale_y
-        width: 80
-        height: 60*scale_y
-        text: qsTr("")
-        font.pixelSize: font_b*scale
-        inputMethodHints: Qt.ImhFormattedNumbersOnly
+    Column
+    {
+        anchors.verticalCenter: pane.verticalCenter
+        anchors.right: pane.right
+        anchors.rightMargin: pane.width*0.35
+        Row {
+            id: firstRow
+            spacing: 20
+            Text {
+                id: wText
+                color: CT.text1
+                text: qsTr("weight:")
+                font.pixelSize: font_b*scale
+                anchors.verticalCenter: parent.verticalCenter
+            }
+            TextField {
+                id: weightField
+                width: 80*scale
+                text: qsTr("")
+                font.pixelSize: font_b*scale
+                inputMethodHints: Qt.ImhFormattedNumbersOnly
+                anchors.verticalCenter: parent.verticalCenter
+            }
+        }
+        Row {
+            spacing: 20
+            Text {
+                id: rText
+                color: CT.text1
+                text: qsTr("reps:")
+                font.pixelSize: font_b*scale
+                anchors.verticalCenter: parent.verticalCenter
+            }
+            TextField {
+                id: repsField
+                width: 80*scale
+                text: qsTr("")
+                font.pixelSize: font_b*scale
+                inputMethodHints: Qt.ImhFormattedNumbersOnly
+                anchors.verticalCenter: parent.verticalCenter
+            }
+        }
     }
 
     Button {
         id: setAddButton
-        x: 346*scale_x
-        y: repsField.y-height*0.3
-        width: 107*scale_x
-        height: 55*scale_y
+        anchors.right: pane.right
+        anchors.rightMargin: 17*scale
+        anchors.bottom: pane.bottom
+        anchors.bottomMargin: 10*scale
+        width: 107*scale
+        height: 55*scale
         text: qsTr("Add set")
         onClicked:{
             var weight = parseFloat(weightField.text)
