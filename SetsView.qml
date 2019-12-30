@@ -71,14 +71,14 @@ Item {
         x: 0
         y: 0
         width: root.width
-        height: 66*scale
+        height: 66*root_scale
         Material.background: CT.accent1
         ToolButton {
             anchors.verticalCenter: parent.verticalCenter
             icon.source: "qrc:/icons/arrow_back-24px.svg"
             icon.color: "#000000"
-            icon.height: 34*scale
-            icon.width: 34*scale
+            icon.height: 34*root_scale
+            icon.width: 34*root_scale
             display: AbstractButton.IconOnly
             onClicked:{
                 toggleSetsView(false)
@@ -96,7 +96,7 @@ Item {
             text: addSetsView.exercise_name
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
-            font.pixelSize: font_b*scale
+            font.pixelSize: font_b*root_scale
         }
     }
 }

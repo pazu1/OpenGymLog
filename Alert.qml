@@ -23,7 +23,7 @@ Item {
         State {
             name: "expanded"
             when: expanded
-            PropertyChanges {target: alertRoot; height: 40*scale}
+            PropertyChanges {target: alertRoot; height: 40*root_scale}
         }
 
     ]
@@ -44,7 +44,7 @@ Item {
         messageTxt.text = message
         delayedAnimation.start()
         expanded= true
-        y = deploy_point+2*scale
+        y = deploy_point+2*root_scale
     }
 
     Rectangle {
@@ -58,7 +58,7 @@ Item {
             text: qsTr("Alert!")
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
-            font.pixelSize: font_s*scale
+            font.pixelSize: font_s*root_scale
         }
     }
 

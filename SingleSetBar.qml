@@ -9,7 +9,7 @@ import "Constants.js" as CT
 Item {
     id: singleSetBarRoot
     width: 200
-    height: 40*scale
+    height: 50*root_scale
     property bool expanded: false
     property var obj_set
 
@@ -17,12 +17,12 @@ Item {
         State {
             name: "normal"
             when: !expanded
-            PropertyChanges {target: singleSetBarRoot; height: 40*scale}
+            PropertyChanges {target: singleSetBarRoot; height: 50*root_scale}
         },
         State {
             name: "expanded"
             when: expanded
-            PropertyChanges {target: singleSetBarRoot; height: 100*scale}
+            PropertyChanges {target: singleSetBarRoot; height: 120*root_scale}
         }
 
     ]
@@ -47,13 +47,15 @@ Item {
         height: singleSetBarRoot.height
     }
 
+
+
     Button {
         text: "delete"
         visible: expanded
         anchors.top: parent.top
-        anchors.topMargin: 50*scale
+        anchors.topMargin: 50*root_scale
         anchors.right: parent.right
-        anchors.rightMargin: 30*scale
+        anchors.rightMargin: 30*root_scale
         onClicked: {
             dataStore.deleteSet(obj_set)
             updateSetElements()
@@ -63,10 +65,10 @@ Item {
     ItemDelegate {
         id: baseItem
         width: singleSetBarRoot.width
-        height: 40*scale
+        height: 50*root_scale
         anchors.top: parent.top
         anchors.topMargin: 0
-        font.pixelSize: font_b*scale
+        font.pixelSize: font_b*root_scale
 
         onClicked:
         {
@@ -75,42 +77,55 @@ Item {
 
         Text {
             id: t1
-            x: singleSetBarRoot.width*0.02
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenter: baseItem.verticalCenter
+            anchors.left: baseItem.left
+            anchors.leftMargin: 15*root_scale
             color: CT.text1
             text: qsTr("Text")
-            font.pixelSize: font_b*scale
+            font.pixelSize: font_b*root_scale
         }
 
         ToolSeparator {
             id: toolSeparator
-            anchors.left: parent.left
-            anchors.leftMargin: parent.width*0.15
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenter: baseItem.verticalCenter
+            anchors.left: t1.right
+            anchors.leftMargin: 0
+            height: 50*root_scale
         }
 
         Text {
             id: t2
-            x: singleSetBarRoot.width*0.3
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenter: baseItem.verticalCenter
+            anchors.left: t1.right
+            anchors.leftMargin: 70*root_scale
             color: CT.text1
             text: qsTr("Text")
-            font.pixelSize: font_b*scale
+            font.pixelSize: font_b*root_scale
         }
 
+        Item {
+            id: middlePos
+            anchors.verticalCenter: baseItem.verticalCenter
+            anchors.left: t2.right
+            anchors.right: t3.left
+            visible: false
+            height: 50*root_scale
+        }
         ToolSeparator {
-            id: toolSeparator1
-            anchors.left: parent.left
-            anchors.leftMargin: t3.x - (t3.x-t2.x)*0.5 + t2.height*0.5
-            anchors.verticalCenter: parent.verticalCenter
+            id: toolSeparator2
+            anchors.verticalCenter: baseItem.verticalCenter
+            anchors.horizontalCenter: middlePos.horizontalCenter
+            height: 50*root_scale
         }
         Text {
             id: t3
-            x: singleSetBarRoot.width*0.7
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenter: baseItem.verticalCenter
+            anchors.right: baseItem.right
+            anchors.rightMargin: 15*root_scale
             color: CT.text1
             text: qsTr("Text")
-            font.pixelSize: font_b*scale
+            font.pixelSize: font_b*root_scale
         }
+
     }
 }

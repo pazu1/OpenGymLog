@@ -63,6 +63,7 @@ Item {
     Text {
         id: issueText
         text: qsTr("Not enough records on this exercise to display a graph.")
+        font.pixelSize: font_s*root_scale
         visible: false
         color: CT.text1
         anchors.horizontalCenter: parent.horizontalCenter
@@ -72,12 +73,12 @@ Item {
     ToolBar {
         Material.background: CT.backgroundDark
         anchors.top: parent.top
-        anchors.topMargin: 66*scale
-        height: 45*scale
+        anchors.topMargin: 66*root_scale
+        height: 45*root_scale
         width: parent.width
         Text {
             text: "Estimated 1 Rep Max"
-            font.pixelSize: font_b
+            font.pixelSize: font_m
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
             color: CT.text1
@@ -118,21 +119,21 @@ Item {
             id: dayFirst
             text: ""
             anchors.left: parent.left
-            anchors.leftMargin: 25*scale
+            anchors.leftMargin: 25*root_scale
             anchors.top: chart.bottom
-            anchors.topMargin: -23*scale
+            anchors.topMargin: -23*root_scale
             color: CT.text1
-            font.pixelSize: font_s*scale
+            font.pixelSize: font_s*root_scale
         }
         Text {
             id: dayLast
             text: ""
             anchors.right: parent.right
-            anchors.rightMargin: 25*scale
+            anchors.rightMargin: 25*root_scale
             anchors.top: chart.bottom
-            anchors.topMargin: -23*scale
+            anchors.topMargin: -23*root_scale
             color: CT.text1
-            font.pixelSize: font_s*scale
+            font.pixelSize: font_s*root_scale
         }
     }
 }

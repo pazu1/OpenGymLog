@@ -19,17 +19,16 @@ ApplicationWindow {
     Material.theme: Material.Dark
     Material.accent: CT.accent1
     property date selectedDate: dataStore.selectedDate
-    property var scale_y: height/855
-    property var scale_x: width/480
+    property var root_scale: (height+width)/(855 + 480)
     property var exercisesDB: []
-    property int font_s: 14
-    property int font_m: 16
-    property int font_b: 22
+    property int font_s: 18
+    property int font_m: 22
+    property int font_b: 26
 
     Alert {
         id: rootAlert
         z: 10
-        y: 160*scale
+        y: 160*root_scale
     }
 
     Settings {
@@ -84,8 +83,10 @@ ApplicationWindow {
         PathView {
             id: view
             anchors.fill: parent
-            snapMode: PathView.SnapToItem
-            model: ["dayPage.qml","dayPage.qml","dayPage.qml"]
+            snapMode: PathView.SnapOneItem
+            model: ["dayPage.qml","dayPage.qml","dayPage.qml",]
+            flickDeceleration: 0
+            maximumFlickVelocity: 9999
             delegate: Loader {
                 width: parent.width
                 height: parent.height
@@ -112,7 +113,7 @@ ApplicationWindow {
 
             path: Path {
                 startX: view.width/2; startY: view.height/2
-                PathQuad { x: view.width/2; y: view.height*view.model.length; controlX: -view.width; controlY: view.height/2 }
+                PathQuad { x: view.width/2; y: view.height*2.5; controlX: -view.width; controlY: view.height/2 }
                 PathQuad { x: view.width/2; y: view.height/2; controlX: view.width * view.model.length; controlY: view.height/2 }
             }
         }
@@ -122,17 +123,17 @@ ApplicationWindow {
             anchors.top: parent.top
             z: 1
             width: root.width
-            height: 66*scale
+            height: 66*root_scale
             opacity: 1
             Material.background: CT.accent1
 
             ToolButton {
                 id: dMenuButton
                 anchors.left: parent.left
-                anchors.leftMargin: 10*scale_x
+                anchors.leftMargin: 10*root_scale
                 icon.source: "qrc:/icons/menu-24px.svg"
-                icon.height: 34*scale
-                icon.width: 34*scale
+                icon.height: 34*root_scale
+                icon.width: 34*root_scale
                 icon.color: "#000000"
                 anchors.verticalCenter: parent.verticalCenter
                 onClicked: dMenu.open()
@@ -145,7 +146,7 @@ ApplicationWindow {
             y: mainBar.height
             z: 1
             width: root.width
-            height: 45*scale
+            height: 45*root_scale
             opacity: 1
             Material.background: CT.foregroundDark
 
@@ -158,7 +159,7 @@ ApplicationWindow {
                 text: selectedDate.toDateString()
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
-                font.pixelSize: font_b*scale
+                font.pixelSize: font_m*root_scale
             }
 
             ToolButton {
@@ -166,8 +167,8 @@ ApplicationWindow {
                 y: parent.height*0.5 - height*0.5
                 icon.source: "qrc:/icons/arrow_back_ios-24px.svg"
                 icon.color: CT.text1
-                icon.height: 25*scale
-                icon.width: 25*scale
+                icon.height: 25*root_scale
+                icon.width: 25*root_scale
                 display: AbstractButton.IconOnly
                 onClicked: view.incrementCurrentIndex()
             }
@@ -178,8 +179,8 @@ ApplicationWindow {
                 anchors.rightMargin: 0
                 icon.source: "qrc:/icons/arrow_forward_ios-24px.svg"
                 icon.color: CT.text1
-                icon.height: 25*scale
-                icon.width: 25*scale
+                icon.height: 25*root_scale
+                icon.width: 25*root_scale
                 display: AbstractButton.IconOnly
                 onClicked: view.decrementCurrentIndex()
             }
@@ -188,11 +189,11 @@ ApplicationWindow {
         RoundButton {
             id: addWOSButton
             anchors.right: parent.right
-            anchors.rightMargin: 40*scale
+            anchors.rightMargin: 40*root_scale
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: 30*scale
-            width: 75*scale
-            height: 75*scale
+            anchors.bottomMargin: 30*root_scale
+            width: 75*root_scale
+            height: 75*root_scale
             text: "+"
             visible: true
             font.pointSize: 28
@@ -237,7 +238,7 @@ ApplicationWindow {
             Alert {
                 id: popupAlert
                 z: 10
-                y: 160*scale
+                y: 160*root_scale
             }
 
             PopupSearchPage {id: srchPage}
@@ -270,29 +271,29 @@ ApplicationWindow {
                     Column {
                         id: dContent
                         anchors.top: parent.top
-                        anchors.topMargin: 40*scale
+                        anchors.topMargin: 40*root_scale
                         anchors.bottom: parent.bottom
                         anchors.bottomMargin: 0
                         width: parent.width
-                        spacing: 10*scale
+                        spacing: 10*root_scale
                         ItemDelegate {
                             id: settingsButton
                             text: "Settings"
-                            font.pixelSize: font_s*scale
+                            font.pixelSize: font_s*root_scale
                             width: dMenuMain.width
                             onClicked: dMenu.toggleSettings(true)
                         }
                         ItemDelegate {
                             id: githubButton
                             text: "View on GitHub"
-                            font.pixelSize: font_s*scale
+                            font.pixelSize: font_s*root_scale
                             width: dMenuMain.width
                             onClicked: Qt.openUrlExternally("https://github.com/pazu1/OpenGymLog")
                         }
                         ItemDelegate {
                             id: licenseButton
                             text: "Show license (GPL v3)"
-                            font.pixelSize: font_s*scale
+                            font.pixelSize: font_s*root_scale
                             width: dMenuMain.width
                             onClicked: Qt.openUrlExternally("https://www.gnu.org/licenses/gpl-3.0.html")
                         }
@@ -306,14 +307,14 @@ ApplicationWindow {
                 ToolBar {
                     anchors.top: parent.top
                     width: parent.width
-                    height: 66*scale
+                    height: 66*root_scale
                     Material.background: CT.backgroundDark
                     ToolButton {
                         anchors.verticalCenter: parent.verticalCenter
                         icon.source: "qrc:/icons/arrow_back-24px.svg"
                         icon.color: CT.text1
-                        icon.height: 34*scale
-                        icon.width: 34*scale
+                        icon.height: 34*root_scale
+                        icon.width: 34*root_scale
                         display: AbstractButton.IconOnly
                         onClicked:{
                             dMenu.toggleSettings(false)
@@ -323,7 +324,7 @@ ApplicationWindow {
                         text: "Settings"
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.verticalCenter: parent.verticalCenter
-                        font.pointSize: font_b*scale
+                        font.pointSize: font_b*root_scale
                         color: CT.text1
                     }
                 }
@@ -332,26 +333,26 @@ ApplicationWindow {
                 Column {
                     id: settingsColumn
                     anchors.top: parent.top
-                    anchors.topMargin: 78*scale
+                    anchors.topMargin: 78*root_scale
                     anchors.bottom: parent.bottom
                     anchors.bottomMargin: 0
                     anchors.left: parent.left
-                    anchors.leftMargin: 20*scale
+                    anchors.leftMargin: 20*root_scale
                     width: parent.width
-                    spacing: 10*scale
+                    spacing: 10*root_scale
 
                     Text {
                         id:label1
                         text: "General:"
                         color: CT.text1
-                        font.pointSize: font_m*scale
+                        font.pointSize: font_m*root_scale
                     }
                     Row {
-                        spacing: 20*scale
+                        spacing: 20*root_scale
 
                         Text {
                             text:"Measuring unit:"
-                            font.pixelSize: font_s*scale
+                            font.pixelSize: font_s*root_scale
                             color: CT.text1
                             anchors.verticalCenter: parent.verticalCenter
                         }
@@ -359,7 +360,7 @@ ApplicationWindow {
                             z:2
                             width: settingsColumn.width*0.5
                             x:0
-                            font.pixelSize: font_s*scale
+                            font.pixelSize: font_s*root_scale
                             model: [ "Kilograms (kg)", "Pounds (lb)"]
                             popup.z: 2
                             onCurrentIndexChanged: {

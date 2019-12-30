@@ -21,20 +21,20 @@ Item {
         id: nameLbl
         text: "Exercise name:"
         anchors.left: parent.left
-        anchors.leftMargin: 15*scale
+        anchors.leftMargin: 15*root_scale
         anchors.top: parent.top
-        anchors.topMargin: 40*scale
-        font.pixelSize: font_b*scale
+        anchors.topMargin: 40*root_scale
+        font.pixelSize: font_b*root_scale
         color: CT.text1
     }
 
     TextField {
         id: nameFld
         anchors.right: parent.right
-        anchors.rightMargin: 8*scale
+        anchors.rightMargin: 8*root_scale
         anchors.top: parent.top
-        anchors.topMargin: 30*scale
-        font.pixelSize: font_b*scale
+        anchors.topMargin: 30*root_scale
+        font.pixelSize: font_b*root_scale
         width: parent.width*0.5
     }
 
@@ -42,21 +42,21 @@ Item {
         id: ctgLbl
         text: "Category:"
         anchors.left: parent.left
-        anchors.leftMargin: 15*scale
+        anchors.leftMargin: 15*root_scale
         anchors.top: parent.top
-        anchors.topMargin: 120*scale
-        font.pixelSize: font_b*scale
+        anchors.topMargin: 120*root_scale
+        font.pixelSize: font_b*root_scale
         color: CT.text1
     }
 
     ComboBox {
         id: ctgCombo
         anchors.right: parent.right
-        anchors.rightMargin: 8*scale
+        anchors.rightMargin: 8*root_scale
         anchors.top: parent.top
-        anchors.topMargin: 110*scale
+        anchors.topMargin: 110*root_scale
         width: parent.width*0.5
-        font.pixelSize: font_b*scale
+        font.pixelSize: font_b*root_scale
         model: []
     }
 

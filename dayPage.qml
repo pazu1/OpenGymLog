@@ -71,7 +71,7 @@ Item {
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 0
         anchors.top: parent.top
-        anchors.topMargin: mainBar.height + navigationBar.height+12*scale
+        anchors.topMargin: mainBar.height + navigationBar.height+12*root_scale
         ScrollBar.vertical.policy: ScrollBar.AlwaysOff
 
         Column {

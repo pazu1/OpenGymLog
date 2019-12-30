@@ -61,16 +61,16 @@ Item {
         id: selectedExerciseSetsSW
         x: 0
         anchors.top: pane.bottom
-        anchors.topMargin: 5*scale
+        anchors.topMargin: 5*root_scale
         width: root.width
-        height: root.height-pane.height-tabBarAS.height-toolBarAS.height-10*scale
+        height: root.height-pane.height-tabBarAS.height-toolBarAS.height-10*root_scale
         anchors.bottomMargin: 0
         ScrollBar.vertical.policy: ScrollBar.AlwaysOff
 
         Column {
             id: oneExerciseWorkoutCO
-            spacing: 5*scale_y
-            x: 25*scale_x
+            spacing: 5*root_scale
+            x: 25*root_scale
             width: selectedExerciseSetsSW.width*0.9
             height: selectedExerciseSetsSW.height
         }
@@ -96,14 +96,14 @@ Item {
                 id: wText
                 color: CT.text1
                 text: qsTr("weight:")
-                font.pixelSize: font_b*scale
+                font.pixelSize: font_b*root_scale
                 anchors.verticalCenter: parent.verticalCenter
             }
             TextField {
                 id: weightField
-                width: 80*scale
+                width: 80*root_scale
                 text: qsTr("")
-                font.pixelSize: font_b*scale
+                font.pixelSize: font_b*root_scale
                 inputMethodHints: Qt.ImhFormattedNumbersOnly
                 anchors.verticalCenter: parent.verticalCenter
             }
@@ -114,14 +114,14 @@ Item {
                 id: rText
                 color: CT.text1
                 text: qsTr("reps:")
-                font.pixelSize: font_b*scale
+                font.pixelSize: font_b*root_scale
                 anchors.verticalCenter: parent.verticalCenter
             }
             TextField {
                 id: repsField
-                width: 80*scale
+                width: 80*root_scale
                 text: qsTr("")
-                font.pixelSize: font_b*scale
+                font.pixelSize: font_b*root_scale
                 inputMethodHints: Qt.ImhFormattedNumbersOnly
                 anchors.verticalCenter: parent.verticalCenter
             }
@@ -131,12 +131,13 @@ Item {
     Button {
         id: setAddButton
         anchors.right: pane.right
-        anchors.rightMargin: 17*scale
+        anchors.rightMargin: 17*root_scale
         anchors.bottom: pane.bottom
-        anchors.bottomMargin: 10*scale
-        width: 107*scale
-        height: 55*scale
+        anchors.bottomMargin: 10*root_scale
+        width: 110*root_scale
+        height: 55*root_scale
         text: qsTr("Add set")
+        font.pixelSize: font_s*root_scale
         onClicked:{
             var weight = parseFloat(weightField.text)
             var reps = parseInt(repsField.text)

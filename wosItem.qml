@@ -35,7 +35,7 @@ Item {
         id: createdSubSet
         Item {
             width: parent.width*0.92
-            height: 30*scale
+            height: 30*root_scale
             anchors.horizontalCenter: parent.horizontalCenter
             Material.background: CT.foregroundDark
 
@@ -44,20 +44,20 @@ Item {
             }
 
             Text {
-                y:5*scale
+                y:5*root_scale
                 anchors.left: parent.left
                 anchors.leftMargin: parent.width*0.03
                 id: txt
                 text: "0x0"
                 color: CT.text1
-                font.pixelSize: font_m*scale
+                font.pixelSize: font_m*root_scale
             }
         }
     }
 
     Button {
         id: bottomButton
-        height: column.height+button.height+2*scale
+        height: column.height+button.height+9*root_scale
         width: parent.width*0.92
         anchors.horizontalCenter: parent.horizontalCenter
         hoverEnabled: false
@@ -74,7 +74,7 @@ Item {
         y: 0
         z: 1
         width: parent.width
-        height: 55*scale
+        height: 60*root_scale
         Material.background: CT.foregroundDark
         hoverEnabled: false
         focusPolicy: Qt.StrongFocus
@@ -87,16 +87,18 @@ Item {
 
         Text {
             id: txt
-            x: 8*scale
-            y: 9*scale
+            anchors.left: parent.left
+            anchors.leftMargin: 8*root_scale
             color: CT.text1
             text: name
-            font.pixelSize: font_b*scale
+            anchors.verticalCenter: parent.verticalCenter
+            font.pixelSize: font_b*root_scale
         }
     }
     Column {
         id: column
-        y: button.height-5*scale
+        y: button.height-5*root_scale
+        spacing: 2*root_scale
         width: parent.width
     }
 }
