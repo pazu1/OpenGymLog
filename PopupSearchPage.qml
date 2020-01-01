@@ -11,9 +11,28 @@ import "Constants.js" as CT
 Item {
     width: addWOSPopup.width
     height: addWOSPopup.height
+    property var slctd_exe_name
 
     function refreshItems(){
         searchItemsColumn.populateWithItems()
+    }
+
+    Dialog {
+        id: modifyExDialog
+        title: "Delete exercise: "+slctd_exe_name+"?"
+        standardButtons: Dialog.Ok | Dialog.Cancel
+        anchors.centerIn: parent
+        modal: true
+        width: parent.width
+        height: parent.height*0.2
+        Overlay.modal: Rectangle {
+                color: "#85000000"
+            }
+        onAccepted: {
+            dataStore.deleteExercise(slctd_exe_name)
+            root.updateExercises()
+            refreshItems()
+        }
     }
 
     TextField {
@@ -54,6 +73,12 @@ Item {
                     addSetsView.exercise_name = searchItem.name
                     root.toggleSetsView(true)
                     addWOSPopup.close()
+                }
+
+                onPressAndHold:
+                {
+                    slctd_exe_name = name
+                    modifyExDialog.open()
                 }
             }
         }

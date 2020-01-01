@@ -26,6 +26,7 @@ public:
     void setSelectedDate(QDate date);
     Q_INVOKABLE void scrollDate(int amount);
     Q_INVOKABLE Exercise* getExerciseAt(int pos) const;
+    Q_INVOKABLE void deleteExercise(QString name);
     Q_INVOKABLE Workout* getWorkout(QDate day) const;
     Q_INVOKABLE int getExerciseAmount() const;
     Q_INVOKABLE bool addSingleSet(QDate date, QString ex_name, float weight, int reps);

@@ -87,6 +87,21 @@ Exercise* DataStore::getExerciseAt(int pos) const
     return nullptr;
 }
 
+void DataStore::deleteExercise(QString name)
+{
+    int i = 0;
+    for (Exercise* e : m_excercise_DB)
+    {
+        if(e->getName() == name)
+        {
+            break;
+        }
+        i++;
+    }
+    m_excercise_DB.removeAt(i);
+    writeExerciseDB();
+}
+
 Workout *DataStore::getWorkout(QDate day) const
 {
     if ( m_workouts.find(day) != m_workouts.end())

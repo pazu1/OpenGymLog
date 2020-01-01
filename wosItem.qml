@@ -17,7 +17,6 @@ Item {
 
         for (var i = 0; i < workout.getSetCount(); i++)
         {
-            console.log(workout.getSetCount())
             if (workout.getSetAt(i).getExercise().getName() == name && !workout.getSetAt(i).isToBeDeleted())
             {
                 var item = createdSubSet.createObject(column)

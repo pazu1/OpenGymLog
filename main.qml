@@ -113,8 +113,6 @@ ApplicationWindow {
                 else if (prev_index < currentIndex || (currentIndex == 0 && prev_index == 2))
                     dataStore.scrollDate(-1)
 
-                console.log(currentIndex)
-
                 prev_index = currentIndex
 
                 currentItem.item.loadWosItems()
