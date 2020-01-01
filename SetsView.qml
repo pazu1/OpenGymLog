@@ -23,7 +23,7 @@ Item {
     Pane {
         width: root.width
         height: root.height
-        Material.background: CT.backgroundDark
+        Material.background: CT.c_themes[cfg.theme].bg1
     }
 
     SwipeView {
@@ -50,7 +50,7 @@ Item {
         width: addSetsView.width
         anchors.bottom: addSetsView.bottom
         anchors.bottomMargin: 0
-        Material.background: CT.foregroundDark
+        Material.background: CT.c_themes[cfg.theme].bg2
         TabButton {
             id: logButton
             text: "log"

@@ -95,11 +95,11 @@ Item {
         width: parent.width
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 0
-        Material.background: CT.backgroundDark
+        Material.background: CT.c_themes[cfg.theme].bg1
         ToolButton {
             id: cancelButton
             text: "Cancel"
-            Material.foreground: CT.text1
+            Material.foreground: CT.c_themes[cfg.theme].txt
             hoverEnabled: false
             width: parent.width / 2
             onClicked: addWOSPopup.close()
@@ -111,7 +111,7 @@ Item {
         ToolButton {
             id: addExButton
             text: "New exercise"
-            Material.foreground: CT.text1
+            Material.foreground: CT.c_themes[cfg.theme].txt
             hoverEnabled: false
             anchors.right: parent.right
             anchors.rightMargin: 0

@@ -74,7 +74,7 @@ Item {
 
     Pane {
         id: pane
-        Material.background: CT.foregroundDark
+        Material.background: CT.c_themes[cfg.theme].bg2
         anchors.top: parent.top
         anchors.topMargin: toolBarAS.height
         width: root.width
@@ -90,7 +90,7 @@ Item {
             spacing: 20
             Text {
                 id: wText
-                color: CT.text1
+                color: CT.c_themes[cfg.theme].txt
                 text: qsTr("weight:")
                 font.pixelSize: font_b*root_scale
                 anchors.verticalCenter: parent.verticalCenter
@@ -108,7 +108,7 @@ Item {
             spacing: 20
             Text {
                 id: rText
-                color: CT.text1
+                color: CT.c_themes[cfg.theme].txt
                 text: qsTr("reps:")
                 font.pixelSize: font_b*root_scale
                 anchors.verticalCenter: parent.verticalCenter

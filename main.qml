@@ -37,6 +37,14 @@ ApplicationWindow {
         property int theme: 0
     }
 
+    function loadTheme()
+    {
+        if (CT.c_themes[cfg.theme].drk)
+            Material.theme = Material.Dark
+        else
+            Material.theme = Material.Light
+    }
+
     function updateExercises() {
         exercisesDB.length = 0
         for (var i = 0; i<dataStore.getExerciseAmount(); i++){
@@ -58,6 +66,7 @@ ApplicationWindow {
 
     Component.onCompleted: {
         view.currentItem.item.loadWosItems()
+        loadTheme()
     }
 
     onClosing: {
@@ -77,7 +86,7 @@ ApplicationWindow {
 
         Pane {
             anchors.fill: parent
-            Material.background: CT.backgroundDark
+            Material.background: CT.c_themes[cfg.theme].bg1
         }
 
         PathView {
@@ -148,14 +157,14 @@ ApplicationWindow {
             width: root.width
             height: 45*root_scale
             opacity: 1
-            Material.background: CT.foregroundDark
+            Material.background: CT.c_themes[cfg.theme].bg2
 
             Text {
                 x: 0
                 y: 0
                 width: navigationBar.width
                 height: navigationBar.height
-                color: CT.text1
+                color: CT.c_themes[cfg.theme].txt
                 text: selectedDate.toDateString()
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
@@ -166,7 +175,7 @@ ApplicationWindow {
                 id: navBack
                 y: parent.height*0.5 - height*0.5
                 icon.source: "qrc:/icons/arrow_back_ios-24px.svg"
-                icon.color: CT.text1
+                icon.color: CT.c_themes[cfg.theme].txt
                 icon.height: 25*root_scale
                 icon.width: 25*root_scale
                 display: AbstractButton.IconOnly
@@ -178,7 +187,7 @@ ApplicationWindow {
                 anchors.right: parent.right
                 anchors.rightMargin: 0
                 icon.source: "qrc:/icons/arrow_forward_ios-24px.svg"
-                icon.color: CT.text1
+                icon.color: CT.c_themes[cfg.theme].txt
                 icon.height: 25*root_scale
                 icon.width: 25*root_scale
                 display: AbstractButton.IconOnly
@@ -212,7 +221,7 @@ ApplicationWindow {
             y: root.height*(0.15/2)
             width: root.width*0.85
             height: root.height*0.85
-            Material.background: CT.foregroundDark
+            Material.background: CT.c_themes[cfg.theme].bg2
             horizontalPadding: 0
             verticalPadding: 0
             clip: true
@@ -251,7 +260,7 @@ ApplicationWindow {
             z: 2
             width: 0.8 * root.width
             height: root.height
-            Material.background: CT.foregroundDark
+            Material.background: CT.c_themes[cfg.theme].bg2
             onClosed: toggleSettings(false)
             Overlay.modal: Rectangle {
                     color: "#85000000"
@@ -308,11 +317,11 @@ ApplicationWindow {
                     anchors.top: parent.top
                     width: parent.width
                     height: 66*root_scale
-                    Material.background: CT.backgroundDark
+                    Material.background: CT.c_themes[cfg.theme].bg1
                     ToolButton {
                         anchors.verticalCenter: parent.verticalCenter
                         icon.source: "qrc:/icons/arrow_back-24px.svg"
-                        icon.color: CT.text1
+                        icon.color: CT.c_themes[cfg.theme].txt
                         icon.height: 34*root_scale
                         icon.width: 34*root_scale
                         display: AbstractButton.IconOnly
@@ -325,7 +334,7 @@ ApplicationWindow {
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.verticalCenter: parent.verticalCenter
                         font.pointSize: font_b*root_scale
-                        color: CT.text1
+                        color: CT.c_themes[cfg.theme].txt
                     }
                 }
 
@@ -344,16 +353,16 @@ ApplicationWindow {
                     Text {
                         id:label1
                         text: "General:"
-                        color: CT.text1
+                        color: CT.c_themes[cfg.theme].txt
                         font.pointSize: font_m*root_scale
                     }
                     Row {
                         spacing: 20*root_scale
 
                         Text {
-                            text:"Measuring unit:"
+                            text:"Weight unit:"
                             font.pixelSize: font_s*root_scale
-                            color: CT.text1
+                            color: CT.c_themes[cfg.theme].txt
                             anchors.verticalCenter: parent.verticalCenter
                         }
                         ComboBox {
@@ -370,6 +379,29 @@ ApplicationWindow {
                                     cfg.unit = "lb"
                                 if (view.currentItem != null)
                                     view.currentItem.item.loadWosItems()
+                            }
+                        }
+                    }
+                    Row {
+                        spacing: 20*root_scale
+
+                        Text {
+                            text:"Theme:"
+                            font.pixelSize: font_s*root_scale
+                            color: CT.c_themes[cfg.theme].txt
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+                        ComboBox {
+                            Component.onCompleted: currentIndex = cfg.theme
+                            z:2
+                            width: settingsColumn.width*0.5
+                            x:0
+                            font.pixelSize: font_s*root_scale
+                            model: [ "Dark", "Light"]
+                            popup.z: 2
+                            onCurrentIndexChanged: {
+                                cfg.theme = currentIndex
+                                root.loadTheme()
                             }
                         }
                     }

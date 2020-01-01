@@ -50,7 +50,7 @@ Item {
             id: nameLbl
             text: "Exercise name:"
             font.pixelSize: font_b*root_scale
-            color: CT.text1
+            color: CT.c_themes[cfg.theme].txt
         }
 
         TextField {
@@ -63,7 +63,7 @@ Item {
             id: ctgLbl
             text: "Category:"
             font.pixelSize: font_b*root_scale
-            color: CT.text1
+            color: CT.c_themes[cfg.theme].txt
         }
 
         ComboBox {
@@ -87,12 +87,12 @@ Item {
         width: parent.width
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 0
-        Material.background: CT.backgroundDark
+        Material.background: CT.c_themes[cfg.theme].bg1
 
         ToolButton {
             id: cancelButton
             text: "back"
-            Material.foreground: CT.text1
+            Material.foreground: CT.c_themes[cfg.theme].txt
             hoverEnabled: false
             width: parent.width / 2
             onClicked:
@@ -104,7 +104,7 @@ Item {
         ToolButton {
             id: addExButton
             text: "create new"
-            Material.foreground: CT.text1
+            Material.foreground: CT.c_themes[cfg.theme].txt
             hoverEnabled: false
             anchors.right: parent.right
             anchors.rightMargin: 0

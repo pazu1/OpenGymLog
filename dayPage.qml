@@ -19,7 +19,7 @@ Item {
         id: noWorkoutTxt
         anchors.centerIn: parent
         visible: false
-        color: CT.text1
+        color: CT.c_themes[cfg.theme].txt
         text: "No workouts on this day."
     }
 

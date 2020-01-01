@@ -42,7 +42,7 @@ Item {
         id: pane
         x: 0
         y: 0
-        Material.background: CT.foregroundDark
+        Material.background: CT.c_themes[cfg.theme].bg2
         width: singleSetBarRoot.width
         height: singleSetBarRoot.height
     }
@@ -80,7 +80,7 @@ Item {
             anchors.verticalCenter: baseItem.verticalCenter
             anchors.left: baseItem.left
             anchors.leftMargin: 15*root_scale
-            color: CT.text1
+            color: CT.c_themes[cfg.theme].txt
             text: qsTr("Text")
             font.pixelSize: font_b*root_scale
         }
@@ -98,7 +98,7 @@ Item {
             anchors.verticalCenter: baseItem.verticalCenter
             anchors.left: t1.right
             anchors.leftMargin: 70*root_scale
-            color: CT.text1
+            color: CT.c_themes[cfg.theme].txt
             text: qsTr("Text")
             font.pixelSize: font_b*root_scale
         }
@@ -122,7 +122,7 @@ Item {
             anchors.verticalCenter: baseItem.verticalCenter
             anchors.right: baseItem.right
             anchors.rightMargin: 15*root_scale
-            color: CT.text1
+            color: CT.c_themes[cfg.theme].txt
             text: qsTr("Text")
             font.pixelSize: font_b*root_scale
         }

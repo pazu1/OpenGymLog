@@ -67,13 +67,13 @@ Item {
         width: root.width
         wrapMode: Text.WordWrap
         visible: false
-        color: CT.text1
+        color: CT.c_themes[cfg.theme].txt
         horizontalAlignment: Text.AlignHCenter
         anchors.verticalCenter: parent.verticalCenter
     }
 
     ToolBar {
-        Material.background: CT.backgroundDark
+        Material.background: CT.c_themes[cfg.theme].bg2
         anchors.top: parent.top
         anchors.topMargin: 66*root_scale
         height: 45*root_scale
@@ -83,7 +83,7 @@ Item {
             font.pixelSize: font_m
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
-            color: CT.text1
+            color: CT.c_themes[cfg.theme].txt
         }
     }
 
@@ -96,7 +96,7 @@ Item {
         title: ""
         legend.visible: false
         backgroundColor: "#00000000"
-        plotAreaColor: "#000000"
+        plotAreaColor: CT.c_themes[cfg.theme].abs
         backgroundRoundness: 0
         antialiasing: true
 
@@ -115,7 +115,7 @@ Item {
             tickCount: 6
             gridVisible: false
             labelFormat: "%.0f "+ cfg.unit
-            labelsColor: CT.text1
+            labelsColor: CT.c_themes[cfg.theme].txt
         }
         Text {
             id: dayFirst
@@ -124,7 +124,7 @@ Item {
             anchors.leftMargin: 25*root_scale
             anchors.top: chart.bottom
             anchors.topMargin: -23*root_scale
-            color: CT.text1
+            color: CT.c_themes[cfg.theme].txt
             font.pixelSize: font_s*root_scale
         }
         Text {
@@ -134,7 +134,7 @@ Item {
             anchors.rightMargin: 25*root_scale
             anchors.top: chart.bottom
             anchors.topMargin: -23*root_scale
-            color: CT.text1
+            color: CT.c_themes[cfg.theme].txt
             font.pixelSize: font_s*root_scale
         }
     }
