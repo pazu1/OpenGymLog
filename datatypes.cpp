@@ -25,30 +25,18 @@ SingleSet::SingleSet(Exercise* ex, float weight, int reps, int amount):
 {
 }
 
-int SingleSet::decreaseAmount()
-{
-    if (m_amount == 1)
-        m_amount = 0;
-    else m_amount--;
-    return m_amount;
-}
-
 Workout::Workout(QObject *parent)
 {
 }
 
+Workout::~Workout()
+{
+    for (SingleSet* s : m_sets)
+        delete s;
+}
+
 void Workout::addSet(SingleSet *to_add)
 {
-    for (SingleSet* found : getSets())
-    {
-        if (found->getWeight() == to_add->getWeight() && found->getReps() == to_add->getReps() \
-                && found->getExercise()->getName() == to_add->getExercise()->getName())
-        {
-            found->incrementAmount();
-            return;
-        }
-
-    }
     m_sets.push_back(to_add);
 }
 

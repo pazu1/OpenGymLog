@@ -31,6 +31,15 @@ DataStore::DataStore(QObject *parent) : QObject(parent)
         qDebug() << "Error: could not read save data";
 }
 
+DataStore::~DataStore()
+{
+    for (pair<QDate,Workout*> p : m_workouts)
+        delete p.second;
+
+    for (Exercise* e : m_excercise_DB)
+        delete e;
+}
+
 void DataStore::setSelectedDate(QDate date)
 {
     m_selected_date = date;
@@ -110,7 +119,7 @@ bool DataStore::addSingleSet(QDate date, QString ex_name, float weight, int reps
 
 bool DataStore::addExercise(QString name, QString category)
 {
-    if (name.length() == 0 || databaseContains(name))
+    if (name.length() == 0 || category.length() == 0 || databaseContains(name))
         return false;
     Exercise* created_ex = new Exercise(name,category);
     m_excercise_DB.push_back(created_ex);
@@ -124,12 +133,13 @@ QString DataStore::getDevicePath() const
 
 void DataStore::deleteSet(SingleSet* to_delete)
 {
+    to_delete->orderForDeletion();
     for (pair<QDate, Workout*> n : m_workouts)
     {
         std::vector<SingleSet*> sets = n.second->getSets();
         for (SingleSet* s : sets)
         {
-            if (s == to_delete && s->decreaseAmount() == 0)
+            if (s == to_delete)
             {
                 n.second->getSets().pop_back();
                 // let QML garbage collection handle the deletion
@@ -160,7 +170,7 @@ QVariantList DataStore::getEstOneRepMaxes(QString ex) const
         // Find highest Est1RM for this day
         for (SingleSet* s : n.second->getSets())
         {
-            if (s->getExercise()->getName() == ex && s->getAmount() != 0)
+            if (s->getExercise()->getName() == ex && !s->isToBeDeleted())
             {
                 float estMax = epleyFormula(s->getWeight(),s->getReps());
                 if (estMax > f_highest)
@@ -283,12 +293,11 @@ bool DataStore::writeSaveData()
         for (SingleSet* s : n.second->getSets())
         {
             QJsonObject set_obj;
-            if (s->getAmount() == 0) // Set with an amount of 0 means it has been deleted.
-                continue;            // No need to save it.
+            if (s->isToBeDeleted())
+                continue;
             set_obj.insert("Exercise", s->getExercise()->getName());
             set_obj.insert("Weight", s->getWeight());
             set_obj.insert("Reps", s->getReps());
-            set_obj.insert("Amount", s->getAmount());
             sets.append(set_obj);
         }
         if (sets.size() == 0) // Don't save days with no content.
@@ -331,12 +340,11 @@ bool DataStore::readSaveData()
 
             SingleSet* f_set = new SingleSet(f_ex,
                 (float)f_obj["Weight"].toDouble(),
-				f_obj["Reps"].toInt(),
-				f_obj["Amount"].toInt());
+                f_obj["Reps"].toInt());
 
 			f_workout->addSet(f_set);
 		}
-		m_workouts[f_date] = f_workout;
+        m_workouts[f_date] = f_workout;
 	}
 
     return true;
