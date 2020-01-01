@@ -17,7 +17,8 @@ Item {
 
         for (var i = 0; i < workout.getSetCount(); i++)
         {
-            if (workout.getSetAt(i).getExercise().getName() == name)
+            console.log(workout.getSetCount())
+            if (workout.getSetAt(i).getExercise().getName() == name && !workout.getSetAt(i).isToBeDeleted())
             {
                 var item = createdSubSet.createObject(column)
                 var form_w = (Math.round(workout.getSetAt(i).getWeight()*100) / 100).toFixed(2);
@@ -35,7 +36,7 @@ Item {
             width: parent.width*0.92
             height: 30*root_scale
             anchors.horizontalCenter: parent.horizontalCenter
-            Material.background: CT.foregroundDark
+            Material.background: CT.c_themes[cfg.theme].bg2
 
             function setText(new_text) {
                 txt.text = new_text
@@ -47,7 +48,7 @@ Item {
                 anchors.leftMargin: parent.width*0.03
                 id: txt
                 text: "0x0"
-                color: CT.text1
+                color: CT.c_themes[cfg.theme].txt
                 font.pixelSize: font_m*root_scale
             }
         }
@@ -59,7 +60,7 @@ Item {
         width: parent.width*0.92
         anchors.horizontalCenter: parent.horizontalCenter
         hoverEnabled: false
-        Material.background: CT.foregroundDark
+        Material.background: CT.c_themes[cfg.theme].bg2
         onClicked: {
             addSetsView.exercise_name = name
             root.toggleSetsView(true)
@@ -73,7 +74,7 @@ Item {
         z: 1
         width: parent.width
         height: 60*root_scale
-        Material.background: CT.foregroundDark
+        Material.background: CT.c_themes[cfg.theme].bg2
         hoverEnabled: false
         focusPolicy: Qt.StrongFocus
         enabled: true
@@ -87,7 +88,7 @@ Item {
             id: txt
             anchors.left: parent.left
             anchors.leftMargin: 8*root_scale
-            color: CT.text1
+            color: CT.c_themes[cfg.theme].txt
             text: name
             anchors.verticalCenter: parent.verticalCenter
             font.pixelSize: font_b*root_scale
