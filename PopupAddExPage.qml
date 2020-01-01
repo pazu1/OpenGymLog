@@ -9,6 +9,7 @@ import com.pz.workout 1.0
 import "Constants.js" as CT
 
 Item {
+    id: itemRoot
     width: addWOSPopup.width
     height: addWOSPopup.height
 
@@ -17,47 +18,68 @@ Item {
             ctgCombo.model = dataStore.getCategories()
     }
 
-    Text {
-        id: nameLbl
-        text: "Exercise name:"
-        anchors.left: parent.left
-        anchors.leftMargin: 15*root_scale
-        anchors.top: parent.top
-        anchors.topMargin: 40*root_scale
-        font.pixelSize: font_b*root_scale
-        color: CT.text1
+    Dialog {
+        id: categoryCreationDialog
+        title: "New category"
+        standardButtons: Dialog.Ok | Dialog.Cancel
+        anchors.centerIn: parent
+        modal: true
+        width: parent.width
+        height: parent.height*0.3
+        Overlay.modal: Rectangle {
+                color: "#85000000"
+            }
+        TextField {
+            id: addCatgTextField
+            anchors.centerIn: parent
+            width: parent.width
+        }
+        onAccepted: {
+
+            var edited = ctgCombo.model
+            edited.push(addCatgTextField.text)
+            ctgCombo.model = edited
+            ctgCombo.currentIndex = edited.length-1
+        }
     }
 
-    TextField {
-        id: nameFld
-        anchors.right: parent.right
-        anchors.rightMargin: 8*root_scale
-        anchors.top: parent.top
-        anchors.topMargin: 30*root_scale
-        font.pixelSize: font_b*root_scale
-        width: parent.width*0.5
-    }
+    Column {
+        topPadding: 20*root_scale
+        spacing: 10*root_scale
+        anchors.horizontalCenter: parent.horizontalCenter
+        Text {
+            id: nameLbl
+            text: "Exercise name:"
+            font.pixelSize: font_b*root_scale
+            color: CT.text1
+        }
 
-    Text {
-        id: ctgLbl
-        text: "Category:"
-        anchors.left: parent.left
-        anchors.leftMargin: 15*root_scale
-        anchors.top: parent.top
-        anchors.topMargin: 120*root_scale
-        font.pixelSize: font_b*root_scale
-        color: CT.text1
-    }
+        TextField {
+            id: nameFld
+            font.pixelSize: font_b*root_scale
+            width: itemRoot.width*0.8
+        }
 
-    ComboBox {
-        id: ctgCombo
-        anchors.right: parent.right
-        anchors.rightMargin: 8*root_scale
-        anchors.top: parent.top
-        anchors.topMargin: 110*root_scale
-        width: parent.width*0.5
-        font.pixelSize: font_b*root_scale
-        model: []
+        Text {
+            id: ctgLbl
+            text: "Category:"
+            font.pixelSize: font_b*root_scale
+            color: CT.text1
+        }
+
+        ComboBox {
+            id: ctgCombo
+            width: itemRoot.width*0.8
+            font.pixelSize: font_b*root_scale
+            model: []
+        }
+        Button {
+            text: "Create category"
+            width: itemRoot.width*0.75
+            height: 65*root_scale
+            font.pixelSize: font_m*root_scale
+            onClicked: categoryCreationDialog.open()
+        }
     }
 
     ToolBar {
@@ -65,12 +87,12 @@ Item {
         width: parent.width
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 0
-        Material.background: CT.foregroundLight
-
+        Material.background: CT.backgroundDark
 
         ToolButton {
             id: cancelButton
             text: "back"
+            Material.foreground: CT.text1
             hoverEnabled: false
             width: parent.width / 2
             onClicked:
@@ -82,6 +104,7 @@ Item {
         ToolButton {
             id: addExButton
             text: "create new"
+            Material.foreground: CT.text1
             hoverEnabled: false
             anchors.right: parent.right
             anchors.rightMargin: 0

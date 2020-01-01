@@ -34,10 +34,8 @@ Item {
             for (var i = 0; i<workout.getSetCount(); i++)
             {
                 var set = workout.getSetAt(i)
-                if (set.getExercise().getName() == exercise_name)
-                {
+                if (set.getExercise().getName() == exercise_name && !set.isToBeDeleted())
                     sets.push(set)
-                }
             }
             createComponents()
         }
@@ -48,12 +46,10 @@ Item {
         for (var setI = 0 ; setI < sets.length; setI++)
         {
             var current_set = sets[setI]
-            for (var n = 0; n < current_set.getAmount(); n++)
-            {
-                index++
-                var item = createdSetBar.createObject(oneExerciseWorkoutCO)
-                item.setProps(index,current_set)
-            }
+            index++
+            var item = createdSetBar.createObject(oneExerciseWorkoutCO)
+            item.setProps(index,current_set)
+
         }
     }
 

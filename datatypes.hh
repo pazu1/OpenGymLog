@@ -34,14 +34,15 @@ public:
     Q_INVOKABLE float getWeight(){return m_weight;}
     Q_INVOKABLE int getReps(){return m_reps;}
     Q_INVOKABLE int getAmount() {return m_amount;}
-    int decreaseAmount();
-    void incrementAmount(){m_amount++;}
+    Q_INVOKABLE bool isToBeDeleted(){return is_garbage;}
+    void orderForDeletion(){is_garbage = true;}
 
 private:
     Exercise* m_ex;
     float m_weight;
     int m_reps;
-    int m_amount; // eg. for 5x10 at same weight this value is 5
+    int m_amount; // redundant
+    bool is_garbage = false;
 };
 
 class Workout : public QObject
@@ -49,6 +50,7 @@ class Workout : public QObject
     Q_OBJECT
 public:
     explicit Workout(QObject *parent = nullptr);
+    virtual ~Workout();
     void addSet(SingleSet* to_add);
     vector<SingleSet*> getSets(){return m_sets;}
 

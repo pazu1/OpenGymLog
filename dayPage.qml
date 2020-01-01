@@ -55,14 +55,14 @@ Item {
             noWorkoutTxt.visible = true
     }
 
-    function getAmountOfSets()
+/*    function getAmountOfSets()
     {
         if (columnWosItems.children.length == 0)
             noWorkoutTxt.visible = true
         else
             noWorkoutTxt.visible = false
         return columnWosItems.children.length
-    }
+    }*/
 
     ScrollView {
         id: scrollView

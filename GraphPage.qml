@@ -64,9 +64,11 @@ Item {
         id: issueText
         text: qsTr("Not enough records on this exercise to display a graph.")
         font.pixelSize: font_s*root_scale
+        width: root.width
+        wrapMode: Text.WordWrap
         visible: false
         color: CT.text1
-        anchors.horizontalCenter: parent.horizontalCenter
+        horizontalAlignment: Text.AlignHCenter
         anchors.verticalCenter: parent.verticalCenter
     }
 

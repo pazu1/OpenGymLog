@@ -20,6 +20,7 @@ class DataStore : public QObject
 
 public:
     explicit DataStore(QObject *parent = nullptr);
+    virtual ~DataStore();
     bool createDeviceExerciseDB();
     QDate selectedDate();
     void setSelectedDate(QDate date);

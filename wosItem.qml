@@ -19,12 +19,10 @@ Item {
         {
             if (workout.getSetAt(i).getExercise().getName() == name)
             {
-                for (var n = 0; n < workout.getSetAt(i).getAmount(); n++)
-                {
-                    var item = createdSubSet.createObject(column)
-                    var form_w = (Math.round(workout.getSetAt(i).getWeight()*100) / 100).toFixed(2);
-                    item.setText(workout.getSetAt(i).getReps()+" reps               "+form_w+" "+cfg.unit)
-                }
+                var item = createdSubSet.createObject(column)
+                var form_w = (Math.round(workout.getSetAt(i).getWeight()*100) / 100).toFixed(2);
+                item.setText(workout.getSetAt(i).getReps()+" reps               "+form_w+" "+cfg.unit)
+
             }
         }
         if (column.children.length == 0) // TODO: replace this with C++ code in deleteSet function
