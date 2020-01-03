@@ -14,6 +14,7 @@ Item {
     property var dates: []
     property var clicked_btn_origin: Qt.point(0,0)
     property var selected_y_value
+    property var selected_day
     clip: true
 
     onVisibleChanged: {
@@ -110,13 +111,16 @@ Item {
                 width: 40*root_scale
                 opacity: 0
                 property var point
-                function setPoint(contained_point){
+                property var date
+                function setProps(contained_point, contained_day){
                     point = contained_point
+                    date = contained_day
                     x = chart.mapToPosition(point,line).x-width*0.5
                     y = chart.mapToPosition(point,line).y-height*0.5
                 }
                 onClicked: {
                     selected_y_value = ((point.y*100) / 100).toFixed(2);
+                    selected_day = date
                     clicked_btn_origin = itemRoot.mapFromItem(chart,x+width*0.5,y+height*0.5)
                     pointInfoPopup.open()
                 }
@@ -145,7 +149,7 @@ Item {
 
                 for (var n = 0 ; n<count ; n++) {
                     var pointButton = createdButton.createObject(lineButtons)
-                    pointButton.setPoint(at(n))
+                    pointButton.setProps(at(n),dates[n])
                 }
             }
         }
@@ -193,13 +197,15 @@ Item {
 
     Dialog {
         id: pointInfoPopup
+        title: ""
         y: parent.height*0.4
         x: parent.width*0.5-width*0.5
         width: 300*root_scale
         height: 200*root_scale
         Material.background: CT.c_themes[cfg.theme].bg3
         onAboutToShow: {
-             y = clicked_btn_origin.y - 100*root_scale - height
+            title = selected_day.toDateString()
+            y = clicked_btn_origin.y - 100*root_scale - height
             cnvs.visible = true
             cnvs.requestPaint()
         }
@@ -209,10 +215,21 @@ Item {
         }
 
         Text {
-            anchors.centerIn: parent
+            anchors.horizontalCenter: parent.horizontalCenter
             text: qsTr("Estimated 1 Rep Max: "+selected_y_value+" "+cfg.unit)
             font.pixelSize: font_s*root_scale
             color: CT.c_themes[cfg.theme].txt
+        }
+
+        Button {
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: -10*root_scale
+            text: "View workout"
+            onClicked: {
+                swipeLogGraph.currentIndex = 0
+                dataStore.selectedDate = selected_day
+                root.toggleSetsView(true)
+            }
         }
     }
 
