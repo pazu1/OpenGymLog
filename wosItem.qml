@@ -25,7 +25,7 @@ Item {
 
             }
         }
-        if (column.children.length == 0) // TODO: replace this with C++ code in deleteSet function
+        if (column.children.length == 0)
             destroy()
     }
 

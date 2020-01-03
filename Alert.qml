@@ -13,7 +13,6 @@ Item {
     visible: false
     property var expanded: false
 
-
     states: [
         State {
             name: "normal"

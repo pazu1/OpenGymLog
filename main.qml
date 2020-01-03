@@ -40,6 +40,7 @@ ApplicationWindow {
     function loadTheme()
     {
         if (CT.c_themes[cfg.theme].drk)
+
             Material.theme = Material.Dark
         else
             Material.theme = Material.Light
