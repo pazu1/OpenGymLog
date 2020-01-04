@@ -19,6 +19,14 @@ class DataStore : public QObject
     Q_PROPERTY(QDate selectedDate READ selectedDate WRITE setSelectedDate NOTIFY selectedDateChanged)
 
 public:
+
+    Q_ENUMS(GraphType)
+    enum GraphType {
+        Estimated1RM = 0,
+        TotalVolume,
+        TotalWeight
+    };
+
     explicit DataStore(QObject *parent = nullptr);
     virtual ~DataStore();
     bool createDeviceExerciseDB();
@@ -34,7 +42,7 @@ public:
     Q_INVOKABLE QString getDevicePath() const;
     Q_INVOKABLE void deleteSet(SingleSet* to_delete);
     Q_INVOKABLE QStringList getCategories() const;
-    Q_INVOKABLE QVariantList getEstOneRepMaxes(QString ex) const;
+    Q_INVOKABLE QVariantList getGraphValues(QString ex, GraphType graph_type = Estimated1RM) const;
     Q_INVOKABLE QVariantList getDaysOfExercise(QString ex, bool as_integers = true) const;
 
 signals:

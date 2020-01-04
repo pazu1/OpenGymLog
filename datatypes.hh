@@ -33,7 +33,6 @@ public:
     Q_INVOKABLE Exercise* getExercise(){return m_ex;}
     Q_INVOKABLE float getWeight(){return m_weight;}
     Q_INVOKABLE int getReps(){return m_reps;}
-    Q_INVOKABLE int getAmount() {return m_amount;}
     Q_INVOKABLE bool isToBeDeleted(){return is_garbage;}
     void orderForDeletion(){is_garbage = true;}
 

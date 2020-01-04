@@ -15,6 +15,7 @@ Item {
     property var clicked_btn_origin: Qt.point(0,0)
     property var selected_y_value
     property var selected_day
+    property var graph_type: 0
     clip: true
 
     onVisibleChanged: {
@@ -27,11 +28,13 @@ Item {
         var maxes = []
         var highest = []
         highest = 0
+        axisX.max = 1
+        axisY.max = 1
 
         line.removePoints(0,line.count) // empty graph
 
         maxes = []
-        maxes = dataStore.getEstOneRepMaxes(ex_name)
+        maxes = dataStore.getGraphValues(ex_name, graph_type)
 
         var days = []
         days = dataStore.getDaysOfExercise(ex_name)
@@ -55,11 +58,11 @@ Item {
             day = days[i]
         }
         axisX.max = day
-        axisY.max = highest+(highest/4)
-        axisY.applyNiceNumbers()
+        axisY.max = highest*1.1
 
         dayFirst.text = dates[0].toLocaleString(Qt.locale("en_EN"),"dd MMM yy")
         dayLast.text = dates.slice(-1)[0].toLocaleString(Qt.locale("en_EN"),"dd MMM yy")
+        axisY.applyNiceNumbers()
 
         line.makeLineButtons()
     }
@@ -82,12 +85,33 @@ Item {
         anchors.topMargin: 66*root_scale
         height: 45*root_scale
         width: parent.width
+        RoundButton {
+            text: "▼"
+            Material.background: "#00000000"
+            anchors.right: parent.right
+            anchors.rightMargin: 10*root_scale
+            anchors.verticalCenter: parent.verticalCenter
+            onClicked: comboMenu.open()
+        }
+
         Text {
+            id: graphTypeHeader
             text: "Estimated 1 Rep Max"
-            font.pixelSize: font_m
+            font.pixelSize: font_m*root_scale
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
             color: CT.c_themes[cfg.theme].txt
+            onTextChanged: itemRoot.makeGraph(exercise_name)
+        }
+
+        Menu {
+            id: comboMenu
+            padding: 0
+            width: parent.width
+            y: parent.y+parent.height
+            MenuItem { text: "Estimated 1 Rep Max"; onClicked: {graph_type = 0; graphTypeHeader.text = text}}
+            MenuItem { text: "Total Volume"; onClicked: {graph_type = 1; graphTypeHeader.text = text}}
+            MenuItem { text: "Highest weight"; onClicked: graphTypeHeader.text = text}
         }
     }
 
@@ -195,16 +219,16 @@ Item {
         }
     }
 
-    Dialog {
+    Popup {
         id: pointInfoPopup
-        title: ""
         y: parent.height*0.4
         x: parent.width*0.5-width*0.5
         width: 300*root_scale
-        height: 200*root_scale
+        height: 180*root_scale
         Material.background: CT.c_themes[cfg.theme].bg3
+        padding: 0
         onAboutToShow: {
-            title = selected_day.toDateString()
+            title.text = selected_day.toDateString()
             y = clicked_btn_origin.y - 100*root_scale - height
             cnvs.visible = true
             cnvs.requestPaint()
@@ -215,15 +239,52 @@ Item {
         }
 
         Text {
+            id: title
             anchors.horizontalCenter: parent.horizontalCenter
-            text: qsTr("Estimated 1 Rep Max: "+selected_y_value+" "+cfg.unit)
+            anchors.top: parent.top
+            anchors.topMargin: 10*root_scale
+            text: qsTr("")
+            font.pixelSize: font_m*root_scale
+            font.bold: true
+            color: CT.c_themes[cfg.theme].b_txt
+        }
+
+        Text {
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: parent.top
+            anchors.topMargin: parent.height*0.3
+            text: qsTr(graphTypeHeader.text +": "+selected_y_value+" "+cfg.unit)
             font.pixelSize: font_s*root_scale
             color: CT.c_themes[cfg.theme].txt
+        }
+        MouseArea {
+            id: dragArea
+            anchors.fill: parent
+            property point lastMousePos: Qt.point(0, 0)
+            onPressed: { lastMousePos = Qt.point(mouseX, mouseY); }
+            onMouseXChanged: {
+                if ( pointInfoPopup.x+pointInfoPopup.width+(mouseX - lastMousePos.x) <= root.width
+                     && pointInfoPopup.x+(mouseX - lastMousePos.x)>0 )
+                {
+                    pointInfoPopup.x += (mouseX - lastMousePos.x)
+                    cnvs.requestPaint()
+                }
+            }
+            onMouseYChanged: {
+                if ( pointInfoPopup.y+pointInfoPopup.height+(mouseY - lastMousePos.y) <= root.height
+                     && pointInfoPopup.y+(mouseY - lastMousePos.y)>0 )
+                {
+                    pointInfoPopup.y += (mouseY - lastMousePos.y)
+                    cnvs.requestPaint()
+                }
+            }
         }
 
         Button {
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: -10*root_scale
+            anchors.left: parent.left
+            anchors.bottomMargin: 10*root_scale
+            anchors.leftMargin: 10*root_scale
             text: "View workout"
             onClicked: {
                 swipeLogGraph.currentIndex = 0
@@ -262,8 +323,8 @@ Item {
 
             context.beginPath();
             context.moveTo(clicked_btn_origin.x,clicked_btn_origin.y)
-            context.lineTo(pointInfoPopup.x+pointInfoPopup.width*0.4, pointInfoPopup.y+pointInfoPopup.height-20*root_scale)
-            context.lineTo(pointInfoPopup.x+pointInfoPopup.width*0.6, pointInfoPopup.y+pointInfoPopup.height-20*root_scale)
+            context.lineTo(pointInfoPopup.x+pointInfoPopup.width*0.4, pointInfoPopup.y+pointInfoPopup.height*0.5)
+            context.lineTo(pointInfoPopup.x+pointInfoPopup.width*0.6, pointInfoPopup.y+pointInfoPopup.height*0.5)
             context.closePath()
 
             context.fillStyle = CT.c_themes[cfg.theme].bg3
