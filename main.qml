@@ -25,6 +25,11 @@ ApplicationWindow {
     property int font_m: 22
     property int font_b: 26
 
+    Connections {
+        target: dataStore
+        onSelectedDateChanged: view.currentItem.item.loadWosItems()
+    }
+
     Alert {
         id: rootAlert
         z: 10
@@ -61,8 +66,6 @@ ApplicationWindow {
 
         if (enabled)
             addSetsView.updateSetElements()
-        else
-            view.currentItem.item.loadWosItems()
     }
 
     Component.onCompleted: {
@@ -115,8 +118,6 @@ ApplicationWindow {
                     dataStore.scrollDate(-1)
 
                 prev_index = currentIndex
-
-                currentItem.item.loadWosItems()
             }
 
             path: Path {
@@ -159,12 +160,11 @@ ApplicationWindow {
             Material.background: CT.c_themes[cfg.theme].bg2
 
             Text {
-                x: 0
-                y: 0
-                width: navigationBar.width
+                id: slctdDayText
                 height: navigationBar.height
                 color: CT.c_themes[cfg.theme].txt
                 text: selectedDate.toDateString()
+                anchors.horizontalCenter: parent.horizontalCenter
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
                 font.pixelSize: font_m*root_scale
@@ -172,7 +172,7 @@ ApplicationWindow {
 
             ToolButton {
                 id: navBack
-                y: parent.height*0.5 - height*0.5
+                anchors.verticalCenter: parent.verticalCenter
                 icon.source: "qrc:/icons/arrow_back_ios-24px.svg"
                 icon.color: CT.c_themes[cfg.theme].txt
                 icon.height: 25*root_scale
@@ -182,7 +182,7 @@ ApplicationWindow {
             }
             ToolButton {
                 id: navForw
-                y: parent.height*0.5 - height*0.5
+                anchors.verticalCenter: parent.verticalCenter
                 anchors.right: parent.right
                 anchors.rightMargin: 0
                 icon.source: "qrc:/icons/arrow_forward_ios-24px.svg"
@@ -191,6 +191,20 @@ ApplicationWindow {
                 icon.width: 25*root_scale
                 display: AbstractButton.IconOnly
                 onClicked: view.decrementCurrentIndex()
+            }
+
+            ToolButton {
+                id: reset
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.left: parent.horizontalCenter
+                anchors.leftMargin: slctdDayText.paintedWidth*0.5
+                icon.source: "qrc:/icons/restore-24px.svg"
+                icon.color: CT.c_themes[cfg.theme].txt
+                icon.height: 25*root_scale
+                icon.width: 25*root_scale
+                display: AbstractButton.IconOnly
+                onClicked: dataStore.selectedDate =  new Date()
+
             }
         }
 
