@@ -27,7 +27,14 @@ ApplicationWindow {
 
     Connections {
         target: dataStore
-        onSelectedDateChanged: view.currentItem.item.loadWosItems()
+        onSelectedDateChanged: {
+            view.currentItem.item.loadWosItems()
+            var current_date = new Date()
+            if (selectedDate.toLocaleDateString() === current_date.toLocaleDateString())
+                resetBtn.visible = false
+            else
+                resetBtn.visible = true
+        }
     }
 
     Alert {
@@ -66,6 +73,8 @@ ApplicationWindow {
 
         if (enabled)
             addSetsView.updateSetElements()
+        else
+            view.currentItem.item.loadWosItems()
     }
 
     Component.onCompleted: {
@@ -175,6 +184,8 @@ ApplicationWindow {
                 anchors.verticalCenter: parent.verticalCenter
                 icon.source: "qrc:/icons/arrow_back_ios-24px.svg"
                 icon.color: CT.c_themes[cfg.theme].txt
+                height: 50*root_scale
+                width: 50*root_scale
                 icon.height: 25*root_scale
                 icon.width: 25*root_scale
                 display: AbstractButton.IconOnly
@@ -187,6 +198,8 @@ ApplicationWindow {
                 anchors.rightMargin: 0
                 icon.source: "qrc:/icons/arrow_forward_ios-24px.svg"
                 icon.color: CT.c_themes[cfg.theme].txt
+                height: 50*root_scale
+                width: 50*root_scale
                 icon.height: 25*root_scale
                 icon.width: 25*root_scale
                 display: AbstractButton.IconOnly
@@ -194,7 +207,7 @@ ApplicationWindow {
             }
 
             ToolButton {
-                id: reset
+                id: resetBtn
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: slctdDayText.paintedWidth*0.5
@@ -203,7 +216,8 @@ ApplicationWindow {
                 icon.height: 25*root_scale
                 icon.width: 25*root_scale
                 display: AbstractButton.IconOnly
-                onClicked: dataStore.selectedDate =  new Date()
+                visible: false
+                onClicked: dataStore.selectedDate = new Date()
 
             }
         }
@@ -213,12 +227,12 @@ ApplicationWindow {
             anchors.right: parent.right
             anchors.rightMargin: 40*root_scale
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: 30*root_scale
-            width: 75*root_scale
-            height: 75*root_scale
+            anchors.bottomMargin: 40*root_scale
+            width: 85*root_scale
+            height: 85*root_scale
             text: "+"
             visible: true
-            font.pointSize: 28
+            font.pointSize: 28*root_scale
             font.bold: true
             Material.background: CT.accent1
             Material.foreground: "#000000"
