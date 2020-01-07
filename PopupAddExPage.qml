@@ -20,7 +20,7 @@ Item {
 
     Dialog {
         id: categoryCreationDialog
-        title: "New category"
+        title: "Create new category"
         standardButtons: Dialog.Ok | Dialog.Cancel
         anchors.centerIn: parent
         modal: true
@@ -48,7 +48,7 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         Text {
             id: nameLbl
-            text: "Exercise name:"
+            text: "Enter exercise name:"
             font.pixelSize: font_b*root_scale
             color: CT.c_themes[cfg.theme].txt
         }
@@ -61,7 +61,7 @@ Item {
 
         Text {
             id: ctgLbl
-            text: "Category:"
+            text: "Select category:"
             font.pixelSize: font_b*root_scale
             color: CT.c_themes[cfg.theme].txt
         }
@@ -72,12 +72,18 @@ Item {
             font.pixelSize: font_b*root_scale
             model: []
         }
+        Text {
+            text: "or"
+            anchors.horizontalCenter: parent.horizontalCenter
+            font.pixelSize: font_b*root_scale
+            color: CT.c_themes[cfg.theme].txt
+        }
         Button {
-            text: "Create category"
-            width: itemRoot.width*0.75
+            text: "Create new category"
+            width: itemRoot.width*0.6
             anchors.horizontalCenter: parent.horizontalCenter
             height: 65*root_scale
-            font.pixelSize: font_m*root_scale
+            font.pixelSize: font_s*root_scale
             onClicked: categoryCreationDialog.open()
         }
     }
