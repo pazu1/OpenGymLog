@@ -25,7 +25,7 @@ Item {
 
     function makeGraph(ex_name)
     {
-        var maxes = []
+        var y_values = []
         var highest = []
         highest = 0
         axisX.max = 1
@@ -33,8 +33,8 @@ Item {
 
         line.removePoints(0,line.count) // empty graph
 
-        maxes = []
-        maxes = dataStore.getGraphValues(ex_name, graph_type)
+        y_values = []
+        y_values = dataStore.getGraphValues(ex_name, graph_type)
 
         var days = []
         days = dataStore.getDaysOfExercise(ex_name)
@@ -50,15 +50,17 @@ Item {
         chart.visible = true
 
         var day = 0
-        for (var i = 0; i< maxes.length; i++)
+        for (var i = 0; i< y_values.length; i++)
         {
-            line.append(days[i], maxes[i])
-            if (maxes[i] > highest)
-                highest = maxes[i]
+            line.append(days[i], y_values[i])
+            if (y_values[i] > highest)
+                highest = y_values[i]
             day = days[i]
         }
         axisX.max = day
         axisY.max = highest*1.1
+
+        console.log((days.length +"days vs: " + y_values.length))
 
         dayFirst.text = dates[0].toLocaleString(Qt.locale("en_EN"),"dd MMM yy")
         dayLast.text = dates.slice(-1)[0].toLocaleString(Qt.locale("en_EN"),"dd MMM yy")
@@ -86,12 +88,35 @@ Item {
         height: 45*root_scale
         width: parent.width
         RoundButton {
+            id: btn
             text: "▼"
+            font.pixelSize: font_s*root_scale
+            Material.foreground: CT.c_themes[cfg.theme].txt
             Material.background: "#00000000"
             anchors.right: parent.right
             anchors.rightMargin: 10*root_scale
             anchors.verticalCenter: parent.verticalCenter
-            onClicked: comboMenu.open()
+
+            onClicked: {
+                if (comboMenu.visible)
+                    comboMenu.close()
+                else
+                    comboMenu.open()
+            }
+
+            RotationAnimator {
+                id: rotAnim
+                target: btn
+                from: 0;
+                to: 180;
+                duration: 200
+                onStarted: {
+                    var p_f = from
+                    var p_t = to
+                    from = p_t
+                    to = p_f
+                }
+            }
         }
 
         Text {
@@ -109,9 +134,11 @@ Item {
             padding: 0
             width: parent.width
             y: parent.y+parent.height
+            onAboutToShow: rotAnim.start()
+            onAboutToHide: rotAnim.start()
             MenuItem { text: "Estimated 1 Rep Max"; onClicked: {graph_type = 0; graphTypeHeader.text = text}}
             MenuItem { text: "Total Volume"; onClicked: {graph_type = 1; graphTypeHeader.text = text}}
-            MenuItem { text: "Highest weight"; onClicked: graphTypeHeader.text = text}
+            MenuItem { text: "Highest weight"; onClicked: {graph_type = 2; graphTypeHeader.text = text}}
         }
     }
 
@@ -191,7 +218,6 @@ Item {
             id: axisY
             min: 0
             max: 250
-            tickCount: 6
             gridVisible: false
             color: CT.accent1
             labelFormat: "%.0f "+ cfg.unit

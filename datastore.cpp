@@ -1,5 +1,6 @@
 #include "datastore.hh"
 #include "utils.hh"
+
 #include <QDebug>
 #include <QFile>
 #include <QDir>
@@ -8,6 +9,8 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QQmlEngine>
+
+#include <float.h>
 
 DataStore::DataStore(QObject *parent) : QObject(parent)
 {
@@ -180,37 +183,45 @@ QVariantList DataStore::getGraphValues(QString ex, GraphType graph_type) const
 {
     QVariantList maxes;
     QVariantList volumes;
+    QVariantList hst_weights;
     for (pair<QDate, Workout*> n : m_workouts)
     {
-        float f_highest_rm = 0.f;
+        float f_highest_rm = -FLT_MAX;
+        float f_highest_weight = -FLT_MAX;
         float total_volume = 0.f;
+        bool ex_found = false;
         // Find values for this day
         for (SingleSet* s : n.second->getSets())
         {
             if (s->getExercise()->getName() == ex && !s->isToBeDeleted())
             {
-
+                ex_found = true;
                 float estMax = epleyFormula(s->getWeight(),s->getReps());
+
                 if (estMax > f_highest_rm)
-                {
-                    //if (f_highest_rm > 0.f)
-                        //maxes.removeLast();
                     f_highest_rm = estMax;
-                }
+
+                if (s->getWeight() > f_highest_weight)
+                    f_highest_weight = s->getWeight();
 
                 total_volume += s->getReps()*s->getWeight();
             }
         }
-        if (f_highest_rm > 0.f)
+
+        if (ex_found)
+        {
             maxes.push_back(f_highest_rm);
-        if (total_volume > 0.f)
             volumes.push_back(total_volume);
+            hst_weights.push_back(f_highest_weight);
+        }
     }
 
     if (graph_type == Estimated1RM)
         return maxes;
     else if (graph_type == TotalVolume)
         return volumes;
+    else if (graph_type == HighestWeight)
+        return hst_weights;
 }
 
 

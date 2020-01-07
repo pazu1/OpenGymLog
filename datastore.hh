@@ -24,7 +24,7 @@ public:
     enum GraphType {
         Estimated1RM = 0,
         TotalVolume,
-        TotalWeight
+        HighestWeight
     };
 
     explicit DataStore(QObject *parent = nullptr);

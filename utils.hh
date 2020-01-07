@@ -1,5 +1,6 @@
 #ifndef UTILS_HH
 #define UTILS_HH
+#include <QDebug>
 
 float epleyFormula(float w, int r)
 {

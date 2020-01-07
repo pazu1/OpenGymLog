@@ -38,8 +38,10 @@ Item {
     TextField {
         id: searchField
         text: ""
+        padding: 5*root_scale
         width: parent.width
-        height: parent.height*0.07
+        // height: parent.height*0.07 TODO test these size params
+        font.pixelSize: font_s*root_scale
         placeholderText: " type to search"
         onTextChanged:
             searchItemsColumn.searchParse(text)
