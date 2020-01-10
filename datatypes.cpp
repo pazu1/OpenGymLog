@@ -17,11 +17,10 @@ SingleSet::SingleSet(QObject *parent)
 {
 }
 
-SingleSet::SingleSet(Exercise* ex, float weight, int reps, int amount):
+SingleSet::SingleSet(Exercise* ex, float weight, int reps):
     m_ex(ex),
     m_weight(weight),
-    m_reps(reps),
-	m_amount(amount)
+    m_reps(reps)
 {
 }
 

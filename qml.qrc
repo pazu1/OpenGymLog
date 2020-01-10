@@ -17,5 +17,6 @@
         <file>main.qml</file>
         <file>SetsView.qml</file>
         <file>icons/restore-24px.svg</file>
+        <file>icons/edit-24px.svg</file>
     </qresource>
 </RCC>

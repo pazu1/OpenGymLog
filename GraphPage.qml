@@ -60,8 +60,6 @@ Item {
         axisX.max = day
         axisY.max = highest*1.1
 
-        console.log((days.length +"days vs: " + y_values.length))
-
         dayFirst.text = dates[0].toLocaleString(Qt.locale("en_EN"),"dd MMM yy")
         dayLast.text = dates.slice(-1)[0].toLocaleString(Qt.locale("en_EN"),"dd MMM yy")
         axisY.applyNiceNumbers()

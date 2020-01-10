@@ -156,6 +156,18 @@ ApplicationWindow {
                 anchors.verticalCenter: parent.verticalCenter
                 onClicked: dMenu.open()
             }
+            ToolButton {
+                id: tagWorkoutButton
+                visible: false
+                anchors.right: parent.right
+                anchors.rightMargin: 10*root_scale
+                icon.source: "qrc:/icons/edit-24px.svg"
+                icon.height: 25*root_scale
+                icon.width: 25*root_scale
+                icon.color: "#000000"
+                anchors.verticalCenter: parent.verticalCenter
+                //onClicked: open AddTagDialog
+            }
         }
 
         ToolBar {
