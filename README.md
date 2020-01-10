@@ -5,4 +5,4 @@ Simple gym log app for keeping track of training. Work in progress.
 - Qt 5.13 or later
 
 # Screenshots 
-<img src="/screenshots/Screenshot_1577659579.png" width="300"> <img src="/screenshots/Screenshot_1577659695.png" width="300">
+<img src="/screenshots/ss_main.png" width="300"> <img src="/screenshots/ss_themes.png" width="300"><img src="/screenshots/ss_graph.png" width="300">
