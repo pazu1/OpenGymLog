@@ -1,5 +1,5 @@
 # OpenGymLog
-Simple gym log app for keeping track of training. Work in progress.
+Simple gym log app for keeping track of training.
 
 Features:
 - Simple way to keep track of training
@@ -7,7 +7,7 @@ Features:
 - Light and Dark themes
 - Graph for visualizing progress
 
-# Dependencies
+# Build dependencies
 - Qt 5.13 or later
 
 - [How to install Qt](https://doc.qt.io/qt-5/gettingstarted.html)
