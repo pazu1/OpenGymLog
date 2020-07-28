@@ -1,14 +1,13 @@
-# OpenGymLog
-Simple gym log app for keeping track of training.
+# QML Gym Log
+Simple workout log application demo. Made with QML and C++. 
 
-Features:
-- Simple way to keep track of training
+Basic features:
 - Creating and adding custom exercises
 - Light and Dark themes
 - Graph for visualizing progress
 
-# Build dependencies
-- Qt 5.13 or later
+# Installation
+- Install using Qt 5.13 or later
 
 - [How to install Qt](https://doc.qt.io/qt-5/gettingstarted.html)
 
